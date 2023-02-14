@@ -7,7 +7,7 @@ Back:
 
     ESTRUCTURA DE DATOS TENTATIVA (Y HECHA ASI NOMAS):    
     
-    Evetos: 
+    Eventos: 
         + Tipo de entrada (General, Platea, etc)
         + Cantidad de entradas disponibles
         + Fecha limite de compra de entradas
