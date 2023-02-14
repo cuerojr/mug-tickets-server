@@ -5,7 +5,7 @@ Back:
     + CRUD evento
 
 
-    ESTRUCTURA DE DATOS TENTATIVA (Y HECHA ASI NOMAS):    
+    ESTRUCTURA DE DATOS TENTATIVA:    
     
     Eventos: 
         + Tipo de entrada (General, Platea, etc)
