@@ -7,30 +7,30 @@ const ticketSchema = new mongoose.Schema({
     required: true
   },
   purchaser: {
-    firstName: {
+    purchaserFirstName: {
       type: String,
       required: true
     },
-    lastName: {
+    purchaserLastName: {
       type: String,
       required: true
     },
-    dni: {
+    purchaserId: {
       type: String,
       required: true
     }
   },
   attendee: {
-    firstName: {
+    attendeeFirstName: {
       type: String,
       required: true
     },
-    lastName: {
+    attendeeLastName: {
       type: String,
       required: true
     },
-    dni: {
-      type: String,
+    attendeeDni: {
+      type: Number,
       required: true
     }
   },
@@ -38,14 +38,23 @@ const ticketSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  purchased: {
+    type: Boolean,
+    default: true
+  },
   purchaseDate: {
     type: Date,
     default: Date.now
-  },
+  },  
   validationDate: {
     type: Date,
     default: null
+  },
+  qrCode: {
+    type: String,
+    //required: true
   }
+
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);

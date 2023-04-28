@@ -5,11 +5,12 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  availableTickets: {
+  ticketsAvailableOnline: {
     type: Number,
-    required: true,
+    default: 0,
     min: 0,
   },
+  ticketsPurchased:{},
   ticketPurchaseDeadline: {
     type: Date,
     required: true,
@@ -26,7 +27,11 @@ const eventSchema = new mongoose.Schema({
     date: {
       type: Date,
       required: true,
-    }
+    },
+    ticketsAvailableOffline: {
+      type: Number,
+      min: 0,
+    },
   },
 });
 
