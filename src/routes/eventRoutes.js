@@ -1,5 +1,10 @@
 const { Router } = require('express');
 const router = Router();
+
+const { check } = require('express-validator');
+const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
+const validationsMiddlewares = new ValidationsMiddlewares();
+
 const EventController = require('../controllers/eventController');
 const eventController = new EventController();
 

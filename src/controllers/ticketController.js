@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Ticket = require('../models/ticketModel');
+const User = require('../models/userModel');
 
 class TicketController {
     
@@ -18,30 +19,36 @@ class TicketController {
     }
   
     async create(req, res = response) {
-      try {
-        const {
-          event,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni 
-          },
-          attendee: { 
-            attendeeFirstName, 
-            attendeeLastName, 
-            attendeeDni 
-          },
-          validated,
-          purchaseDate,
-          validationDate
-        } = req.body;
+      const {
+        event,
+        purchaser: { 
+          purchaserFirstName, 
+          purchaserLastName, 
+          purchaserDni,
+          purchaserId
+        },
+        attendee: { 
+          attendeeFirstName, 
+          attendeeLastName, 
+          attendeeDni 
+        },
+        validated,
+        purchaseDate,
+        validationDate
+      } = req.body;
 
+      try {
+
+        const user = await User.findById(purchaserId);
+        console.log(user)
+//return
         const newTicket = new Ticket({
           event,
           purchaser: { 
             purchaserFirstName, 
             purchaserLastName, 
-            purchaserDni 
+            purchaserDni,
+            purchaserId: user._id
           },
           attendee: { 
             attendeeFirstName, 
@@ -53,17 +60,22 @@ class TicketController {
           validationDate
         });
 
-        await newTicket.save();
+        const savedNewTicket = await newTicket.save();
+        
+        user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
+        await user.save();
 
-        res.json(newTicket);
+        res.json(savedNewTicket);
+
       } catch (err) {
         console.error(err.message);
       }
     }
   
     async get(req, res = response) {
+      const { id } = req.body;
+
       try {
-        const { id } = req.body;
         const ticket = await Ticket.findById(id);
         res.json(ticket);
       } catch (err) {
@@ -72,10 +84,18 @@ class TicketController {
     }
   
     async update(req, res = response) {
+      const { id } = req.body;
+      const { name, description } = req.body;
+
       try {
-        const { id } = req.params;
-        const { name, description } = req.body;
-        const ticket = await Ticket.findByIdAndUpdate(id, { name, description }, { new: true });
+        const ticket = await Ticket.findByIdAndUpdate(id, { 
+          name, 
+          description 
+        }, 
+        { 
+          new: true 
+        });
+
         res.json(ticket);
       } catch (err) {
         console.error(err.message);
