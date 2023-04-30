@@ -8,6 +8,7 @@ class EventController {
     async getAll(req, res = response) {
       try {
         const events = await Event.find({});
+
         res.json({
           ok: true,
           events
@@ -43,39 +44,55 @@ class EventController {
 
         await newEvent.save();
 
-        res.json(newEvent);
+        res.json({
+          ok: true,
+          newEvent
+        });
       } catch (err) {
         console.error(err.message);
       }
     }
   
     async get(req, res = response) {
+      const { id } = req.params;
+
       try {
-        const { id } = req.params;
         const event = await Event.findById(id);
-        res.json(event);
+        
+        res.json({
+          ok: true,
+          event
+        });
       } catch (err) {
         console.error(err.message);
       }
     }
   
     async update(req, res = response) {
+      const { id } = req.params;
+      const { name, description } = req.body;
+
       try {
-        const { id } = req.params;
-        const { name, description } = req.body;
         const event = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(event);
+
+        res.json({
+          ok: true,
+          event
+        });        
       } catch (err) {
         console.error(err.message);
       }
     }
 
     async delete(req, res = response) {
+      const { id } = req.params;
+
       try {
-        /*const { id } = req.params;
-        const { name, description } = req.body;
-        const resource = await Resource.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(resource);*/
+        await Event.findByIdAndRemove(id, { new: true });
+
+        res.json({
+          ok: true
+        });
       } catch (err) {
         console.error(err.message);
       }

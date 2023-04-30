@@ -2,8 +2,7 @@ const { response } = require('express');
 const Ticket = require('../models/ticketModel');
 const User = require('../models/userModel');
 
-class TicketController {
-    
+class TicketController {    
     constructor(){}
 
     async getAll(req, res = response) {
@@ -66,7 +65,10 @@ class TicketController {
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
         await user.save();
 
-        res.json(savedNewTicket);
+        res.json({
+          ok: true,
+          savedNewTicket
+        });
 
       } catch (err) {
         console.error(err.message);
@@ -78,7 +80,11 @@ class TicketController {
 
       try {
         const ticket = await Ticket.findById(id);
-        res.json(ticket);
+
+        res.json({
+          ok: true,
+          ticket
+        });
       } catch (err) {
         console.error(err.message);
       }
@@ -97,7 +103,10 @@ class TicketController {
           new: true 
         });
 
-        res.json(ticket);
+        res.json({
+          ok: true,
+          ticket
+        });
       } catch (err) {
         console.error(err.message);
       }
@@ -107,19 +116,22 @@ class TicketController {
       try {
         /*const { id } = req.params;
         const { name, description } = req.body;
-        const resource = await Resource.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(resource);*/
+        const updatedUser = await Ticket.findByIdAndUpdate(id, { name, description }, { new: true });
+        res.json(updatedUser);*/
       } catch (err) {
         console.error(err.message);
       }
     }
 
     async delete(req, res = response) {
+      const { id } = req.params;
+
       try {
-        /*const { id } = req.params;
-        const { name, description } = req.body;
-        const resource = await Resource.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(resource);*/
+        await Ticket.findByIdAndRemove(id, { new: true });
+
+        res.json({
+          ok: true
+        });
       } catch (err) {
         console.error(err.message);
       }

@@ -2,10 +2,8 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const User = require('../models/userModel');
-const Ticket = require('../models/ticketModel');
 
-class UserController {
-    
+class UserController {    
     constructor(){}
 
     async getAll(req, res = response) {
@@ -66,7 +64,10 @@ class UserController {
 
         await newUser.save();
 
-        res.json(newUser);
+        res.json({
+          ok: true,
+          newUser
+        });
       } catch (err) {
         console.error(err.message);
       }
@@ -78,7 +79,10 @@ class UserController {
       try {
         const user = await User.findById(id);
 
-        res.json(user);      
+        res.json({
+          ok: true,
+          user
+        });     
       } catch (err) {
         console.error(err.message);
       }
@@ -89,7 +93,11 @@ class UserController {
 
       try {
         const user = await User.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(user);
+
+        res.json({
+          ok: true,
+          user
+        });
       } catch (err) {
         console.error(err.message);
       }
@@ -99,7 +107,8 @@ class UserController {
       const { id } = req.params;
 
       try {
-        const user = await User.findByIdAndRemove(id, { new: true });
+        await User.findByIdAndRemove(id, { new: true });
+
         res.json({
           ok: true
         });
