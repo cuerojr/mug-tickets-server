@@ -27,7 +27,9 @@ router.put('/:id',
     [
         check('firstName', 'firstName is required').not().isEmpty(),
         check('lastName', 'lastName is required').not().isEmpty(),
-        check('dni', 'DNI is required').not().isEmpty(), 
+        check('dni', 'DNI is required').not().isEmpty(),
+        check('password', 'password is required').not().isEmpty(), 
+        check('email', 'email is required').not().isEmpty(),
         validationsMiddlewares.validateFields,       
     ]
 , userController.update);

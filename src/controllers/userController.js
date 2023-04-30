@@ -10,17 +10,18 @@ class UserController {
 
     async getAll(req, res = response) {
       try {
-        const users = await User.find({})
-                                .populate('purchasedTickets', {
-                                  purchaser: 1,
-                                  attendee: 1, 
-                                  validated: 1, 
-                                  purchased: 1, 
-                                  purchaseDate: 1, 
-                                  validationDate: 1, 
-                                  qrCode: 1,
-                                  purchaserId: 0
-                                });
+        const users = await User
+          .find({})
+          .populate('purchasedTickets', {
+            purchaser: 1,
+            attendee: 1, 
+            validated: 1, 
+            purchased: 1, 
+            purchaseDate: 1, 
+            validationDate: 1, 
+            qrCode: 1,
+            purchaserId: 1
+        });
 
         res.json({
           ok: true,
@@ -95,11 +96,13 @@ class UserController {
     }
 
     async delete(req, res = response) {
+      const { id } = req.params;
+
       try {
-        /*const { id } = req.params;
-        const { name, description } = req.body;
-        const resource = await Resource.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(resource);*/
+        const user = await User.findByIdAndRemove(id, { new: true });
+        res.json({
+          ok: true
+        });
       } catch (err) {
         console.error(err.message);
       }
