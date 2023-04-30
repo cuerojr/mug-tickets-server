@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const ticketSchema = new mongoose.Schema({
   event: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event',
-    required: true
+    ref: 'Event'
   },
   purchaser: {
     purchaserFirstName: {
@@ -55,6 +54,12 @@ const ticketSchema = new mongoose.Schema({
     //required: true
   }
 
+});
+
+ticketSchema.method('toJSON', function() {
+  const { __v, _id, ... object } = this.toObject();
+  object.ticketId = _id;
+  return object;
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);

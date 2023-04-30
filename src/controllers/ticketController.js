@@ -8,7 +8,10 @@ class TicketController {
 
     async getAll(req, res = response) {
       try {
-        const tickets = await Ticket.find({});
+        const tickets = await Ticket
+        .find({})
+        .populate('event');
+
         res.json({
           ok: true,
           tickets
@@ -38,10 +41,8 @@ class TicketController {
       } = req.body;
 
       try {
-
         const user = await User.findById(purchaserId);
-        console.log(user)
-//return
+
         const newTicket = new Ticket({
           event,
           purchaser: { 
