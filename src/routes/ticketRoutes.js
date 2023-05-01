@@ -12,18 +12,31 @@ router.get('/', ticketController.getAll);
 
 router.post('/', 
     [
-        /*check('firstName', 'firstName is required').not().isEmpty(),
-        check('lastName', 'lastName is required').not().isEmpty(),
-        check('dni', 'DNI is required').not().isEmpty(),
-        check('password', 'password is required').not().isEmpty(), 
-        check('email', 'email is required').not().isEmpty(),  */
-        validationsMiddlewares.validateFields, 
-    ]
-,ticketController.create);
+        check('event', 'event is required').not().isEmpty(),
+        check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
+        check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
+        check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
+        check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
+        validationsMiddlewares.validateFields
+    ],
+    ticketController.create);
 
 router.get('/:id', ticketController.get);
 
-router.put('/:id', ticketController.update);
+router.put('/:id', 
+    [
+        check('event', 'event is required').not().isEmpty(),
+        check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
+        check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
+        check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
+        check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
+        validationsMiddlewares.validateFields 
+    ], 
+    ticketController.update);
 
 router.delete('/:id', ticketController.delete);
 

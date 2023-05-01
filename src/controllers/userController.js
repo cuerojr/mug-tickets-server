@@ -2,25 +2,24 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const User = require('../models/userModel');
-const Ticket = require('../models/ticketModel');
 
-class UserController {
-    
+class UserController {    
     constructor(){}
 
     async getAll(req, res = response) {
       try {
-        const users = await User.find({})
-                                .populate('purchasedTickets', {
-                                  purchaser: 1,
-                                  attendee: 1, 
-                                  validated: 1, 
-                                  purchased: 1, 
-                                  purchaseDate: 1, 
-                                  validationDate: 1, 
-                                  qrCode: 1,
-                                  purchaserId: 0
-                                });
+        const users = await User
+          .find({})
+          .populate('purchasedTickets', {
+            purchaser: 1,
+            attendee: 1, 
+            validated: 1, 
+            purchased: 1, 
+            purchaseDate: 1, 
+            validationDate: 1, 
+            qrCode: 1,
+            purchaserId: 1
+        });
 
         res.json({
           ok: true,
@@ -65,7 +64,10 @@ class UserController {
 
         await newUser.save();
 
-        res.json(newUser);
+        res.json({
+          ok: true,
+          newUser
+        });
       } catch (err) {
         console.error(err.message);
       }
@@ -77,29 +79,56 @@ class UserController {
       try {
         const user = await User.findById(id);
 
-        res.json(user);      
+        res.json({
+          ok: true,
+          user
+        });     
       } catch (err) {
         console.error(err.message);
       }
     }
   
     async update(req, res = response) {
-      const { id, name, description } = req.body;
+      const id = req.params.id;
+      const {         
+        dni, 
+        firstName, 
+        lastName,
+        email,
+        password
+      } = req.body;
 
       try {
-        const user = await User.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(user);
+        const user = await User.findByIdAndUpdate(id, 
+          { 
+            dni,
+            firstName,
+            lastName,
+            email,
+            password
+          }, 
+          { 
+            new: true 
+          });
+
+        res.json({
+          ok: true,
+          user
+        });
       } catch (err) {
         console.error(err.message);
       }
     }
 
     async delete(req, res = response) {
+      const { id } = req.params;
+
       try {
-        /*const { id } = req.params;
-        const { name, description } = req.body;
-        const resource = await Resource.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(resource);*/
+        await User.findByIdAndRemove(id, { new: true });
+
+        res.json({
+          ok: true
+        });
       } catch (err) {
         console.error(err.message);
       }
