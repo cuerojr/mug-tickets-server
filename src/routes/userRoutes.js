@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 const { check } = require('express-validator');
-const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
+const ValidationsMiddlewares = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 const UserController = require('../controllers/userController');
@@ -12,11 +12,11 @@ router.get('/', userController.getAll);
 
 router.post('/',
     [
-        check('firstName', 'firstName is required').not().isEmpty(),
-        check('lastName', 'lastName is required').not().isEmpty(),
-        check('dni', 'DNI is required').not().isEmpty(),
-        check('password', 'password is required').not().isEmpty(), 
-        check('email', 'email is required').not().isEmpty(),  
+        check('firstName', 'First name is required').not().isEmpty(),
+        check('lastName', 'Last name is required').not().isEmpty(),
+        check('dni', 'Dni is required').not().isEmpty(),
+        check('password', 'Password is required').not().isEmpty(), 
+        check('email', 'Email is required').isEmail(),  
         validationsMiddlewares.validateFields,       
     ]
 , userController.create);
@@ -25,11 +25,11 @@ router.get('/:id', userController.get);
 
 router.put('/:id',
     [
-        check('firstName', 'firstName is required').not().isEmpty(),
-        check('lastName', 'lastName is required').not().isEmpty(),
-        check('dni', 'DNI is required').not().isEmpty(),
-        check('password', 'password is required').not().isEmpty(), 
-        check('email', 'email is required').not().isEmpty(),
+        check('firstName', 'First name is required').not().isEmpty(),
+        check('lastName', 'Last name is required').not().isEmpty(),
+        check('dni', 'Dni is required').not().isEmpty(),
+        check('password', 'Password is required').not().isEmpty(), 
+        check('email', 'Email is required').isEmail(),
         validationsMiddlewares.validateFields,       
     ]
 , userController.update);

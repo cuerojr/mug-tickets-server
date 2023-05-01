@@ -13,12 +13,12 @@ router.get('/', ticketController.getAll);
 router.post('/', 
     [
         check('event', 'event is required').not().isEmpty(),
-        check('purchaser.purchaserFirstName', 'purchaser First Name is required').not().isEmpty(),
-        check('purchaser.purchaserLastName', 'purchaser Last Name is required').not().isEmpty(),
-        check('purchaser.purchaserId', 'purchaser id is required').not().isEmpty(),
-        check('attendee.attendeeFirstName', 'attendee first Name is required').not().isEmpty(),
-        check('attendee.attendeeLastName', 'attendee last Name is required').not().isEmpty(),
-        check('attendee.attendeeDni', 'attendee dni is required').not().isEmpty(),        
+        check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
+        check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
+        check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
+        check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
         validationsMiddlewares.validateFields
     ],
     ticketController.create);
@@ -28,12 +28,12 @@ router.get('/:id', ticketController.get);
 router.put('/:id', 
     [
         check('event', 'event is required').not().isEmpty(),
-        check('purchaser.purchaserFirstName', 'purchaser First Name is required').not().isEmpty(),
-        check('purchaser.purchaserLastName', 'purchaser Last Name is required').not().isEmpty(),
-        check('purchaser.purchaserId', 'purchaser id is required').not().isEmpty(),
-        check('attendee.attendeeFirstName', 'attendee first Name is required').not().isEmpty(),
-        check('attendee.attendeeLastName', 'attendee last Name is required').not().isEmpty(),
-        check('attendee.attendeeDni', 'attendee dni is required').not().isEmpty(),        
+        check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
+        check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
+        check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
+        check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
         validationsMiddlewares.validateFields 
     ], 
     ticketController.update);
