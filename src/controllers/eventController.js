@@ -1,8 +1,7 @@
 const { response } = require('express');
 const Event = require('../models/eventModel');
 
-class EventController {
-    
+class EventController {    
     constructor(){}
 
     async getAll(req, res = response) {

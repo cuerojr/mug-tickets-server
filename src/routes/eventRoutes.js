@@ -10,11 +10,29 @@ const eventController = new EventController();
 
 router.get('/', eventController.getAll);
 
-router.post('/', eventController.create);
+router.post('/', 
+    [
+        check('eventType', 'event type is required').not().isEmpty(),
+        check('ticketPurchaseDeadline', 'ticket Purchase Deadline is required').not().isEmpty(),
+        check('showInfo.title', 'purchaser Last Name is required').not().isEmpty(),
+        check('showInfo.address', 'purchaser id is required').not().isEmpty(),
+        check('showInfo.date', 'attendee first Name is required').not().isEmpty(),  
+        validationsMiddlewares.validateFields
+    ],
+    eventController.create);
 
 router.get('/:id', eventController.get);
 
-router.put('/:id', eventController.update);
+router.put('/:id', 
+    [
+        check('eventType', 'event type is required').not().isEmpty(),
+        check('ticketPurchaseDeadline', 'ticket Purchase Deadline is required').not().isEmpty(),
+        check('showInfo.title', 'purchaser Last Name is required').not().isEmpty(),
+        check('showInfo.address', 'purchaser id is required').not().isEmpty(),
+        check('showInfo.date', 'attendee first Name is required').not().isEmpty(),  
+        validationsMiddlewares.validateFields
+    ], 
+    eventController.update);
 
 router.delete('/:id', eventController.delete);
 
