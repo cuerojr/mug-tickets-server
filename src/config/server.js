@@ -18,27 +18,21 @@ class Server {
     middlewares(){
         //CORS
         this.app.use( cors() );
-
         //lectura y parseo del body
         this.app.use( express.json() );
-
         //Public dir
         this.app.use( express.static('public') );
     }
 
     routes(){
-
         this.app.use('/api/users', require('../routes/userRoutes'));
-
         this.app.use('/api/tickets', require('../routes/ticketRoutes'));
-
-        this.app.use('/api/events', require('../routes/eventRoutes'));
-        
+        this.app.use('/api/events', require('../routes/eventRoutes'));        
     }
 
     listen(){        
         this.app.listen(this.port, ()=>{
-            console.log('servidor', this.port)
+            console.log('server', this.port)
         });
     }
 }
