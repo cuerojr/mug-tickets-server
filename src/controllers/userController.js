@@ -89,10 +89,27 @@ class UserController {
     }
   
     async update(req, res = response) {
-      const { id, name, description } = req.body;
+      const id = req.params.id;
+      const {         
+        dni, 
+        firstName, 
+        lastName,
+        email,
+        password
+      } = req.body;
 
       try {
-        const user = await User.findByIdAndUpdate(id, { name, description }, { new: true });
+        const user = await User.findByIdAndUpdate(id, 
+          { 
+            dni,
+            firstName,
+            lastName,
+            email,
+            password
+          }, 
+          { 
+            new: true 
+          });
 
         res.json({
           ok: true,
