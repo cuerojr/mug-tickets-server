@@ -76,11 +76,13 @@ class TicketController {
     }
   
     async get(req, res = response) {
-      const { id } = req.body;
+      const { id } = req.params;
 
       try {
-        const ticket = await Ticket.findById(id);
-
+        const ticket = await Ticket
+          .findById(id)
+          .populate('event');
+          
         res.json({
           ok: true,
           ticket
