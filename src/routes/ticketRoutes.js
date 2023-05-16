@@ -12,6 +12,7 @@ router.get('/', ticketController.getAll);
 
 router.post('/', 
     [
+        //validationsMiddlewares.validateJWT,
         check('event', 'event is required').not().isEmpty(),
         check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
         check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
@@ -27,6 +28,7 @@ router.get('/:id', ticketController.get);
 
 router.put('/:id', 
     [
+        validationsMiddlewares.validateJWT,
         check('event', 'event is required').not().isEmpty(),
         check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
         check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
@@ -38,6 +40,10 @@ router.put('/:id',
     ], 
     ticketController.update);
 
-router.delete('/:id', ticketController.delete);
+router.delete('/:id', 
+    [
+        validationsMiddlewares.validateJWT
+    ], 
+    ticketController.delete);
 
 module.exports = router;

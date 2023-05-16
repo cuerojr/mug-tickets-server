@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const User = require('../models/userModel');
+const { generateJWT } = require('../config/authentication');
 
 class UserController {    
     constructor(){}
@@ -23,7 +24,8 @@ class UserController {
 
         res.json({
           ok: true,
-          users
+          users,
+          uid: req.uid
         });
 
       } catch (err) {
@@ -50,7 +52,7 @@ class UserController {
           })
         }
 
-        const newUser = new User({ 
+        const user = new User({ 
           dni, 
           firstName, 
           lastName,
@@ -60,13 +62,16 @@ class UserController {
 
         //encrypt
         const salt = bcryptjs.genSaltSync();
-        newUser.password = bcryptjs.hashSync( password, salt );
+        user.password = bcryptjs.hashSync( password, salt );
 
-        await newUser.save();
+        await user.save();
 
+        const token = await generateJWT(user._id);
+        
         res.json({
           ok: true,
-          newUser
+          user,
+          token
         });
       } catch (err) {
         console.error(err.message);

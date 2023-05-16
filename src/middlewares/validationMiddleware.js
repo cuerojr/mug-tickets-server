@@ -1,5 +1,6 @@
 const { response } = require('express');
 const { validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 class ValidationsMiddlewares {
     constructor() { }
@@ -17,6 +18,29 @@ class ValidationsMiddlewares {
         next();        
     }
 
-};
+    validateJWT(req, res = response, next) {    
+      const token = req.header('x-token');
+
+      if(!token) {
+        return res.status(401).json({
+          ok: false,
+          msg: 'There is no token'
+        });
+      }
+
+      try{
+        const { uid } = jwt.verify( token, process.env.JWT_SECRET );
+
+        req.uid = uid;
+        
+        next();
+      } catch(error) {
+        return res.status(401).json({
+          ok: false,
+          msg: 'Wrong token'
+        })
+      }     
+  }
+}
 
 module.exports = ValidationsMiddlewares;
