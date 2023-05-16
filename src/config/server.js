@@ -27,7 +27,8 @@ class Server {
     routes(){
         this.app.use('/api/users', require('../routes/userRoutes'));
         this.app.use('/api/tickets', require('../routes/ticketRoutes'));
-        this.app.use('/api/events', require('../routes/eventRoutes'));        
+        this.app.use('/api/events', require('../routes/eventRoutes'));
+        this.app.use('/api/login', require('../routes/logInRoutes'));        
     }
 
     listen(){        
