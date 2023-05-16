@@ -2,7 +2,7 @@ Back:
     + CRUD de usuarios
     + Autenticación/Uso de token
     + Manejo de sesión (esto capaz que es front)
-    + CRUD evento
+    + CRUD evento 
 
 
     ESTRUCTURA DE DATOS TENTATIVA:    
