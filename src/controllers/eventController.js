@@ -8,12 +8,12 @@ class EventController {
       try {
         const events = await Event.find({});
 
-        res.json({
+        res.status(200).json({
           ok: true,
           events
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
   
@@ -43,12 +43,12 @@ class EventController {
 
         await newEvent.save();
 
-        res.json({
+        res.status(200).json({
           ok: true,
           newEvent
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
   
@@ -57,13 +57,18 @@ class EventController {
 
       try {
         const event = await Event.findById(id);
-        
-        res.json({
+        if (!event) {
+          return res
+            .status(404)
+            .json({ ok: false, error: `Event with id ${id} not found.` });
+        }
+
+        res.status(200).json({
           ok: true,
           event
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
   
@@ -72,14 +77,19 @@ class EventController {
       const { name, description } = req.body;
 
       try {
-        const event = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
+        const updatedEvent = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
+        if (!updatedEvent) {
+          return res
+            .status(404)
+            .json({ ok: false, error: `Event with id ${id} not found.` });
+        }
 
-        res.json({
+        res.status(200).json({
           ok: true,
-          event
+          updatedEvent
         });        
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
 
@@ -87,13 +97,18 @@ class EventController {
       const { id } = req.params;
 
       try {
-        await Event.findByIdAndRemove(id, { new: true });
+        const deletedEvent = await Event.findByIdAndRemove(id, { new: true });
+        if (!deletedEvent) {
+          return res
+            .status(404)
+            .json({ ok: false, error: `Event with id ${id} not found.` });
+        }
 
-        res.json({
+        res.status(200).json({
           ok: true
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
 }
