@@ -10,13 +10,21 @@ const eventSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
-  ticketsPurchased:{},
+  ticketsPurchased: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   ticketPurchaseDeadline: {
     type: Date,
     required: true,
   },
   showInfo: {
     title: {
+      type: String,
+      required: true,
+    },
+    descrition: {
       type: String,
       required: true,
     },
@@ -27,6 +35,10 @@ const eventSchema = new mongoose.Schema({
     date: {
       type: Date,
       required: true,
+    },
+    imageUrl: {
+      type: String,
+      required: true
     },
     ticketsAvailableOffline: {
       type: Number,
@@ -42,5 +54,4 @@ eventSchema.method('toJSON', function() {
 });
 
 const Event = mongoose.model('Event', eventSchema);
-
 module.exports = Event;

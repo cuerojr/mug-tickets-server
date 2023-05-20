@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./counterModel');
 
 const ticketSchema = new mongoose.Schema({
   event: {
@@ -52,9 +53,31 @@ const ticketSchema = new mongoose.Schema({
   qrCode: {
     type: String,
     //required: true
+  },
+  ticketNumber: {
+    type: Number,
+    unique: true
   }
-
 });
+
+ticketSchema.pre('save', async function (next) {
+  const doc = this;  
+  if (!doc.ticketNumber) {
+    try {
+      const counter = await Counter.findByIdAndUpdate(
+        { _id: 'ticketNumber' },
+        { $inc: { sequence_value: 1 } },
+        { new: true, upsert: true }
+      ).exec();
+      doc.ticketNumber = counter.sequence_value;
+    } catch (error) {
+      console.error('Error while generating ticket number:', error);
+      throw error;
+    }
+  }
+  next();
+});
+
 
 ticketSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
@@ -63,5 +86,4 @@ ticketSchema.method('toJSON', function() {
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
-
 module.exports = Ticket;
