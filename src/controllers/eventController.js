@@ -99,9 +99,10 @@ class EventController {
       try {
         const deletedEvent = await Event.findByIdAndRemove(id, { new: true });
         if (!deletedEvent) {
-          return res
-            .status(404)
-            .json({ ok: false, error: `Event with id ${id} not found.` });
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Event with id ${id} not found.` 
+          });
         }
 
         res.status(200).json({

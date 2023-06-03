@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  imageUrl: {
+    type: String,
+    required: false
+  },
   purchasedTickets: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ticket'
