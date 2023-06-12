@@ -23,8 +23,7 @@ class UserController {
 
         res.status(200).json({
           ok: true,
-          users,
-          uid: req.uid
+          users
         });
 
       } catch (err) {
@@ -32,7 +31,8 @@ class UserController {
         res.status(500).json({
           ok: false,
           error: 'Unable to fetch ticket information',
-        });      }
+        });      
+      }
     }
   
     async create(req, res = response) {
@@ -84,10 +84,20 @@ class UserController {
     }
   
     async get(req, res = response) {
-      const { id } = req.params;
-      
+      const { id } = req.params;      
       try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate('purchasedTickets', {
+          purchaser: 1,
+          attendee: 1, 
+          validated: 1, 
+          purchased: 1, 
+          purchaseDate: 1, 
+          validationDate: 1, 
+          qrCode: 1,
+          purchaserId: 1,
+          ticketNumber: 1
+      });
+
         if (!user) {
           return res.status(404).json({
             ok: false,
