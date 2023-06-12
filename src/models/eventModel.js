@@ -24,9 +24,9 @@ const eventSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    descrition: {
+    description: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       type: String,
@@ -36,9 +36,9 @@ const eventSchema = new mongoose.Schema({
       type: Date,
       required: true,
     },
-    imageUrl: {
+    image: {
       type: String,
-      required: true
+      required: false
     },
     ticketsAvailableOffline: {
       type: Number,

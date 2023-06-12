@@ -1,5 +1,6 @@
 const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
+const { updateImages } = require('../helpers/updateImage');
 
 class UploadImagesController {    
     constructor(){}
@@ -40,6 +41,7 @@ class UploadImagesController {
       const fileName = `${ uuidv4() }.${ fileExtension }`;
 
       const path = `./src/uploads/${ type }/${ fileName }`;
+
       file.mv(path, (err) => {
         if(err) {
           return res.status(500).json({
@@ -49,6 +51,8 @@ class UploadImagesController {
             fileName
           })
         }
+        
+        updateImages({ type, id, fileName });
           
         res.status(200).json({
             ok: true,

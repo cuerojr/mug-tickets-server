@@ -9,7 +9,12 @@ const UploadImagesController = require('../controllers/uploadImagesController');
 const uploadImagesController = new UploadImagesController();
 
 // file upload middleware
-router.use(fileUpload());
+router.use(fileUpload({
+    limits: {
+        fileSize: 300000 //300kb
+    },
+    abortOnLimit: true
+}));
 
 router.put('/:type/:id', 
     [     
