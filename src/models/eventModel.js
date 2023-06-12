@@ -17,7 +17,12 @@ const eventSchema = new mongoose.Schema({
   },
   ticketPurchaseDeadline: {
     type: Date,
-    required: true,
+    required: true
+  },
+  hasLimitedPlaces: {
+    type: Boolean,
+    required: false,
+    default: false
   },
   showInfo: {
     title: {
