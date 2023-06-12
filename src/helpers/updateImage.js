@@ -31,7 +31,7 @@ const updateImages = (options) => {
     
                 _replacePrevPath({
                     type, 
-                    image: event.image
+                    image: event.showInfo.image
                 });
     
                 event.showInfo.image = fileName;
