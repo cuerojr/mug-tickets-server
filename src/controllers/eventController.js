@@ -13,7 +13,10 @@ class EventController {
           events
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: error.message 
+        });
       }
     }
   
@@ -26,7 +29,8 @@ class EventController {
           showInfo: { 
             title, 
             address, 
-            date 
+            date,
+            image
           },
         } = req.body;
 
@@ -37,7 +41,8 @@ class EventController {
           showInfo: { 
             title, 
             address, 
-            date
+            date,
+            image
           },
         });
 
