@@ -34,7 +34,7 @@ const updateImages = (options) => {
                     image: event.image
                 });
     
-                event.image = fileName;
+                event.showInfo.image = fileName;
                 await event.save();
                 return true;
             },
