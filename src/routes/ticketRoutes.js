@@ -24,7 +24,10 @@ router.post('/',
     ],
     ticketController.create);
 
-router.get('/:id', ticketController.get);
+router.get('/:id', [
+        validationsMiddlewares.validateJWT,
+    ], 
+    ticketController.get);
 
 router.put('/:id', 
     [

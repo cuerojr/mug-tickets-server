@@ -57,15 +57,17 @@ class EventController {
       }
     }
   
-    async get(req, res = response) {
-      const { id } = req.params;
-
+    async get(req, res = response) {      
       try {
+        const { id } = req.params;
         const event = await Event.findById(id);
         if (!event) {
           return res
             .status(404)
-            .json({ ok: false, error: `Event with id ${id} not found.` });
+            .json({ 
+              ok: false, 
+              error: `Event with id ${id} not found.` 
+            });
         }
 
         res.status(200).json({
@@ -73,7 +75,10 @@ class EventController {
           event
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: error.message 
+        });
       }
     }
   
