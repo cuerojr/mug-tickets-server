@@ -2,13 +2,13 @@
   "name": "mug-tickets-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "engines": {
     "node": "18.x"
   },
   "scripts": {
     "test": "jest",
-    "start": "node app.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
