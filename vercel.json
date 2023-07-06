@@ -1,15 +1,17 @@
 {
     "version": 2,
+    "framework": "node",
+    "name": "mug-tickets-server",
     "builds": [
         {
-            "src": "./app.js",
+            "src": "app.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "/app.js"
         }
     ]
 }
