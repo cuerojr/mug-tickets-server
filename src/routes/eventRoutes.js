@@ -8,13 +8,13 @@ const validationsMiddlewares = new ValidationsMiddlewares();
 const EventController = require('../controllers/eventController');
 const eventController = new EventController();
 
-//router.get('/', eventController.getAll);
+router.get('/', eventController.getAll(req, res));
 
-router.get('/',(req, res) => {
+/*router.get('/',(req, res) => {
     res.json({
       message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
     });
-  });
+  });*/
 
 router.get('/query', eventController.filter);
 
