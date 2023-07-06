@@ -5,17 +5,10 @@ const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-//const { EventController } = require('../controllers/eventController');
 import { EventController } from '../controllers/eventController';
 const eventController = new EventController();
 
 router.get('/', eventController.getAll);
-
-/*router.get('/',(req, res) => {
-    res.json({
-      message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
-    });
-  });*/
 
 router.get('/query', eventController.filter);
 

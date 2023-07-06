@@ -81,4 +81,6 @@ class LogInController {
     }
 }
 
-module.exports = LogInController;
+module.exports = {
+    LogInController
+};
