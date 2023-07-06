@@ -6,7 +6,7 @@ class EventController {
 
     async getAll(req, res = response) {
       try {
-        const events = await Event.find({});
+        const events = await Event.find({})/*.populate('purchasedTicketsList');*/
 
         res.status(200).json({
           ok: true,
@@ -19,31 +19,51 @@ class EventController {
         });
       }
     }
+
+    async filter(req, res = response) {
+      try {
+        const events = await Event.find(req.query);
+        if (events.length < 1) {
+            return res.status(200).json({
+              ok: false,
+              error: 'No products matched your search'
+            });
+        }
+        
+        res.status(200).json({
+          ok: true,
+          events
+        });
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
+      }
+    }
   
     async create(req, res = response) {
       try {
         const {
           eventType,
-          availableTickets,
+          ticketsAvailableOnline,
           ticketPurchaseDeadline,
-          showInfo: { 
-            title, 
-            address, 
-            date,
-            image
-          },
+          hasLimitedPlaces,
+          title, 
+          address, 
+          date,
+          image
         } = req.body;
 
         const newEvent = new Event({
           eventType,
-          availableTickets,
+          ticketsAvailableOnline,
           ticketPurchaseDeadline,
-          showInfo: { 
-            title, 
-            address, 
-            date,
-            image
-          },
+          hasLimitedPlaces,          
+          title, 
+          address, 
+          date,
+          image          
         });
 
         await newEvent.save();
@@ -53,14 +73,18 @@ class EventController {
           newEvent
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
     async get(req, res = response) {      
       try {
         const { id } = req.params;
-        const event = await Event.findById(id);
+        const event = await Event.findById(id)/*.populate('purchasedTicketsList')*/;
+;
         if (!event) {
           return res
             .status(404)
@@ -116,7 +140,8 @@ class EventController {
         }
 
         res.status(200).json({
-          ok: true
+          ok: true,
+          message: `Event with id ${ id } was deleted.`
         });
       } catch (err) {
         res.status(500).json({ ok: false, error: error.message });
