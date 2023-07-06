@@ -10,6 +10,8 @@ const ticketController = new TicketController();
 
 router.get('/', ticketController.getAll);
 
+router.get('/query', ticketController.filter);
+
 router.post('/', 
     [
         //validationsMiddlewares.validateJWT,
@@ -24,7 +26,10 @@ router.post('/',
     ],
     ticketController.create);
 
-router.get('/:id', ticketController.get);
+router.get('/:id', [
+        validationsMiddlewares.validateJWT,
+    ], 
+    ticketController.get);
 
 router.put('/:id', 
     [

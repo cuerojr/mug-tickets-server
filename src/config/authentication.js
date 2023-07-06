@@ -4,12 +4,20 @@ const User = require('../models/userModel');
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    const { header } = req;
+    const token = header('Authorization').replace('Bearer ', '');
     const decoded = jwt.verify(token, config.jwt.secret);
-    const user = await User.findOne({ _id: decoded._id, 'tokens.token': token });
+    const user = await User.findOne({ 
+      _id: decoded._id, 
+      'tokens.token': token 
+    });
 
     if (!user) {
-      throw new Error();
+      res.status(404).json({ 
+        ok: false, 
+        error: `Event with id ${id} not found.` 
+      });
+      throw new Error('User not found or token invalid');
     }
 
     req.token = token;
@@ -20,24 +28,22 @@ const auth = async (req, res, next) => {
   }
 };
 
-const generateJWT = ( uid ) => {
-  return new Promise((resolve, reject) => {
-    const payload = {
-      uid
-    };
-    jwt.sign( payload, process.env.JWT_SECRET, {
-      expiresIn: '12h'
-    }, (err, token) => {  
-      if(err) {
-        console.log(err);
-        reject('Error generating JWT');
-      } else {
-        resolve(token);
-      }  
-    });
-
+const generateJWT = ( uid ) => new Promise((resolve, reject) => {
+  const payload = {
+    uid
+  };
+  jwt.sign( payload, process.env.JWT_SECRET, {
+    expiresIn: '12h'
+  }, (err, token) => {  
+    if(err) {
+      console.log(err);
+      reject('Error generating JWT');
+    } else {
+      resolve(token);
+    }  
   });
-};
+});
+
 
 module.exports = {
   auth,

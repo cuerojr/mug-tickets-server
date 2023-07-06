@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  image: {
+    type: String,
+    required: false
+  },
   purchasedTickets: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ticket'
@@ -41,5 +45,4 @@ userSchema.method('toJSON', function() {
 });
 
 const User = mongoose.model('User', userSchema);
-
 module.exports = User;

@@ -9,9 +9,7 @@ class UserController {
 
     async getAll(req, res = response) {
       try {
-        const users = await User
-          .find({})
-          .populate('purchasedTickets', {
+        const users = await User.find({}).populate('purchasedTickets', {
             purchaser: 1,
             attendee: 1, 
             validated: 1, 
@@ -19,20 +17,46 @@ class UserController {
             purchaseDate: 1, 
             validationDate: 1, 
             qrCode: 1,
-            purchaserId: 1
+            purchaserId: 1,
+            ticketNumber: 1
         });
 
-        res.json({
+        res.status(200).json({
           ok: true,
-          users,
-          uid: req.uid
+          users
         });
 
       } catch (err) {
-        console.error(err.message);
+        console.error(`Error occurred while fetching tickets - ${err}`);
+        res.status(500).json({
+          ok: false,
+          error: 'Unable to fetch ticket information',
+        });      
       }
     }
   
+    async filter(req, res = response) {
+      try {
+        const user = await User.find(req.query);
+        if (user.length < 1) {
+            return res.status(404).json({
+              ok: false,
+              error: 'No events matched your search'
+            });
+        } 
+
+        res.status(200).json({
+          ok: true,
+          user
+        });
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
+      }
+    }
+    
     async create(req, res = response) {
       const { 
         dni, 
@@ -68,28 +92,51 @@ class UserController {
 
         const token = await generateJWT(user._id);
         
-        res.json({
+        res.status(200).json({
           ok: true,
           user,
           token
         });
       } catch (err) {
-        console.error(err.message);
-      }
+        console.error(`Error occurred while creating user - ${err}`);
+        res.status(500).json({
+          ok: false,
+          error: 'Unable to create user',
+        });      }
     }
   
     async get(req, res = response) {
-      const { id } = req.params;
-      
+      const { id } = req.params;      
       try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate('purchasedTickets', {
+          purchaser: 1,
+          attendee: 1, 
+          validated: 1, 
+          purchased: 1, 
+          purchaseDate: 1, 
+          validationDate: 1, 
+          qrCode: 1,
+          purchaserId: 1,
+          ticketNumber: 1
+      });
 
-        res.json({
+        if (!user) {
+          return res.status(404).json({
+            ok: false,
+            error: 'User not found',
+          });
+        }
+        
+        res.status(200).json({
           ok: true,
           user
         });     
       } catch (err) {
-        console.error(err.message);
+        console.error(`Error occurred while fetching user with ID "${id}" - ${err}`);
+        res.status(500).json({
+          ok: false,
+          error: 'Unable to fetch user information',
+        });      
       }
     }
   
@@ -116,12 +163,23 @@ class UserController {
             new: true 
           });
 
-        res.json({
+        if (!user) {
+          return res.status(404).json({
+            ok: false,
+            error: 'User not found',
+          });
+        }  
+
+        res.status(200).json({
           ok: true,
           user
         });
       } catch (err) {
-        console.error(err.message);
+        console.error(`Error occurred while updating user with ID "${id}" - ${err}`);
+        res.status(500).json({
+          ok: false,
+          error: 'Unable to update user information',
+        });
       }
     }
 
@@ -129,13 +187,23 @@ class UserController {
       const { id } = req.params;
 
       try {
-        await User.findByIdAndRemove(id, { new: true });
+        const user = await User.findByIdAndRemove(id, { new: true });
+        if (!user) {
+          return res.status(404).json({
+            ok: false,
+            error: 'User not found',
+          });
+        }
 
-        res.json({
+        res.status(200).json({
           ok: true
         });
       } catch (err) {
-        console.error(err.message);
+        console.error(`Error occurred while deleting user with ID "${id}" - ${err}`);
+        res.status(500).json({
+          ok: false,
+          error: 'Unable to delete user information',
+        });
       }
     }
 }

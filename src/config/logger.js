@@ -10,7 +10,9 @@ const logger = createLogger({
     format.splat(),
     format.json()
   ),
-  defaultMeta: { service: 'ticketing-service' },
+  defaultMeta: { 
+    service: 'ticketing-service' 
+  },
   transports: [
     new transports.File({ filename: 'error.log', level: 'error' }),
     new transports.File({ filename: 'combined.log' })

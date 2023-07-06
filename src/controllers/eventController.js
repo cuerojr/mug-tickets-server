@@ -6,14 +6,39 @@ class EventController {
 
     async getAll(req, res = response) {
       try {
-        const events = await Event.find({});
+        const events = await Event.find({})/*.populate('purchasedTicketsList');*/
 
-        res.json({
+        res.status(200).json({
           ok: true,
           events
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ 
+          ok: false, 
+          error: error.message 
+        });
+      }
+    }
+
+    async filter(req, res = response) {
+      try {
+        const events = await Event.find(req.query);
+        if (events.length < 1) {
+            return res.status(404).json({
+              ok: false,
+              error: 'No events matched your search'
+            });
+        }
+        
+        res.status(200).json({
+          ok: true,
+          events
+        });
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
@@ -21,49 +46,63 @@ class EventController {
       try {
         const {
           eventType,
-          availableTickets,
+          ticketsAvailableOnline,
           ticketPurchaseDeadline,
-          showInfo: { 
-            title, 
-            address, 
-            date 
-          },
+          hasLimitedPlaces,
+          title, 
+          address, 
+          date,
+          image
         } = req.body;
 
         const newEvent = new Event({
           eventType,
-          availableTickets,
+          ticketsAvailableOnline,
           ticketPurchaseDeadline,
-          showInfo: { 
-            title, 
-            address, 
-            date
-          },
+          hasLimitedPlaces,          
+          title, 
+          address, 
+          date,
+          image          
         });
 
         await newEvent.save();
 
-        res.json({
+        res.status(200).json({
           ok: true,
           newEvent
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
-    async get(req, res = response) {
-      const { id } = req.params;
-
+    async get(req, res = response) {      
       try {
-        const event = await Event.findById(id);
-        
-        res.json({
+        const { id } = req.params;
+        const event = await Event.findById(id)/*.populate('purchasedTicketsList')*/;
+;
+        if (!event) {
+          return res
+            .status(404)
+            .json({ 
+              ok: false, 
+              error: `Event with id ${id} not found.` 
+            });
+        }
+
+        res.status(200).json({
           ok: true,
           event
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ 
+          ok: false, 
+          error: error.message 
+        });
       }
     }
   
@@ -72,14 +111,19 @@ class EventController {
       const { name, description } = req.body;
 
       try {
-        const event = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
+        const updatedEvent = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
+        if (!updatedEvent) {
+          return res
+            .status(404)
+            .json({ ok: false, error: `Event with id ${id} not found.` });
+        }
 
-        res.json({
+        res.status(200).json({
           ok: true,
-          event
+          updatedEvent
         });        
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
 
@@ -87,13 +131,20 @@ class EventController {
       const { id } = req.params;
 
       try {
-        await Event.findByIdAndRemove(id, { new: true });
+        const deletedEvent = await Event.findByIdAndRemove(id, { new: true });
+        if (!deletedEvent) {
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Event with id ${id} not found.` 
+          });
+        }
 
-        res.json({
-          ok: true
+        res.status(200).json({
+          ok: true,
+          message: `Event with id ${ id } was deleted.`
         });
       } catch (err) {
-        console.error(err.message);
+        res.status(500).json({ ok: false, error: error.message });
       }
     }
 }

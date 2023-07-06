@@ -10,14 +10,16 @@ const eventController = new EventController();
 
 router.get('/', eventController.getAll);
 
+router.get('/query', eventController.filter);
+
 router.post('/', 
     [
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
-        check('showInfo.title', 'Show title is required').not().isEmpty(),
-        check('showInfo.address', 'Show address is required').not().isEmpty(),
-        check('showInfo.date', 'Show date is required').not().isEmpty(),  
+        check('title', 'Show title is required').not().isEmpty(),
+        check('address', 'Show address is required').not().isEmpty(),
+        check('date', 'Show date is required').not().isEmpty(),  
         validationsMiddlewares.validateFields
     ],
     eventController.create);
@@ -29,9 +31,9 @@ router.put('/:id',
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
-        check('showInfo.title', 'Show title is required').not().isEmpty(),
-        check('showInfo.address', 'Show address is required').not().isEmpty(),
-        check('showInfo.date', 'Show date is required').not().isEmpty(),  
+        check('title', 'Show title is required').not().isEmpty(),
+        check('address', 'Show address is required').not().isEmpty(),
+        check('date', 'Show date is required').not().isEmpty(),  
         validationsMiddlewares.validateFields
     ], 
     eventController.update);
