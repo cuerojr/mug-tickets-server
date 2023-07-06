@@ -21,7 +21,7 @@ class Server {
         //lectura y parseo del body
         this.app.use( express.json() );
         //Public dir
-        this.app.use( express.static('public') );
+        //this.app.use( express.static('public') );
     }
 
     routes(){
