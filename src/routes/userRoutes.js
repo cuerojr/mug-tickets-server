@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 const { check } = require('express-validator');
-import { ValidationsMiddlewares } from '../middlewares/validationMiddleware';
+const ValidationsMiddlewares = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 import { UserController } from '../controllers/userController';

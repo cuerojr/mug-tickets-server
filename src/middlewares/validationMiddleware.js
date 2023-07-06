@@ -43,6 +43,4 @@ class ValidationsMiddlewares {
   }
 }
 
-module.exports = {
-  ValidationsMiddlewares
-};
+module.exports = ValidationsMiddlewares;

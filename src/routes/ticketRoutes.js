@@ -1,14 +1,14 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
 const router = Router();
 
-import { ValidationsMiddlewares } from '../middlewares/validationMiddleware';
+const { check } = require('express-validator');
+const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 import { TicketController } from '../controllers/ticketController';
 const ticketController = new TicketController();
 
-router.get('/', [ validationsMiddlewares.validateJWT ], ticketController.getAll);
+router.get('/', ticketController.getAll);
 
 router.get('/query', ticketController.filter);
 
