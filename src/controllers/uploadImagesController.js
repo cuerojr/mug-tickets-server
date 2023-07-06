@@ -64,6 +64,4 @@ class UploadImagesController {
 
 }
 
-module.exports = {
-  UploadImagesController
-};
+module.exports = UploadImagesController;

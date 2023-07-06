@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-import { EventController } from '../controllers/eventController';
+const { EventController } = require('../controllers/eventController');
 const eventController = new EventController();
 
 router.get('/', eventController.getAll);

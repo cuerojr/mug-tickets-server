@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-import { TicketController } from '../controllers/ticketController';
+const { TicketController } = require('../controllers/ticketController');
 const ticketController = new TicketController();
 
 router.get('/', ticketController.getAll);
