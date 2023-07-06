@@ -35,6 +35,28 @@ class UserController {
       }
     }
   
+    async filter(req, res = response) {
+      try {
+        const user = await User.find(req.query);
+        if (user.length < 1) {
+            return res.status(404).json({
+              ok: false,
+              error: 'No events matched your search'
+            });
+        } 
+
+        res.status(200).json({
+          ok: true,
+          user
+        });
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
+      }
+    }
+    
     async create(req, res = response) {
       const { 
         dni, 
