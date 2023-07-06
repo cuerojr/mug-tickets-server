@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 const fileUpload = require('express-fileupload');
-const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
+import { ValidationsMiddlewares } from '../middlewares/validationMiddleware';
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 const UploadImagesController = require('../controllers/uploadImagesController');
