@@ -10,6 +10,8 @@ const ticketController = new TicketController();
 
 router.get('/', ticketController.getAll);
 
+router.get('/query', ticketController.filter);
+
 router.post('/', 
     [
         //validationsMiddlewares.validateJWT,

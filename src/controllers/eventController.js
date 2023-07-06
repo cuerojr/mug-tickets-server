@@ -24,9 +24,9 @@ class EventController {
       try {
         const events = await Event.find(req.query);
         if (events.length < 1) {
-            return res.status(200).json({
+            return res.status(404).json({
               ok: false,
-              error: 'No products matched your search'
+              error: 'No events matched your search'
             });
         }
         
