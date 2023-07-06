@@ -1,12 +1,14 @@
 const { response } = require('express');
 const Ticket = require('../models/ticketModel');
 const User = require('../models/userModel');
+const Event = require('../models/eventModel');
 
 class TicketController {    
     constructor(){}
 
     async getAll(req, res = response) {
       try {
+        const { id } = req.params;
         const tickets = await Ticket.find({}).populate('event');
 
         res.status(200).json({
@@ -14,31 +16,65 @@ class TicketController {
           tickets
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
+      }
+    }
+
+    async filter(req, res = response) {
+      try {
+        const tickets = await Ticket.find(req.query);
+        if (tickets.length < 1) {
+            return res.status(404).json({
+              ok: false,
+              error: 'No events matched your search'
+            });
+        } 
+        res.status(200).json({
+          ok: true,
+          tickets
+        });
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
-    async create(req, res = response) {
-      const {
-        event,
-        purchaser: { 
-          purchaserFirstName, 
-          purchaserLastName, 
-          purchaserDni,
-          purchaserId
-        },
-        attendee: { 
-          attendeeFirstName, 
-          attendeeLastName, 
-          attendeeDni 
-        },
-        validated,
-        purchaseDate,
-        validationDate
-      } = req.body;
-
+    async create(req, res = response) {      
       try {
-        const user = await User.findById(purchaserId);
+        const {
+          event,
+          purchaser: { 
+            purchaserFirstName, 
+            purchaserLastName, 
+            purchaserDni,
+            purchaserId
+          },
+          attendee: { 
+            attendeeFirstName, 
+            attendeeLastName, 
+            attendeeDni 
+          },
+          validated,
+          purchaseDate,
+          validationDate
+        } = req.body;
+
+        const [ purchaseEvent, user ] = await Promise.all([
+          Event.findById(event), 
+          User.findById(purchaserId)
+        ]);
+
+        if(purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent.purchasedTicketsList.length) {
+          return res.status(404).json({
+            ok: false,
+            message: 'Sold out!'
+          });          
+        }
 
         const newTicket = new Ticket({
           event,
@@ -58,9 +94,11 @@ class TicketController {
           validationDate
         });
 
-        const savedNewTicket = await newTicket.save();
-        
+        const savedNewTicket = await newTicket.save();        
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
+        purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
+
+        await purchaseEvent.save();
         await user.save();
 
         res.status(200).json({
@@ -68,7 +106,10 @@ class TicketController {
           savedNewTicket
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
@@ -116,18 +157,10 @@ class TicketController {
           ticket
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
-      }
-    }
-
-    async update(req, res = response) {
-      try {
-        /*const { id } = req.params;
-        const { name, description } = req.body;
-        const updatedUser = await Ticket.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.json(updatedUser);*/
-      } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
 

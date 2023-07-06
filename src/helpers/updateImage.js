@@ -5,7 +5,6 @@ const Event = require('../models/eventModel');
 
 const updateImages = (options) => {
     const { type, id, fileName } = options;
-
     try{
         const action = {
             user: async () => {
