@@ -66,7 +66,7 @@ ticketSchema.pre('save', async function (next) {
   if (!doc.ticketNumber) {
     try {
       const counter = await Counter.findByIdAndUpdate(
-        { _id: this.event },
+        { _id: 'ticketNumber' },
         { $inc: { sequence_value: 1 } },
         { new: true, upsert: true }
       ).exec();
