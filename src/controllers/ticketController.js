@@ -97,6 +97,7 @@ class TicketController {
         const savedNewTicket = await newTicket.save();        
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
         purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
+        purchaseEvent.purchasedTicketsList = purchaseEvent.purchasedTicketsList.concat(savedNewTicket._id);
 
         await purchaseEvent.save();
         await user.save();

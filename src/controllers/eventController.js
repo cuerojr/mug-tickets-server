@@ -50,6 +50,7 @@ class EventController {
           ticketPurchaseDeadline,
           hasLimitedPlaces,
           title, 
+          description,
           address, 
           date,
           image
@@ -61,6 +62,7 @@ class EventController {
           ticketPurchaseDeadline,
           hasLimitedPlaces,          
           title, 
+          description,
           address, 
           date,
           image          
