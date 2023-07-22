@@ -127,17 +127,22 @@ class TicketController {
       try {
         const ticket = await Ticket.findById(id).populate('event');
         if (!ticket) {
-          return res
-          .status(404)
-          .json({ ok: false, error: `Ticket with id ${id} not found.` });
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Ticket with id ${id} not found.` 
+          });
         }
+        const { purchasedTicketsList, __v, ticketsPurchased, description, ...item } = ticket;
 
         res.status(200).json({
           ok: true,
-          ticket
+          item
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
