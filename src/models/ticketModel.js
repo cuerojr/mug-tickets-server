@@ -61,7 +61,7 @@ const ticketSchema = new mongoose.Schema({
   }
 });
 
-/*ticketSchema.pre('save', async function (next) {
+ticketSchema.pre('save', async function (next) {
   const doc = this;  
   if (!doc.ticketNumber) {
     try {
@@ -77,7 +77,7 @@ const ticketSchema = new mongoose.Schema({
     }
   }
   next();
-});*/
+});
 
 
 ticketSchema.method('toJSON', function() {
