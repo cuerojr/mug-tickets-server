@@ -149,11 +149,14 @@ class TicketController {
             error: `Ticket with id ${id} not found.` 
           });
         }
+        
+        const { purchaser, ... params} = ticket;
 
         res.status(200).json({
           ok: true,
-          ticket
+          ticket: params
         });
+
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
