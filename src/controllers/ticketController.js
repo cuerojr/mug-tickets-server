@@ -9,7 +9,15 @@ class TicketController {
     async getAll(req, res = response) {
       try {
         const { id } = req.params;
-        const tickets = await Ticket.find({}).populate('event');
+        const tickets = await Ticket.find({}).populate('event', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
 
         res.status(200).json({
           ok: true,
@@ -125,18 +133,26 @@ class TicketController {
       const { id } = req.params;
 
       try {
-        const ticket = await Ticket.findById(id).populate('event');
+        const ticket = await Ticket.findById(id).populate('event', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
+
         if (!ticket) {
           return res.status(404).json({ 
             ok: false, 
             error: `Ticket with id ${id} not found.` 
           });
         }
-        const { purchasedTicketsList, __v, ticketsPurchased, description, ... object } = ticket.toObject();
 
         res.status(200).json({
           ok: true,
-          object
+          ticket
         });
       } catch (err) {
         res.status(500).json({ 
