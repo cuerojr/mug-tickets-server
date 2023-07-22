@@ -150,7 +150,7 @@ class TicketController {
           });
         }
         
-        const { purchaser, ... params} = ticket;
+        const { purchaser, ... params} = ticket.toObject();
 
         res.status(200).json({
           ok: true,
