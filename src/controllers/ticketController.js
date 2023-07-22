@@ -132,11 +132,11 @@ class TicketController {
             error: `Ticket with id ${id} not found.` 
           });
         }
-        const { purchasedTicketsList, __v, ticketsPurchased, description, ...item } = ticket;
+        const { purchasedTicketsList, __v, ticketsPurchased, description, ... object } = ticket.toObject();
 
         res.status(200).json({
           ok: true,
-          item
+          object
         });
       } catch (err) {
         res.status(500).json({ 
