@@ -6,6 +6,7 @@ module.exports = function (duration = 360) {
         const cachedBody = mcache.get(key);
 
         if(cachedBody) {
+            console.log('data')
             return res.send(JSON.parse(cachedBody));
         } else {
             res.sendResponse = res.send;
