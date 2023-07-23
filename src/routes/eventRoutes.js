@@ -13,7 +13,8 @@ const eventController = new EventController();
 router.get('/', 
     [
         CacheMiddleware()
-    ],eventController.getAll);
+    ], 
+    eventController.getAll);
 
 router.get('/query', eventController.filter);
 

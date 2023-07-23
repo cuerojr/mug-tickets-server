@@ -3,6 +3,8 @@ const router = Router();
 
 const { check } = require('express-validator');
 const ValidationsMiddlewares = require('../middlewares/validationMiddleware');
+const CacheMiddleware = require('../middlewares/cacheMiddleware');
+
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 const { UserController } = require('../controllers/userController');
@@ -10,7 +12,8 @@ const userController = new UserController();
 
 router.get('/',
     [
-        validationsMiddlewares.validateJWT
+        validationsMiddlewares.validateJWT,
+        CacheMiddleware()
     ], 
     userController.getAll);
 
