@@ -4,14 +4,15 @@ const router = Router();
 const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
 const { TicketController } = require('../controllers/ticketController');
-const CacheMiddleware = require('../middlewares/cacheMiddleware');
+import apicache from 'apicache';
+let cache = apicache.middleware
 
 const validationsMiddlewares = new ValidationsMiddlewares();
 
 const ticketController = new TicketController();
 
 router.get('/', [
-        CacheMiddleware()
+        cache('5 minutes')
     ],
     ticketController.getAll);
 
