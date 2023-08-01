@@ -53,7 +53,8 @@ class EventController {
           description,
           address, 
           date,
-          image
+          image,
+          price
         } = req.body;
 
         const newEvent = new Event({
@@ -65,7 +66,8 @@ class EventController {
           description,
           address, 
           date,
-          image          
+          image,
+          price      
         });
 
         await newEvent.save();

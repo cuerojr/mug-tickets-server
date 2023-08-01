@@ -13,8 +13,7 @@ class ValidationsMiddlewares {
             ok: false,
             errors: errors.mapped()
           });
-        }
-    
+        }    
         next();        
     }
 

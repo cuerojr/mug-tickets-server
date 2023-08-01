@@ -32,7 +32,7 @@ const eventSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: false,
+    required: true,
   },
   address: {
     type: String,
@@ -49,7 +49,12 @@ const eventSchema = new mongoose.Schema({
   ticketsAvailableOffline: {
     type: Number,
     min: 0,
-  },  
+  },
+  price:{
+    type: Number,
+    min: 0,
+    default: 0
+  },
   purchasedTicketsList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ticket'
