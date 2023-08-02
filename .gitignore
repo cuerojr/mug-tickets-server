@@ -132,4 +132,4 @@ dist
 .pnp.*
 
 # Adde docs on develepment
-src/uploads
+#src/uploads
