@@ -47,11 +47,11 @@ const eventSchema = new mongoose.Schema({
     required: false
   },
   ticketsAvailableOffline: {
-    type: Number,
+    type: String,
     min: 0,
   },
   price:{
-    type: Number,
+    type: String,
     min: 0,
     default: 0
   },
