@@ -84,7 +84,7 @@ class TicketController {
             message: 'Sold out!'
           });          
         }
-        const ticketUniqueNumber = (purchaseEvent.ticketsPurchased + 1)
+        
         const newTicket = new Ticket({
           event,
           purchaser: { 
@@ -100,11 +100,10 @@ class TicketController {
           },
           validated,
           purchaseDate,
-          validationDate,
-          ticketUniqueNumber
+          validationDate
         });
-        console.log(newTicket)
-        const savedNewTicket = await newTicket.save();        
+        
+        const savedNewTicket = await newTicket.save();
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
         
         purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
