@@ -100,7 +100,8 @@ class TicketController {
           },
           validated,
           purchaseDate,
-          validationDate
+          validationDate,
+          ticketNumber: 123
         });
         
         const savedNewTicket = await newTicket.save();
