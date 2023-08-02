@@ -85,7 +85,7 @@ class TicketController {
             message: 'Sold out!'
           });          
         }
-        const ticketNumber = +purchaseEvent.purchasedTicketsList.length + 2;
+        const ticketNumber = +purchaseEvent.purchasedTicketsList.length + 1;
         const newTicket = new Ticket({
           event,
           purchaser: { 
