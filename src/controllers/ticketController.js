@@ -54,6 +54,7 @@ class TicketController {
   
     async create(req, res = response) {      
       try {
+        console.log(req.body)
         const {
           event,
           purchaser: { 
@@ -100,9 +101,9 @@ class TicketController {
           validated,
           purchaseDate,
           validationDate,
-          ticketNumber: purchaseEvent.purchasedTicketsList.length + 2
+          ticketNumber: purchaseEvent.ticketsPurchased + 1
         });
-
+        console.log(newTicket)
         const savedNewTicket = await newTicket.save();        
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
         
