@@ -58,12 +58,6 @@ const ticketSchema = new mongoose.Schema({
     type: Number,
     unique: false,
     default: 0
-  },
-  ticketUniqueNumber: {
-    type: Number,
-    unique: false,
-    default: 0,
-    required: false
   }
 });
 
