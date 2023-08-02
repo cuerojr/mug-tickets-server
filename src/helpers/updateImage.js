@@ -3,7 +3,7 @@ const fs = require('fs');
 const User = require('../models/userModel');
 const Event = require('../models/eventModel');
 
-const updateImages = (options) => {
+const updateImages = (options = {}) => {
     const { type, id, fileName } = options;
     try{
         const action = {
