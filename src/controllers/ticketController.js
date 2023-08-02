@@ -101,7 +101,7 @@ class TicketController {
           validated,
           purchaseDate,
           validationDate,
-          ticketNumber: purchaseEvent.ticketsPurchased + 1
+          ticketUniqueNumber: purchaseEvent.ticketsPurchased + 1
         });
         console.log(newTicket)
         const savedNewTicket = await newTicket.save();        
