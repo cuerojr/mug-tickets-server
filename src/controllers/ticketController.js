@@ -7,6 +7,7 @@ class TicketController {
     constructor(){}
 
     async getAll(req, res = response) {
+      console.log('asdasd', req.body)
       try {
         const { id } = req.params;
         const tickets = await Ticket.find({}).populate('event', {
@@ -54,7 +55,7 @@ class TicketController {
   
     async create(req, res = response) {      
       try {
-        console.log(req.body)
+        console.log('asdasd', req.body)
         const {
           event,
           purchaser: { 
