@@ -7,13 +7,13 @@ const eventSchema = new mongoose.Schema({
     required: true,
   },
   ticketsAvailableOnline: {
-    type: Number,
+    type: String,
     required: true,
     default: 0,
     min: 0,
   },
   ticketsPurchased: {
-    type: Number,
+    type: String,
     default: 0,
     min: 0,
   },
