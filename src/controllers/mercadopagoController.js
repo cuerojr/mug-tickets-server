@@ -32,6 +32,7 @@ class MercadopagoController {
         
             const response = await mercadopago.preferences.create(preference);
             if (response) {
+                console.log(response)
                 return res.status(200).json({
                     ok: true,
                     id: response.body.id,
