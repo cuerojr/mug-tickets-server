@@ -34,7 +34,8 @@ class MercadopagoController {
             if (response) {
                 return res.status(200).json({
                     ok: true,
-                    id: response.body.id
+                    id: response.body.id,
+                    body: response.body
                 });
             }   
             res.status(500).json({ 
