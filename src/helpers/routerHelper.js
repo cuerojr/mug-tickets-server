@@ -1,6 +1,4 @@
-const express = require('express');
-
-class RouteLibrary {
+class Routes {
   constructor(app) {
     this.app = app;
   }
@@ -16,4 +14,4 @@ class RouteLibrary {
   }
 }
 
-module.exports = RouteLibrary;
+module.exports = Routes;

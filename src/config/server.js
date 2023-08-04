@@ -1,19 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./db');
-const RouteLibrary = require('../helpers/routerHelper');
-
+const Routes = require('../helpers/routerHelper');
+const Database = require('./db');
 class Server {
-    constructor(){
+    constructor(dataBase = new Database(), port = process.env.PORT){
         this.app = express();
-        connectDB();
-        this.port = process.env.PORT;
+        this.dataBase = dataBase;
+        this.dataBase.connectDB();
+        this.port = port;
 
         //Middlewares
         this.middlewares();
 
         // Routes
-        this.routes = new RouteLibrary(this.app);
+        this.routes = new Routes(this.app);
         this.setup();
     }
 
@@ -23,7 +24,7 @@ class Server {
         //lectura y parseo del body
         this.app.use( express.json() );
         //Public dir
-        this.app.use( express.static('public') );
+        //this.app.use( express.static('public') );
     }
 
     setup(){
