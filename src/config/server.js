@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./db');
+const RouteLibrary = require('../helpers/routerHelper');
 
 class Server {
     constructor(){
@@ -12,7 +13,8 @@ class Server {
         this.middlewares();
 
         // Routes
-        this.routes();
+        this.routes = new RouteLibrary(this.app);
+        this.setup();
     }
 
     middlewares(){
@@ -24,18 +26,12 @@ class Server {
         this.app.use( express.static('public') );
     }
 
-    routes(){
-        this.app.use('/api/users', require('../routes/userRoutes'));
-        this.app.use('/api/admin', require('../routes/adminRoutes'));
-        this.app.use('/api/tickets', require('../routes/ticketRoutes'));
-        this.app.use('/api/events', require('../routes/eventRoutes'));
-        this.app.use('/api/login', require('../routes/logInRoutes')); 
-        this.app.use('/api/upload', require('../routes/uploadImagesRoutes'));     
-        this.app.use('/api/checkout', require('../routes/mercadopagoRoutes'));   
+    setup(){
+        this.routes.setupRoutes();        
     }
 
     listen(){        
-        this.app.listen(this.port, ()=>{
+        this.app.listen(this.port, () => {
             console.log('server', this.port)
         });
     }
