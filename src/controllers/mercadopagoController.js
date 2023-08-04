@@ -6,8 +6,7 @@ class MercadopagoController {
 
     async create(req, res = response) {
         try {
-            createTransaction(req.body);
-
+            await createTransaction(req.body);
             res.status(200).json({
                 ok: true,
                 token
@@ -23,6 +22,7 @@ class MercadopagoController {
     async feedback(req, res = response) {
         const { payment_id, status, merchant_order_id } = req.query;
         try {
+            feedback();
             res.status(200).json({
                 Payment: payment_id,
                 Status: status,
