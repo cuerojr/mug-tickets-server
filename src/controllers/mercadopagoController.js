@@ -5,7 +5,6 @@ class MercadopagoController {
     constructor(){}
 
     async create(req, res = response) {
-        const { email, password } = req.body;
         try {
             createTransaction(req.body);
 
