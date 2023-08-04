@@ -19,7 +19,7 @@ router.get('/',
 
 router.post('/',
     [
-        validationsMiddlewares.validateJWT,
+        //validationsMiddlewares.validateJWT,
         check('firstName', 'First name is required').not().isEmpty(),
         check('lastName', 'Last name is required').not().isEmpty(),
         check('dni', 'Dni is required').not().isEmpty(),
