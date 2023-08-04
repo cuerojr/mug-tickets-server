@@ -15,7 +15,7 @@ class MercadopagoController {
         } catch (err) {
             res.status(500).json({ 
                 ok: false, 
-                error: err 
+                error: err.message
             });
         }
     }
