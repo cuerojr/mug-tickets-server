@@ -12,7 +12,7 @@ const eventController = new EventController();
 
 router.get('/', 
     [
-        validationsMiddlewares.validateIfAdmin,
+        //validationsMiddlewares.validateIfAdmin,
         CacheMiddleware()
     ], 
     eventController.getAll);
