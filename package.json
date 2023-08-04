@@ -25,6 +25,7 @@
     "google-auth-library": "^8.9.0",
     "jsonwebtoken": "^9.0.0",
     "memory-cache": "^0.2.0",
+    "mercadopago": "^1.5.17",
     "mogodb": "^0.0.1-security",
     "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.0.3",
