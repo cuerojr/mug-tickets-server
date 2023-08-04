@@ -12,14 +12,19 @@ const eventController = new EventController();
 
 router.get('/', 
     [
+        validationsMiddlewares.validateIfAdmin,
         CacheMiddleware()
     ], 
     eventController.getAll);
 
-router.get('/query', eventController.filter);
+router.get('/query', [
+        validationsMiddlewares.validateIfAdmin,
+    ], 
+    eventController.filter);
 
 router.post('/', 
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
@@ -27,14 +32,18 @@ router.post('/',
         check('description', 'Show description is required').not().isEmpty(),
         check('address', 'Show address is required').not().isEmpty(),
         check('date', 'Show date is required').not().isEmpty(),  
-        validationsMiddlewares.validateFields
+        validationsMiddlewares.validateFields,
     ],
     eventController.create);
 
-router.get('/:id', eventController.get);
+router.get('/:id', [
+        validationsMiddlewares.validateIfAdmin,
+    ], 
+    eventController.get);
 
 router.put('/:id', 
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
@@ -48,6 +57,7 @@ router.put('/:id',
 
 router.delete('/:id',
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT
     ], 
     eventController.delete);
