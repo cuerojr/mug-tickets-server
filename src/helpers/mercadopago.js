@@ -1,6 +1,7 @@
 const mercadopago = require("mercadopago");
 
 const createTransaction = async (options = {}) => {
+    console.log(options)
     try{
         const { description, price, quantity } = options;
         // REPLACE WITH YOUR ACCESS TOKEN AVAILABLE IN: https://developers.mercadopago.com/panel
