@@ -29,7 +29,8 @@ class Server {
         this.app.use('/api/tickets', require('../routes/ticketRoutes'));
         this.app.use('/api/events', require('../routes/eventRoutes'));
         this.app.use('/api/login', require('../routes/logInRoutes')); 
-        this.app.use('/api/upload', require('../routes/uploadImagesRoutes'));        
+        this.app.use('/api/upload', require('../routes/uploadImagesRoutes'));     
+        this.app.use('/api/checkout', require('../routes/mercadopagoRoutes'));   
     }
 
     listen(){        
