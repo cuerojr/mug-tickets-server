@@ -4,11 +4,11 @@ const { connectDB } = require('./db');
 const Routes = require('../helpers/routerHelper');
 const Database = require('./db');
 class Server {
-    constructor(dataBase = new Database(), port = process.env.PORT){
-        this.app = express();
+    constructor(dataBase = new Database(), port = process.env.PORT, app = express()){
         this.dataBase = dataBase;
-        this.dataBase.connectDB();
         this.port = port;
+        this.app = app;
+        this.dataBase.connectDB();
 
         //Middlewares
         this.middlewares();
