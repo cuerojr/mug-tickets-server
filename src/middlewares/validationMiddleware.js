@@ -1,4 +1,5 @@
 const { response } = require('express');
+const Admin = require('./../models/adminModel');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
@@ -62,7 +63,7 @@ class ValidationsMiddlewares {
      * @param {object} res - The response object.
      * @param {function} next - The next function to proceed to the next middleware or route handler.
      */
-  validateIfAdmin(req, res = response, next) {
+  async validateIfAdmin(req, res = response, next) {
     const token = req.header('x-token');
 
     if(!token) {
@@ -79,7 +80,14 @@ class ValidationsMiddlewares {
           msg: "Can't access there."
         });
       } 
-      
+      /// validate if admin
+      const admin = await Admin.findById(uid)
+      if(!admin){
+        return res.status(401).json({
+          ok: false,
+          msg: "Can't access there."
+        });
+      } 
       next();
     } catch(error) {
       return res.status(401).json({

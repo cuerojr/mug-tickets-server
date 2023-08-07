@@ -34,7 +34,11 @@ const adminSchema = new mongoose.Schema({
   image: {
     type: String,
     required: false
-  }
+  },
+  eventsCreatedList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  }]
 });
 
 /**

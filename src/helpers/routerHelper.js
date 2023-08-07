@@ -19,7 +19,7 @@ class Routes {
     this.app.use('/api/users', require('../routes/userRoutes'));
 
     // Admin Routes
-    this.app.use('/api/admin', require('../routes/adminRoutes'));
+    this.app.use('/api/admins', require('../routes/adminRoutes'));
 
     // Ticket Routes
     this.app.use('/api/tickets', require('../routes/ticketRoutes'));
@@ -29,6 +29,9 @@ class Routes {
 
     // Login Routes
     this.app.use('/api/login', require('../routes/logInRoutes'));
+
+    // Login Routes
+    this.app.use('/api/panel/login', require('../routes/adminLogInRoutes'));
 
     // Upload Images Routes
     this.app.use('/api/upload', require('../routes/uploadImagesRoutes'));
