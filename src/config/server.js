@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./db');
+const config = require('./config');
 const Routes = require('../helpers/routerHelper');
 const Database = require('./db');
+
 class Server {
-    constructor(dataBase = new Database(), port = process.env.PORT, app = express()){
-        this.dataBase = dataBase;
+    constructor(dataBase = new Database(), port = config.PORT, app = express()){
         this.port = port;
         this.app = app;
+        this.dataBase = dataBase;
         this.dataBase.connectDB();
 
         //Middlewares
@@ -32,12 +33,12 @@ class Server {
     }
 
     setup(){
-        this.routes.setupRoutes();        
+        this.routes.setupRoutes();
     }
 
-    listen(){        
+    listen(){
         this.app.listen(this.port, () => {
-            console.log('server', this.port)
+            console.log('server', this.port);
         });
     }
 }
