@@ -9,6 +9,8 @@
   "scripts": {
     "test": "jest",
     "start": "node index.js",
+    "dev": "set NODE_ENV=development&& nodemon index.js",
+    "prod": "set NODE_ENV=production&& node index.js",
     "vercel-build": "echo hello"
   },
   "keywords": [],
@@ -32,6 +34,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^4.1.7",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jsdom": "^22.0.0",

@@ -112,7 +112,7 @@ class AdminController {
           admin
         });     
       } catch (err) {
-        console.error(`Error occurred while fetching user with ID "${id}" - ${err}`);
+        console.error(`Error occurred while fetching admin with ID "${id}" - ${err}`);
         res.status(500).json({
           ok: false,
           error: 'Unable to fetch admin information',
