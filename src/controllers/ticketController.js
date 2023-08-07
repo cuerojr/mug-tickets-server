@@ -7,9 +7,18 @@ class TicketController {
     constructor(){}
 
     async getAll(req, res = response) {
+      console.log('asdasd', req.body)
       try {
         const { id } = req.params;
-        const tickets = await Ticket.find({}).populate('event');
+        const tickets = await Ticket.find({}).populate('event', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
 
         res.status(200).json({
           ok: true,
@@ -75,7 +84,7 @@ class TicketController {
             message: 'Sold out!'
           });          
         }
-
+        const ticketNumber = +purchaseEvent.purchasedTicketsList.length + 1;
         const newTicket = new Ticket({
           event,
           purchaser: { 
@@ -91,12 +100,15 @@ class TicketController {
           },
           validated,
           purchaseDate,
-          validationDate
+          validationDate,
+          ticketNumber
         });
-
-        const savedNewTicket = await newTicket.save();        
+        
+        const savedNewTicket = await newTicket.save();
         user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
+        
         purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
+        purchaseEvent.purchasedTicketsList = purchaseEvent.purchasedTicketsList.concat(savedNewTicket._id);
 
         await purchaseEvent.save();
         await user.save();
@@ -123,19 +135,35 @@ class TicketController {
       const { id } = req.params;
 
       try {
-        const ticket = await Ticket.findById(id).populate('event');
+        const ticket = await Ticket.findById(id).populate('event', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
+
         if (!ticket) {
-          return res
-          .status(404)
-          .json({ ok: false, error: `Ticket with id ${id} not found.` });
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Ticket with id ${id} not found.` 
+          });
         }
+        
+        const { purchaser, ... params} = ticket.toObject();
 
         res.status(200).json({
           ok: true,
-          ticket
+          ticket: params
         });
+
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
   
@@ -174,9 +202,14 @@ class TicketController {
           ok: true
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
 }
 
-module.exports = TicketController;
+module.exports = {
+  TicketController
+};

@@ -7,15 +7,15 @@ const CacheMiddleware = require('../middlewares/cacheMiddleware');
 
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-const { UserController } = require('../controllers/userController');
-const userController = new UserController();
+const { AdminController } = require('../controllers/adminController');
+const adminController = new AdminController();
 
 router.get('/',
     [
         validationsMiddlewares.validateJWT,
         CacheMiddleware()
     ], 
-    userController.getAll);
+    adminController.getAll);
 
 router.post('/',
     [
@@ -27,9 +27,12 @@ router.post('/',
         check('email', 'Email is required').isEmail(),  
         validationsMiddlewares.validateFields,       
     ], 
-    userController.create);
+    adminController.create);
 
-router.get('/:id', userController.get);
+router.get('/:id', [
+        validationsMiddlewares.validateJWT,
+    ], 
+    adminController.get);
 
 router.put('/:id',
     [
@@ -41,12 +44,12 @@ router.put('/:id',
         check('email', 'Email is required').isEmail(),
         validationsMiddlewares.validateFields,       
     ], 
-    userController.update);
+    adminController.update);
 
 router.delete('/:id',
     [
         validationsMiddlewares.validateJWT
     ], 
-    userController.delete);
+    adminController.delete);
 
 module.exports = router;

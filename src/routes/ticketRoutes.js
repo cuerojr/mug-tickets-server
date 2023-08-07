@@ -3,12 +3,16 @@ const router = Router();
 
 const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
-const validationsMiddlewares = new ValidationsMiddlewares();
+const { TicketController } = require('../controllers/ticketController');
+const CacheMiddleware = require('../middlewares/cacheMiddleware');
 
-const TicketController = require('../controllers/ticketController');
+const validationsMiddlewares = new ValidationsMiddlewares();
 const ticketController = new TicketController();
 
-router.get('/', ticketController.getAll);
+router.get('/', [
+        CacheMiddleware()
+    ],
+    ticketController.getAll);
 
 router.get('/query', ticketController.filter);
 
