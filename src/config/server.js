@@ -11,16 +11,20 @@ class Server {
         this.dataBase.connectDB();
 
         //Middlewares
-        this.middlewares();
+        this.corsMiddleware();
+        this.parserMiddleware();
 
         // Routes
         this.routes = new Routes(this.app);
         this.setup();
     }
 
-    middlewares(){
+    corsMiddleware(){
         //CORS
         this.app.use( cors() );
+    }
+    
+    parserMiddleware(){
         //lectura y parseo del body
         this.app.use( express.json() );
         //Public dir

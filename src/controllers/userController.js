@@ -27,7 +27,7 @@ class UserController {
         });
 
       } catch (err) {
-        console.error(`Error occurred while fetching tickets - ${err}`);
+        console.error(`Error occurred while fetching users - ${err}`);
         res.status(500).json({
           ok: false,
           error: 'Unable to fetch ticket information',

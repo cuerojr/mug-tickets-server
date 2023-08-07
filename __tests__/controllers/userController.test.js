@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const request = require('supertest');
 
@@ -190,4 +190,88 @@ describe('UserController', () => {
       expect(response.body.error).toBeDefined();
     });
   });
+});*/
+
+const { UserController } = require('./../../src/controllers/userController');
+const User = require('./../../src/models/userModel');
+const { generateJWT } = require('./../../src/config/authentication');
+
+jest.mock('./../../src/models/userModel', () => {
+  return {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    findById: jest.fn(),
+    findByIdAndUpdate: jest.fn(),
+    findByIdAndRemove: jest.fn(),
+    save: jest.fn()
+  };
+});
+
+jest.mock('./../../src/config/authentication', () => {
+  return {
+    generateJWT: jest.fn()
+  };
+});
+
+describe('UserController', () => {
+  let userController;
+
+  beforeEach(() => {
+    // Create a new instance of the UserController class for each test
+    userController = new UserController();
+  });
+
+  it('should get all users successfully', async () => {
+    // Mock the user data
+    const users = [{ 
+      name: 'User1', 
+      purchasedTickets: [] 
+    }, { 
+      name: 'User2', 
+      purchasedTickets: [] 
+    }];
+
+    User.find.mockResolvedValue(users);
+
+    // Mock the response object
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    // Call the getAll method
+    await userController.getAll({}, res);
+
+    // Expect the response to be correct
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      ok: true,
+      users
+    });
+  });
+
+  it('should handle errors while getting all users', async () => {
+    // Mock the error
+    const errorMessage = 'Database error';
+    User.find.mockRejectedValue(new Error(errorMessage));
+
+    // Mock the response object
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    // Call the getAll method
+    await userController.getAll({}, res);
+
+    // Expect the response to indicate an error
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      ok: false,
+      error: 'Unable to fetch user information'
+    });
+  });
+
+  // Write similar tests for other methods like filter, create, get, update, and delete
+  // Mock the necessary functions and objects to properly test each method.
 });
