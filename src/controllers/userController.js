@@ -4,9 +4,19 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/userModel');
 const { generateJWT } = require('../config/authentication');
 
+/**
+ * Controller class for handling user-related operations.
+ */
 class UserController {    
     constructor(){}
 
+    /**
+     * Get all users from the database and populate their purchasedTickets field.
+     *
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of users or an error message.
+     */
     async getAll(req, res = response) {
       try {
         const users = await User.find({}).populate('purchasedTickets', {
@@ -35,6 +45,13 @@ class UserController {
       }
     }
   
+    /**
+     * Filter users based on the provided query parameters.
+     *
+     * @param {Object} req - Express request object containing query parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of filtered users or an error message.
+     */
     async filter(req, res = response) {
       try {
         const user = await User.find(req.query);
@@ -57,6 +74,13 @@ class UserController {
       }
     }
     
+    /**
+     * Create a new user with the provided data.
+     *
+     * @param {Object} req - Express request object containing the user data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the newly created user details or an error message.
+     */
     async create(req, res = response) {
       const { 
         dni, 
@@ -106,6 +130,13 @@ class UserController {
       }
     }
   
+    /**
+     * Get a user by their ID and populate their purchasedTickets field.
+     *
+     * @param {Object} req - Express request object containing the user ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the user details or an error message if not found.
+     */
     async get(req, res = response) {
       const { id } = req.params;      
       try {
@@ -141,6 +172,13 @@ class UserController {
       }
     }
   
+    /**
+     * Update a user's information by their ID.
+     *
+     * @param {Object} req - Express request object containing the user ID in the request body and updated data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the updated user details or an error message if not found.
+     */
     async update(req, res = response) {
       const id = req.params.id;
       const {         
@@ -184,6 +222,13 @@ class UserController {
       }
     }
 
+    /**
+     * Delete a user by their ID.
+     *
+     * @param {Object} req - Express request object containing the user ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
     async delete(req, res = response) {
       const { id } = req.params;
 

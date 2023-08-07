@@ -2,9 +2,19 @@ const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { updateImages } = require('../helpers/updateImage');
 
+/**
+ * Controller class for handling image upload operations.
+ */
 class UploadImagesController {    
     constructor(){}
 
+    /**
+     * Upload an image for a specific type and ID.
+     *
+     * @param {Object} req - Express request object containing the type and ID in the request parameters and the image file in the request files.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the uploaded image filename or an error message.
+     */
     upload(req, res = response) {      
       try{
         const { type, id } = req.params;      

@@ -10,6 +10,9 @@ const validationsMiddlewares = new ValidationsMiddlewares();
 const { AdminController } = require('../controllers/adminController');
 const adminController = new AdminController();
 
+// Route: GET /api/admin
+// Middleware: validateJWT (JWT validation middleware) and CacheMiddleware (cache middleware)
+// Controller: adminController.getAll
 router.get('/',
     [
         validationsMiddlewares.validateJWT,
@@ -17,6 +20,9 @@ router.get('/',
     ], 
     adminController.getAll);
 
+// Route: POST /api/admin
+// Middleware: validateFields (Express validator middleware)
+// Controller: adminController.create
 router.post('/',
     [
         //validationsMiddlewares.validateJWT,
@@ -29,11 +35,17 @@ router.post('/',
     ], 
     adminController.create);
 
+// Route: GET /api/admin/:id
+// Middleware: validateJWT (JWT validation middleware)
+// Controller: adminController.get
 router.get('/:id', [
         validationsMiddlewares.validateJWT,
     ], 
     adminController.get);
 
+// Route: PUT /api/admin/:id
+// Middleware: validateJWT (JWT validation middleware) and validateFields (Express validator middleware)
+// Controller: adminController.update
 router.put('/:id',
     [
         validationsMiddlewares.validateJWT,
@@ -46,6 +58,9 @@ router.put('/:id',
     ], 
     adminController.update);
 
+// Route: DELETE /api/admin/:id
+// Middleware: validateJWT (JWT validation middleware)
+// Controller: adminController.delete
 router.delete('/:id',
     [
         validationsMiddlewares.validateJWT

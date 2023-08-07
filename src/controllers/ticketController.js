@@ -3,9 +3,19 @@ const Ticket = require('../models/ticketModel');
 const User = require('../models/userModel');
 const Event = require('../models/eventModel');
 
+/**
+ * Controller class for handling ticket-related operations.
+ */
 class TicketController {    
     constructor(){}
 
+    /**
+     * Get all tickets from the database and populate their associated events.
+     *
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of tickets or an error message.
+     */
     async getAll(req, res = response) {
       console.log('asdasd', req.body)
       try {
@@ -32,6 +42,13 @@ class TicketController {
       }
     }
 
+    /**
+     * Filter tickets based on the provided query parameters.
+     *
+     * @param {Object} req - Express request object containing query parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of filtered tickets or an error message.
+     */
     async filter(req, res = response) {
       try {
         const tickets = await Ticket.find(req.query);
@@ -53,6 +70,13 @@ class TicketController {
       }
     }
   
+    /**
+     * Create a new ticket with the provided data.
+     *
+     * @param {Object} req - Express request object containing the ticket data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the newly created ticket details or an error message.
+     */
     async create(req, res = response) {      
       try {
         const {
@@ -126,10 +150,11 @@ class TicketController {
     }
   
     /**
-     * Gets a ticket by ID and populates its event field
-     * @param {object} req - The request object
-     * @param {object} res - The response object
-     * @returns {object} - Returns a JSON object with `ok` and `ticket` fields if successful, otherwise returns an error message
+     * Get a ticket by its ID and populate its associated event.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the ticket details or an error message if not found.
      */
     async get(req, res = response) {
       const { id } = req.params;
@@ -167,6 +192,13 @@ class TicketController {
       }
     }
   
+    /**
+     * Update a ticket's information by its ID.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request body and updated data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the updated ticket details or an error message if not found.
+     */
     async update(req, res = response) {
       const { id } = req.body;
       const { name, description } = req.body;
@@ -192,6 +224,13 @@ class TicketController {
       }
     }
 
+    /**
+     * Delete a ticket by its ID.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
     async delete(req, res = response) {
       const { id } = req.params;
 
