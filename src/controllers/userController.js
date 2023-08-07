@@ -102,7 +102,8 @@ class UserController {
         res.status(500).json({
           ok: false,
           error: 'Unable to create user',
-        });      }
+        });      
+      }
     }
   
     async get(req, res = response) {

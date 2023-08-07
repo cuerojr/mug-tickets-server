@@ -55,7 +55,6 @@ class TicketController {
   
     async create(req, res = response) {      
       try {
-        console.log('asdasd', req.body)
         const {
           event,
           purchaser: { 
@@ -203,7 +202,10 @@ class TicketController {
           ok: true
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: err.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
 }
