@@ -2,9 +2,18 @@ const { response } = require('express');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
+/**
+ * Middleware class containing validation methods for request fields, JWT tokens, and admin privileges.
+ */
 class ValidationsMiddlewares {
     constructor() { }
 
+    /**
+     * Middleware to validate the request fields using express-validator.
+     * @param {object} req - The request object.
+     * @param {object} res - The response object.
+     * @param {function} next - The next function to proceed to the next middleware or route handler.
+     */
     validateFields(req, res = response, next) {
         const errors = validationResult( req );
     
@@ -17,6 +26,12 @@ class ValidationsMiddlewares {
         next();        
     }
 
+    /**
+     * Middleware to validate the JWT token from the request header.
+     * @param {object} req - The request object.
+     * @param {object} res - The response object.
+     * @param {function} next - The next function to proceed to the next middleware or route handler.
+     */
     validateJWT(req, res = response, next) {    
       const token = req.header('x-token');
 
@@ -41,6 +56,12 @@ class ValidationsMiddlewares {
       }     
   }
 
+  /**
+     * Middleware to validate if the user has admin privileges based on the JWT token.
+     * @param {object} req - The request object.
+     * @param {object} res - The response object.
+     * @param {function} next - The next function to proceed to the next middleware or route handler.
+     */
   validateIfAdmin(req, res = response, next) {
     const token = req.header('x-token');
 

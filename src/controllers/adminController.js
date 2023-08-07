@@ -4,9 +4,19 @@ const bcryptjs = require('bcryptjs');
 const Admin = require('../models/adminModel');
 const { generateJWT } = require('../config/authentication');
 
+/**
+ * Controller class for handling admin-related operations.
+ */
 class AdminController {    
     constructor(){}
 
+    /**
+   * Get all admins from the database.
+   *
+   * @param {Object} req - Express request object.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing an array of admins or an error message.
+   */
     async getAll(req, res = response) {
       try {
         const admins = await Admin.find({});
@@ -24,6 +34,13 @@ class AdminController {
       }
     }
   
+    /**
+   * Filter admins based on the provided query parameters.
+   *
+   * @param {Object} req - Express request object containing query parameters.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing an array of filtered admins or an error message.
+   */
     async filter(req, res = response) {
       try {
         const admin = await Admin.find(req.query);
@@ -46,6 +63,13 @@ class AdminController {
       }
     }
     
+    /**
+   * Create a new admin with the provided data.
+   *
+   * @param {Object} req - Express request object containing the admin data in the request body.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the newly created admin details and a JWT token or an error message.
+   */
     async create(req, res = response) {
       const { 
         dni, 
@@ -95,6 +119,13 @@ class AdminController {
       }
     }
   
+    /**
+   * Get an admin by their ID.
+   *
+   * @param {Object} req - Express request object containing the admin ID in the request parameters.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the admin details or an error message if not found.
+   */
     async get(req, res = response) {
       const { id } = req.params;      
       try {
@@ -120,6 +151,13 @@ class AdminController {
       }
     }
   
+    /**
+   * Update an admin's information by their ID.
+   *
+   * @param {Object} req - Express request object containing the admin ID in the request parameters and updated data in the request body.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the updated admin details or an error message if not found.
+   */
     async update(req, res = response) {
       const id = req.params.id;
       const {         
@@ -163,6 +201,13 @@ class AdminController {
       }
     }
 
+    /**
+   * Delete an admin by their ID.
+   *
+   * @param {Object} req - Express request object containing the admin ID in the request parameters.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response indicating success or failure of the delete operation.
+   */
     async delete(req, res = response) {
       const { id } = req.params;
 
