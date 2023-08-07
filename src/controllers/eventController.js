@@ -126,12 +126,10 @@ class EventController {
         const { id } = req.params;
         const event = await Event.findById(id)/*.populate('purchasedTicketsList')*/;
         if (!event) {
-          return res
-            .status(404)
-            .json({ 
-              ok: false, 
-              error: `Event with id ${id} not found.` 
-            });
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Event with id ${id} not found.` 
+          });
         }
 
         res.status(200).json({
