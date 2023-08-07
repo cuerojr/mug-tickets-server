@@ -15,7 +15,7 @@ class EventController {
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
-          error: error.message 
+          error: err.message 
         });
       }
     }
@@ -50,9 +50,11 @@ class EventController {
           ticketPurchaseDeadline,
           hasLimitedPlaces,
           title, 
+          description,
           address, 
           date,
-          image
+          image,
+          price
         } = req.body;
 
         const newEvent = new Event({
@@ -61,9 +63,11 @@ class EventController {
           ticketPurchaseDeadline,
           hasLimitedPlaces,          
           title, 
+          description,
           address, 
           date,
-          image          
+          image,
+          price      
         });
 
         await newEvent.save();
@@ -84,7 +88,6 @@ class EventController {
       try {
         const { id } = req.params;
         const event = await Event.findById(id)/*.populate('purchasedTicketsList')*/;
-;
         if (!event) {
           return res
             .status(404)
@@ -101,7 +104,7 @@ class EventController {
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
-          error: error.message 
+          error: err.message 
         });
       }
     }
@@ -115,7 +118,10 @@ class EventController {
         if (!updatedEvent) {
           return res
             .status(404)
-            .json({ ok: false, error: `Event with id ${id} not found.` });
+            .json({ 
+              ok: false, 
+              error: `Event with id ${id} not found.` 
+            });
         }
 
         res.status(200).json({
@@ -123,7 +129,10 @@ class EventController {
           updatedEvent
         });        
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, error: 
+          err.message 
+        });
       }
     }
 
@@ -144,9 +153,14 @@ class EventController {
           message: `Event with id ${ id } was deleted.`
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
 }
 
-module.exports = EventController;
+module.exports = { 
+  EventController 
+};

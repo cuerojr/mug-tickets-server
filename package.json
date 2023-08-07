@@ -2,18 +2,22 @@
   "name": "mug-tickets-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "engines": {
     "node": "18.x"
   },
   "scripts": {
     "test": "jest",
-    "start": "node app.js"
+    "start": "node index.js",
+    "dev": "set NODE_ENV=development&& nodemon index.js",
+    "prod": "set NODE_ENV=production&& node index.js",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apicache": "^1.6.3",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -22,12 +26,15 @@
     "express-validator": "^7.0.1",
     "google-auth-library": "^8.9.0",
     "jsonwebtoken": "^9.0.0",
+    "memory-cache": "^0.2.0",
+    "mercadopago": "^1.5.17",
     "mogodb": "^0.0.1-security",
     "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.0.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^4.1.7",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jsdom": "^22.0.0",

@@ -3,35 +3,52 @@ const router = Router();
 
 const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
+const { EventController } = require('../controllers/eventController');
+const CacheMiddleware = require('../middlewares/cacheMiddleware');
+
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-const EventController = require('../controllers/eventController');
 const eventController = new EventController();
 
-router.get('/', eventController.getAll);
+router.get('/', 
+    [
+        //validationsMiddlewares.validateIfAdmin,
+        CacheMiddleware()
+    ], 
+    eventController.getAll);
 
-router.get('/query', eventController.filter);
+router.get('/query', [
+        validationsMiddlewares.validateIfAdmin,
+    ], 
+    eventController.filter);
 
 router.post('/', 
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
         check('title', 'Show title is required').not().isEmpty(),
+        check('description', 'Show description is required').not().isEmpty(),
         check('address', 'Show address is required').not().isEmpty(),
         check('date', 'Show date is required').not().isEmpty(),  
-        validationsMiddlewares.validateFields
+        validationsMiddlewares.validateFields,
     ],
     eventController.create);
 
-router.get('/:id', eventController.get);
+router.get('/:id', [
+        validationsMiddlewares.validateIfAdmin,
+    ], 
+    eventController.get);
 
 router.put('/:id', 
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
         check('title', 'Show title is required').not().isEmpty(),
+        check('description', 'Show description is required').not().isEmpty(),
         check('address', 'Show address is required').not().isEmpty(),
         check('date', 'Show date is required').not().isEmpty(),  
         validationsMiddlewares.validateFields
@@ -40,6 +57,7 @@ router.put('/:id',
 
 router.delete('/:id',
     [
+        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT
     ], 
     eventController.delete);

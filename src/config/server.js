@@ -1,40 +1,44 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./db');
+const config = require('./config');
+const Routes = require('../helpers/routerHelper');
+const Database = require('./db');
 
 class Server {
-    constructor(){
-        this.app = express();
-        connectDB();
-        this.port = process.env.PORT;
+    constructor(dataBase = new Database(), port = config.PORT, app = express()){
+        this.port = port;
+        this.app = app;
+        this.dataBase = dataBase;
+        this.dataBase.connectDB();
 
         //Middlewares
-        this.middlewares();
+        this.corsMiddleware();
+        this.parserMiddleware();
 
         // Routes
-        this.routes();
+        this.routes = new Routes(this.app);
+        this.setup();
     }
 
-    middlewares(){
+    corsMiddleware(){
         //CORS
         this.app.use( cors() );
+    }
+    
+    parserMiddleware(){
         //lectura y parseo del body
         this.app.use( express.json() );
         //Public dir
-        this.app.use( express.static('public') );
+        //this.app.use( express.static('public') );
     }
 
-    routes(){
-        this.app.use('/api/users', require('../routes/userRoutes'));
-        this.app.use('/api/tickets', require('../routes/ticketRoutes'));
-        this.app.use('/api/events', require('../routes/eventRoutes'));
-        this.app.use('/api/login', require('../routes/logInRoutes')); 
-        this.app.use('/api/upload', require('../routes/uploadImagesRoutes'));        
+    setup(){
+        this.routes.setupRoutes();
     }
 
-    listen(){        
-        this.app.listen(this.port, ()=>{
-            console.log('server', this.port)
+    listen(){
+        this.app.listen(this.port, () => {
+            console.log('server', this.port);
         });
     }
 }
