@@ -8,7 +8,7 @@ const validationsMiddlewares = new ValidationsMiddlewares();
 const UploadImagesController = require('../controllers/uploadImagesController');
 const uploadImagesController = new UploadImagesController();
 
-// file upload middleware
+// Middleware: fileUpload (File upload middleware to handle image uploads)
 router.use(fileUpload({
     limits: {
         fileSize: 300000 //300kb
@@ -16,6 +16,10 @@ router.use(fileUpload({
     abortOnLimit: true
 }));
 
+// Route: PUT /api/upload/:type/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Middleware: validateFields (Validates request body fields)
+// Controller: uploadImagesController.upload (Controller method to upload an image)
 router.put('/:type/:id', 
     [     
         validationsMiddlewares.validateJWT,         
