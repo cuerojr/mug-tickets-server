@@ -73,4 +73,13 @@ router.delete('/:id',
     ], 
     ticketController.delete);
 
+router.put('/:id', 
+    [
+        validationsMiddlewares.validateJWT,
+        validationsMiddlewares.validateIfAdmin,
+        check('event', 'event is required').not().isEmpty(),
+        check('admin', 'admin is required').not().isEmpty(),
+    ], 
+    ticketController.delete);
+
 module.exports = router;

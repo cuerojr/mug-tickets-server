@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Event = require('../models/eventModel');
+const Admin = require('../models/adminModel');
 
 /**
  * Controller class for handling event-related operations.
@@ -69,6 +70,7 @@ class EventController {
     async create(req, res = response) {
       try {
         const {
+          creatorId,
           eventType,
           ticketsAvailableOnline,
           ticketPurchaseDeadline,
@@ -94,8 +96,12 @@ class EventController {
           price      
         });
 
-        await newEvent.save();
+        const admin = await Admin.findById(creatorId);
+        const savedNewEvent = await newEvent.save();
+        admin.eventsCreatedList = admin.eventsCreatedList.concat(savedNewEvent._id);
 
+        await admin.save();
+        
         res.status(200).json({
           ok: true,
           newEvent

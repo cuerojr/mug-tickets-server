@@ -19,11 +19,19 @@ class AdminController {
    */
     async getAll(req, res = response) {
       try {
-        const admins = await Admin.find({});
+        const admin = await Admin.find({}).populate('eventsCreatedList', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
 
         res.status(200).json({
           ok: true,
-          admins
+          admin
         });
 
       } catch (err) {
@@ -129,7 +137,15 @@ class AdminController {
     async get(req, res = response) {
       const { id } = req.params;      
       try {
-        const admin = await Admin.findById(id);
+        const admin = await Admin.findById(id).populate('eventsCreatedList', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+        });
 
         if (!admin) {
           return res.status(404).json({
