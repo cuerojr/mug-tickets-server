@@ -1,9 +1,19 @@
 const { response } = require('express');
 const Event = require('../models/eventModel');
 
+/**
+ * Controller class for handling event-related operations.
+ */
 class EventController {    
     constructor(){}
 
+    /**
+     * Get all events from the database.
+     *
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of events or an error message.
+     */
     async getAll(req, res = response) {
       try {
         const events = await Event.find({})/*.populate('purchasedTicketsList');*/
@@ -20,6 +30,13 @@ class EventController {
       }
     }
 
+    /**
+     * Filter events based on the provided query parameters.
+     *
+     * @param {Object} req - Express request object containing query parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing an array of filtered events or an error message.
+     */
     async filter(req, res = response) {
       try {
         const events = await Event.find(req.query);
@@ -42,6 +59,13 @@ class EventController {
       }
     }
   
+    /**
+     * Create a new event with the provided data.
+     *
+     * @param {Object} req - Express request object containing the event data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the newly created event details or an error message.
+     */
     async create(req, res = response) {
       try {
         const {
@@ -84,6 +108,13 @@ class EventController {
       }
     }
   
+    /**
+     * Get an event by its ID.
+     *
+     * @param {Object} req - Express request object containing the event ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the event details or an error message if not found.
+     */
     async get(req, res = response) {      
       try {
         const { id } = req.params;
@@ -109,6 +140,13 @@ class EventController {
       }
     }
   
+    /**
+     * Update an event's information by its ID.
+     *
+     * @param {Object} req - Express request object containing the event ID in the request parameters and updated data in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the updated event details or an error message if not found.
+     */
     async update(req, res = response) {
       const { id } = req.params;
       const { name, description } = req.body;
@@ -136,6 +174,13 @@ class EventController {
       }
     }
 
+    /**
+     * Delete an event by its ID.
+     *
+     * @param {Object} req - Express request object containing the event ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
     async delete(req, res = response) {
       const { id } = req.params;
 

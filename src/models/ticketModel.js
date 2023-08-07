@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Mongoose schema for the 'ticket' collection.
+ */
 const ticketSchema = new mongoose.Schema({
   event: {
     type: mongoose.Schema.Types.ObjectId,
@@ -59,11 +62,19 @@ const ticketSchema = new mongoose.Schema({
   }
 });
 
+/**
+ * Method to convert the Mongoose document to a JSON object.
+ * Removes '__v' and '_id' fields from the returned JSON object.
+ * Adds 'ticketId' field using the '_id' field for the returned JSON object.
+ */
 ticketSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.ticketId = _id;
   return object;
 });
 
+/**
+ * Mongoose model for the 'Ticket' collection based on the 'ticketSchema'.
+ */
 const Ticket = mongoose.model('Ticket', ticketSchema);
 module.exports = Ticket;

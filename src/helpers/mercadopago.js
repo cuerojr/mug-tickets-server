@@ -1,5 +1,14 @@
 const mercadopago = require("mercadopago");
 
+/**
+ * Creates a transaction using MercadoPago API.
+ * @param {Object} options - An object containing options for the transaction.
+ * @param {string} options.description - The description of the transaction.
+ * @param {number} options.price - The price of the item in the transaction.
+ * @param {number} options.quantity - The quantity of the item in the transaction.
+ * @returns {Promise<Object>} - A Promise that resolves to an object containing the ID of the created transaction if successful,
+ *                               or an object with `ok` as false and an error message if there is an issue with the transaction.
+ */
 const createTransaction = async (options = {}) => {
     console.log(options)
     try{

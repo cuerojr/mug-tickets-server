@@ -4,9 +4,20 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/userModel');
 const { generateJWT } = require('../config/authentication');
 const { googleVerify } = require('../helpers/google-verify');
+
+/**
+ * Controller class for handling user login-related operations.
+ */
 class LogInController {    
     constructor(){}
 
+    /**
+     * Log in a user with the provided email and password.
+     *
+     * @param {Object} req - Express request object containing the user's email and password in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing a JWT token if login is successful, or an error message.
+     */
     async login(req, res = response) {
         const { email, password } = req.body;
         try {
@@ -39,6 +50,13 @@ class LogInController {
         }
     }
 
+    /**
+     * Sign in a user with Google OAuth2 token.
+     *
+     * @param {Object} req - Express request object containing the Google OAuth2 token in the request body.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing user information and a new JWT token if sign-in is successful, or an error message.
+     */
     async googleSignIn(req, res = response) {
         try {
             const { token } = req.body;

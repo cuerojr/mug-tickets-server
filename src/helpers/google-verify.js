@@ -1,6 +1,12 @@
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_SECRET_ID);
 
+/**
+ * Verifies the authenticity of a Google ID token.
+ * @param {string} token - The Google ID token to be verified.
+ * @returns {Promise<Object>} - A Promise that resolves to an object containing user information if the token is valid,
+ *                               or an object with `ok` as false and an error message if there is an issue with verification.
+ */
 const googleVerify = async (token) => {
   try{
     const ticket = await client.verifyIdToken({

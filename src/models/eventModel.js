@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Counter = require('./counterModel');
 
+/**
+ * Mongoose schema for the 'event' collection.
+ */
 const eventSchema = new mongoose.Schema({
   eventType: {
     type: String,
@@ -84,11 +87,20 @@ eventSchema.pre('save', async function(next) {
     };
 });
 
+/**
+ * Mongoose pre-save hook for the 'event' schema.
+ * It updates the 'ticketsPurchased' field based on the 'ticketsAvailableOnline' value.
+ */
 eventSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.eventId = _id;
   return object;
 });
 
+/**
+ * Method to convert the Mongoose document to a JSON object.
+ * Removes '__v' and '_id' fields from the returned JSON object.
+ * Adds 'eventId' field using the '_id' field for the returned JSON object.
+ */
 const Event = mongoose.model('Event', eventSchema);
 module.exports = Event;
