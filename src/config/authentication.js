@@ -2,6 +2,14 @@ const jwt = require('jsonwebtoken');
 const config = require('./server');
 const User = require('../models/userModel');
 
+/**
+ * Middleware function to authenticate incoming requests using JSON Web Tokens (JWT).
+ *
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Next function to continue to the next middleware/route handler.
+ * @throws {Error} If user is not found or token is invalid, an error is thrown and an unauthorized response is sent.
+ */
 const auth = async (req, res, next) => {
   try {
     const { header } = req;
@@ -28,6 +36,13 @@ const auth = async (req, res, next) => {
   }
 };
 
+/**
+ * Generates a JSON Web Token (JWT) with the given user ID (uid) as the payload.
+ *
+ * @param {string} uid - User ID to be included in the JWT payload.
+ * @returns {Promise<string>} A Promise that resolves to the generated JWT.
+ * @throws {Error} If there's an error during JWT generation, it is logged, and the Promise is rejected.
+ */
 const generateJWT = ( uid ) => new Promise((resolve, reject) => {
   const payload = {
     uid

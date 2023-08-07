@@ -10,6 +10,9 @@ const validationsMiddlewares = new ValidationsMiddlewares();
 
 const eventController = new EventController();
 
+// Route: GET /api/events
+// Middleware: CacheMiddleware (cache middleware)
+// Controller: eventController.getAll
 router.get('/', 
     [
         //validationsMiddlewares.validateIfAdmin,
@@ -17,11 +20,17 @@ router.get('/',
     ], 
     eventController.getAll);
 
+// Route: GET /api/events/query
+// Middleware: validateIfAdmin (Admin validation middleware)
+// Controller: eventController.filter
 router.get('/query', [
         validationsMiddlewares.validateIfAdmin,
     ], 
     eventController.filter);
 
+// Route: POST /api/events
+// Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
+// Controller: eventController.create
 router.post('/', 
     [
         validationsMiddlewares.validateIfAdmin,
@@ -36,11 +45,17 @@ router.post('/',
     ],
     eventController.create);
 
+// Route: GET /api/events/:id
+// Middleware: validateIfAdmin (Admin validation middleware)
+// Controller: eventController.get
 router.get('/:id', [
         validationsMiddlewares.validateIfAdmin,
     ], 
     eventController.get);
 
+// Route: PUT /api/events/:id
+// Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
+// Controller: eventController.update
 router.put('/:id', 
     [
         validationsMiddlewares.validateIfAdmin,
@@ -54,7 +69,10 @@ router.put('/:id',
         validationsMiddlewares.validateFields
     ], 
     eventController.update);
-
+    
+// Route: DELETE /api/events/:id
+// Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
+// Controller: eventController.delete
 router.delete('/:id',
     [
         validationsMiddlewares.validateIfAdmin,

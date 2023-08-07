@@ -9,13 +9,21 @@ const CacheMiddleware = require('../middlewares/cacheMiddleware');
 const validationsMiddlewares = new ValidationsMiddlewares();
 const ticketController = new TicketController();
 
+// Route: GET /api/tickets
+// Middleware: CacheMiddleware (Caches the response for faster subsequent requests)
+// Controller: ticketController.getAll (Controller method to get all tickets)
 router.get('/', [
         CacheMiddleware()
     ],
     ticketController.getAll);
 
+// Route: GET /api/tickets/query
+// Controller: ticketController.filter (Controller method to filter tickets based on query parameters)
 router.get('/query', ticketController.filter);
 
+// Route: POST /api/tickets
+// Middleware: validateFields (Validates request body fields)
+// Controller: ticketController.create (Controller method to create a new ticket)
 router.post('/', 
     [
         //validationsMiddlewares.validateJWT,
@@ -30,11 +38,18 @@ router.post('/',
     ],
     ticketController.create);
 
+// Route: GET /api/tickets/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Controller: ticketController.get (Controller method to get a specific ticket by ID)
 router.get('/:id', [
         validationsMiddlewares.validateJWT,
     ], 
     ticketController.get);
 
+// Route: PUT /api/tickets/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Middleware: validateFields (Validates request body fields)
+// Controller: ticketController.update (Controller method to update a specific ticket by ID)
 router.put('/:id', 
     [
         validationsMiddlewares.validateJWT,
@@ -49,6 +64,9 @@ router.put('/:id',
     ], 
     ticketController.update);
 
+// Route: DELETE /api/tickets/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Controller: ticketController.delete (Controller method to delete a specific ticket by ID)
 router.delete('/:id', 
     [
         validationsMiddlewares.validateJWT
