@@ -2,9 +2,19 @@ const { response } = require('express');
 const mercadopago = require("mercadopago");
 const { createTransaction, callbackReturn } = require('../helpers/mercadopago');
 
+/**
+ * Controller class for handling Mercadopago-related operations.
+ */
 class MercadopagoController {    
     constructor(){}
 
+    /**
+     * Create a Mercadopago preference for payment.
+     *
+     * @param {Object} req - Express request object containing the item description, price, and quantity in the request query.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing the created preference ID and body from Mercadopago, or an error message.
+     */
     async create(req, res = response) {
         try {
             
@@ -52,6 +62,13 @@ class MercadopagoController {
         }
     }
 
+    /**
+     * Handle the feedback from Mercadopago after payment.
+     *
+     * @param {Object} req - Express request object containing the payment_id, status, and merchant_order_id in the request query.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response containing payment information from Mercadopago or an error message.
+     */
     async feedback(req, res = response) {
         const { payment_id, status, merchant_order_id } = req.query;
         try {
