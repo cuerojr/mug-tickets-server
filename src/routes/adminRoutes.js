@@ -15,7 +15,7 @@ const adminController = new AdminController();
 // Controller: adminController.getAll
 router.get('/',
     [
-        validationsMiddlewares.validateJWT,
+        //validationsMiddlewares.validateJWT,
         CacheMiddleware()
     ], 
     adminController.getAll);

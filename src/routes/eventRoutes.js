@@ -33,8 +33,8 @@ router.get('/query', [
 // Controller: eventController.create
 router.post('/', 
     [
-        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
+        validationsMiddlewares.validateIfAdmin,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
         check('title', 'Show title is required').not().isEmpty(),
@@ -58,8 +58,8 @@ router.get('/:id', [
 // Controller: eventController.update
 router.put('/:id', 
     [
-        validationsMiddlewares.validateIfAdmin,
         validationsMiddlewares.validateJWT,
+        validationsMiddlewares.validateIfAdmin,
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
         check('title', 'Show title is required').not().isEmpty(),
@@ -69,14 +69,14 @@ router.put('/:id',
         validationsMiddlewares.validateFields
     ], 
     eventController.update);
-    
+
 // Route: DELETE /api/events/:id
 // Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
 // Controller: eventController.delete
 router.delete('/:id',
     [
+        validationsMiddlewares.validateJWT,
         validationsMiddlewares.validateIfAdmin,
-        validationsMiddlewares.validateJWT
     ], 
     eventController.delete);
 
