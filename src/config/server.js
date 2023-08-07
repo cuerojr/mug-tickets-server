@@ -27,7 +27,6 @@ class Server {
      * Configures CORS middleware to allow cross-origin requests.
      */
     corsMiddleware(){
-        //CORS
         this.app.use( cors() );
     }
     
@@ -35,7 +34,6 @@ class Server {
      * Configures the parser middleware to read and parse request bodies as JSON.
      */
     parserMiddleware(){
-        //lectura y parseo del body
         this.app.use( express.json() );
         //Public dir
         //this.app.use( express.static('public') );
