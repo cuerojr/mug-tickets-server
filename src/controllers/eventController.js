@@ -15,7 +15,7 @@ class EventController {
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
-          error: error.message 
+          error: err.message 
         });
       }
     }
@@ -104,7 +104,7 @@ class EventController {
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
-          error: error.message 
+          error: err.message 
         });
       }
     }
@@ -118,7 +118,10 @@ class EventController {
         if (!updatedEvent) {
           return res
             .status(404)
-            .json({ ok: false, error: `Event with id ${id} not found.` });
+            .json({ 
+              ok: false, 
+              error: `Event with id ${id} not found.` 
+            });
         }
 
         res.status(200).json({
@@ -126,7 +129,10 @@ class EventController {
           updatedEvent
         });        
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, error: 
+          err.message 
+        });
       }
     }
 
@@ -147,7 +153,10 @@ class EventController {
           message: `Event with id ${ id } was deleted.`
         });
       } catch (err) {
-        res.status(500).json({ ok: false, error: error.message });
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
       }
     }
 }
