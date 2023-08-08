@@ -47,7 +47,7 @@ class UploadImagesController {
         }
 
         const fileName = `${ uuidv4() }.${ fileExtension }`;
-        const path = `./src/uploads/${ type }/${ fileName }`;
+        const path = `./public/uploads/${ type }/${ fileName }`;
 
         file.mv(path, (err) => {
           if(err) {
