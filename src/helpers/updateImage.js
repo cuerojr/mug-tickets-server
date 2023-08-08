@@ -64,7 +64,8 @@ const updateImages = (options = {}) => {
  */
 const _replacePrevPath = (imageData = {}) => {
     const { type = '', image = ''} = imageData;
-    const prevPath = `./public/uploads/${ type }/${ image }`;
+    const prevPath = `https://mug-tickets-server.vercel.app/uploads/${ type }/${ fileName }`;
+
     if (fs.existsSync(prevPath)) {
         // remove previous image
         fs.unlinkSync(prevPath);
