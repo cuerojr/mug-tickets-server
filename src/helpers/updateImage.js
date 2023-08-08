@@ -64,7 +64,7 @@ const updateImages = (options = {}) => {
  */
 const _replacePrevPath = (imageData = {}) => {
     const { type = '', image = ''} = imageData;
-    const prevPath = `.src/uploads/${ type }/${ image }`;
+    const prevPath = `./public/uploads/${ type }/${ image }`;
     if (fs.existsSync(prevPath)) {
         // remove previous image
         fs.unlinkSync(prevPath);
