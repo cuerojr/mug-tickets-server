@@ -49,7 +49,7 @@ router.post('/',
 // Middleware: validateIfAdmin (Admin validation middleware)
 // Controller: eventController.get
 router.get('/:id', [
-        validationsMiddlewares.validateIfAdmin,
+        //validationsMiddlewares.validateIfAdmin,
     ], 
     eventController.get);
 
