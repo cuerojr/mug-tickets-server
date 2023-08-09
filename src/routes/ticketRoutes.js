@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const router = Router();
+const config = require('../config/config');
+
 
 const { check } = require('express-validator');
 const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
@@ -73,13 +75,25 @@ router.delete('/:id',
     ], 
     ticketController.delete);
 
-router.put('/:id', 
+router.use((req, res, next) => {
+    const apiKey = req.get('API-Key')
+    if (!apiKey || apiKey !== config.API_KEY) {
+        res.status(401).json({
+            ok: false,
+            error: 'Unauthorized'});
+    } else {
+        next();
+    }
+});
+
+// Route: UPDATE /api/tickets/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Controller: ticketController.validate (Controller method to validate a specific ticket by ID)
+router.put('/validate/:id', 
     [
         validationsMiddlewares.validateJWT,
         validationsMiddlewares.validateIfAdmin,
-        check('event', 'event is required').not().isEmpty(),
-        check('admin', 'admin is required').not().isEmpty(),
     ], 
-    ticketController.delete);
+    ticketController.validate);
 
 module.exports = router;
