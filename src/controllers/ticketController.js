@@ -17,7 +17,6 @@ class TicketController {
      * @returns {Object} JSON response containing an array of tickets or an error message.
      */
     async getAll(req, res = response) {
-      console.log('asdasd', req.body)
       try {
         const { id } = req.params;
         const tickets = await Ticket.find({}).populate('event', {
@@ -77,7 +76,7 @@ class TicketController {
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the newly created ticket details or an error message.
      */
-    async create(req, res = response) {      
+    async create(req, res = response) { 
       try {
         const {
           event,
@@ -102,13 +101,13 @@ class TicketController {
           User.findById(purchaserId)
         ]);
 
-        if(purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent.purchasedTicketsList.length) {
+        if(purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
           return res.status(404).json({
             ok: false,
             message: 'Sold out!'
           });          
         }
-        const ticketNumber = +purchaseEvent.purchasedTicketsList.length + 1;
+        const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
         const newTicket = new Ticket({
           event,
           purchaser: { 
@@ -248,7 +247,7 @@ class TicketController {
       }
     }
 
-    async validate(req, res = response){      
+    async validate(req, res = response){
       try {
         const { id } = req.params;
         const ticket = await Ticket.findById(id);
@@ -268,7 +267,7 @@ class TicketController {
         }
         
         ticket.validated = true;
-        ticket.validationDate = Date;
+        ticket.validationDate = new Date();
         await ticket.save();
         
         const { purchaser, ... params} = ticket.toObject();

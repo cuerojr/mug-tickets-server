@@ -132,4 +132,6 @@ dist
 .pnp.*
 
 # Adde docs on develepment
-#src/uploads
+uploads
+src/config/.env.development
+src/config/.env.production

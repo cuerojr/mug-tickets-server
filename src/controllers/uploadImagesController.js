@@ -1,6 +1,7 @@
 const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { updateImages } = require('../helpers/updateImage');
+const { uploadCloudImage } = require('../helpers/cloudinaryFiles');
 
 /**
  * Controller class for handling image upload operations.
@@ -15,7 +16,7 @@ class UploadImagesController {
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the uploaded image filename or an error message.
      */
-    upload(req, res = response) {      
+    async upload(req, res = response) {      
       try{
         const { type, id } = req.params;      
         const validTypes = ['events', 'user'];
@@ -23,14 +24,14 @@ class UploadImagesController {
         if(!validTypes.includes(type)){
           return res.status(400).json({
             ok: false,
-            msg: 'Not a valid type.'
+            msg: "Not a valid type."
           });
         }
 
         if(!req.files || Object.keys(req.files).length === 0) {
           return res.status(400).json({
             ok: false,
-            msg: 'No files were uploaded.'
+            msg: "No files were uploaded."
           })
         }
 
@@ -46,30 +47,20 @@ class UploadImagesController {
           });
         }
 
-        const fileName = `${ uuidv4() }.${ fileExtension }`;
-        const path = `public/uploads/${ type }/${ fileName }`;
-        file.mv(path, (err) => {
-          if(err) {
-            return res.status(500).json({
-              ok: false,
-              msg : err,
-              path,
-              fileName
-            });
-          }
-          
-          updateImages({ type, id, fileName });
+        const result =  await uploadCloudImage(file.tempFilePath , type);
+        const { url } = result;
+        
+        updateImages({ type, id, url });
             
-          res.status(200).json({
-              ok: true,
-              msg: 'File uploaded.',
-              fileName
-          });
-        });
+        res.status(200).json({
+            ok: true,
+            msg: "File uploaded.",
+            url
+        });        
       } catch(err) {
         return res.status(500).json({
           ok: false,
-          msg : err.message
+          msg : err.message || 'asdadsa'
         });
       }
     }

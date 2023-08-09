@@ -125,7 +125,7 @@ class UserController {
         console.error(`Error occurred while creating user - ${err}`);
         res.status(500).json({
           ok: false,
-          error: 'Unable to create user',
+          error: err.message,
         });      
       }
     }

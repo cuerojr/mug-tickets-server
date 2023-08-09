@@ -10,10 +10,8 @@ const uploadImagesController = new UploadImagesController();
 
 // Middleware: fileUpload (File upload middleware to handle image uploads)
 router.use(fileUpload({
-    limits: {
-        fileSize: 300000 //300kb
-    },
-    abortOnLimit: true
+    useTempFiles: true,
+    tempFileDir: './uploads',
 }));
 
 // Route: PUT /api/upload/:type/:id
