@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const config = require('./config');
 const Routes = require('../helpers/routerHelper');
 const Database = require('./db');
@@ -15,6 +16,8 @@ class Server {
         this.dataBase.connectDB();
 
         //Middlewares
+        this.app.use(helmet());
+
         this.corsMiddleware();
         this.parserMiddleware();
 
@@ -27,7 +30,13 @@ class Server {
      * Configures CORS middleware to allow cross-origin requests.
      */
     corsMiddleware(){
-        this.app.use( cors() );
+        //this.app.use( cors() );
+        // enable CORS for all routes and for our specific API-Key header
+        this.app.use(function (req, res, next) {
+            res.header('Access-Control-Allow-Origin', '*')
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, API-Key')
+            next()
+        });
     }
     
     /**

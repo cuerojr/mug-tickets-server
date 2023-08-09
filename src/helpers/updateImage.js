@@ -8,7 +8,7 @@ const Event = require('../models/eventModel');
  * @param {Object} options - Options object containing 'type', 'id', and 'fileName'.
  */
 const updateImages = (options = {}) => {
-    const { type, id, fileName } = options;
+    const { type, id, url } = options;
     try{
         // Define actions based on the 'type' (user, events, tickets)
         const action = {
@@ -26,7 +26,7 @@ const updateImages = (options = {}) => {
                 });
     
                 // Update the user's image with the new file name and save changes
-                user.image = fileName;
+                user.image = url;
                 await user.save();
                 return true;
             },
@@ -44,7 +44,7 @@ const updateImages = (options = {}) => {
                 });
     
                 // Update the event's image with the new file name and save changes
-                event.image = fileName;
+                event.image = url;
                 await event.save();
                 return true;
             },
@@ -63,8 +63,9 @@ const updateImages = (options = {}) => {
  * @param {Object} imageData - Image data object containing 'type' and 'image' (file name).
  */
 const _replacePrevPath = (imageData = {}) => {
-    const { type = '', image = ''} = imageData;
-    const prevPath = `.src/uploads/${ type }/${ image }`;
+    const { type = '', url = ''} = imageData;
+    const prevPath = url;
+
     if (fs.existsSync(prevPath)) {
         // remove previous image
         fs.unlinkSync(prevPath);
