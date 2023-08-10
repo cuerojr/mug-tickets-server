@@ -11,7 +11,7 @@ const uploadImagesController = new UploadImagesController();
 // Middleware: fileUpload (File upload middleware to handle image uploads)
 router.use(fileUpload({
     useTempFiles: true,
-    tempFileDir: './uploads',
+    tempFileDir: './public/uploads',
 }));
 
 // Route: PUT /api/upload/:type/:id

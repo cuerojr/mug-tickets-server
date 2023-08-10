@@ -45,7 +45,7 @@ class Server {
     parserMiddleware(){
         this.app.use( express.json() );
         //Public dir
-        //this.app.use( express.static('public') );
+        this.app.use( express.static('public') );
     }
 
     /**
