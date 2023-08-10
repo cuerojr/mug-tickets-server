@@ -26,7 +26,7 @@ router.get('/query', ticketController.filter);
 // Route: POST /api/tickets
 // Middleware: validateFields (Validates request body fields)
 // Controller: ticketController.create (Controller method to create a new ticket)
-router.post('/', 
+router.post('/',
     [
         //validationsMiddlewares.validateJWT,
         check('event', 'event is required').not().isEmpty(),
