@@ -27,18 +27,20 @@ router.get('/query', ticketController.filter);
 // Middleware: validateFields (Validates request body fields)
 // Controller: ticketController.create (Controller method to create a new ticket)
 router.post('/',
-    [
-        //validationsMiddlewares.validateJWT,
-        check('event', 'event is required').not().isEmpty(),
-        check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
-        check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
-        check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
-        check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
-        check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
-        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
-        validationsMiddlewares.validateFields
-    ],
-    ticketController.create);
+  [
+    // validationsMiddlewares.validateJWT,
+    check('tickets', 'Tickets array is required and must be an array').isArray({ min: 1 }),
+    check('tickets.*.event', 'Event is required for each ticket').not().isEmpty(),
+    check('tickets.*.purchaser.purchaserFirstName', 'Purchaser first name is required for each ticket').not().isEmpty(),
+    check('tickets.*.purchaser.purchaserLastName', 'Purchaser last name is required for each ticket').not().isEmpty(),
+    check('tickets.*.purchaser.purchaserId', 'Purchaser id is required for each ticket').not().isEmpty(),
+    check('tickets.*.attendee.attendeeFirstName', 'Attendee first name is required for each ticket').not().isEmpty(),
+    check('tickets.*.attendee.attendeeLastName', 'Attendee last name is required for each ticket').not().isEmpty(),
+    check('tickets.*.attendee.attendeeDni', 'Attendee dni is required for each ticket').not().isEmpty(),
+    validationsMiddlewares.validateFields
+  ],
+  ticketController.create);
+
 
 // Route: GET /api/tickets/:id
 // Middleware: validateJWT (Validates the JSON Web Token in the request header)
