@@ -147,7 +147,90 @@ class TicketController {
         });
       }
     }
-  
+    
+    /**
+   * Create new tickets with the provided data.
+   *
+   * @param {Object} req - Express request object containing the ticket data in the request body.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the newly created ticket details or an error message.
+   */
+  async create(req, res = response) {
+    try {
+      const ticketsData = req.body.tickets;
+
+      const eventsIds = ticketsData.map(ticket => ticket.event);
+      const purchasersIds = ticketsData.map(ticket => ticket.purchaser.purchaserId);
+
+      const [purchaseEvents, users] = await Promise.all([
+        Event.find({ _id: { $in: eventsIds } }),
+        User.find({ _id: { $in: purchasersIds } })
+      ]);
+
+      const insertData = ticketsData.map((ticket, index) => {
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId);
+
+        if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
+          return {
+            error: {
+              message: 'Sold out!',
+              ticketIndex: index
+            }
+          };
+        }
+
+        const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);
+        const newTicket = new Ticket({
+          event: ticket.event,
+          purchaser: {
+            purchaserFirstName: ticket.purchaser.purchaserFirstName,
+            purchaserLastName: ticket.purchaser.purchaserLastName,
+            purchaserDni: ticket.purchaser.purchaserDni,
+            purchaserId: user._id
+          },
+          attendee: {
+            attendeeFirstName: ticket.attendee.attendeeFirstName,
+            attendeeLastName: ticket.attendee.attendeeLastName,
+            attendeeDni: ticket.attendee.attendeeDni
+          },
+          validated: ticket.validated,
+          purchaseDate: ticket.purchaseDate,
+          validationDate: ticket.validationDate,
+          ticketNumber
+        });
+
+        return newTicket;
+      });
+
+      const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
+
+      savedTickets.forEach((savedTicket, index) => {
+        const ticket = ticketsData[index];
+        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId);
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+
+        user.purchasedTickets.push(savedTicket._id);
+        purchaseEvent.ticketsPurchased += 1;
+        purchaseEvent.purchasedTicketsList.push(savedTicket._id);
+      });
+
+      await Promise.all([
+        ...users.map(user => user.save()),
+        ...purchaseEvents.map(event => event.save())
+      ]);
+
+      res.status(200).json({
+        ok: true,
+        savedTickets
+      });
+    } catch (err) {
+      res.status(500).json({
+        ok: false,
+        error: err.message
+      });
+    }
+  }
     /**
      * Get a ticket by its ID and populate its associated event.
      *
