@@ -52,7 +52,7 @@ class Server {
      * Sets up routes using the `Routes` helper class.
      */
     setup(){
-        this.router.use((req, res, next) => {
+        this.app.use((req, res, next) => {
             const apiKey = req.get('API-Key')
             if (!apiKey || apiKey !== config.API_KEY) {
                 res.status(401).json({
