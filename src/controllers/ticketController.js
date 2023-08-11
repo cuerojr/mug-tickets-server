@@ -330,6 +330,13 @@ class TicketController {
       }
     }
 
+    /**
+     * Validate a ticket by its ID.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
     async validate(req, res = response){
       try {
         const { id } = req.params;
