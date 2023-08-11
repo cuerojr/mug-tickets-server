@@ -57,7 +57,8 @@ class Server {
             if (!apiKey || apiKey !== config.API_KEY) {
                 res.status(401).json({
                     ok: false,
-                    error: 'Unauthorized'});
+                    error: 'Unauthorized'
+                });
             } else {
                 next();
             }
