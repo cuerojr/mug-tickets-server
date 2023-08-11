@@ -2,6 +2,7 @@ const { response } = require('express');
 const Ticket = require('../models/ticketModel');
 const User = require('../models/userModel');
 const Event = require('../models/eventModel');
+const { ticketNumber } = require('../helpers/dataFormatter')
 
 /**
  * Controller class for handling ticket-related operations.
@@ -51,12 +52,18 @@ class TicketController {
     async filter(req, res = response) {
       try {
         const tickets = await Ticket.find(req.query);
+        
         if (tickets.length < 1) {
             return res.status(404).json({
               ok: false,
-              error: 'No events matched your search'
+              error: 'No tickets matched your search'
             });
         } 
+
+        tickets.forEach((item) => {
+          item.ticketNumber = ticketNumber(item.ticketNumber);
+        });
+
         res.status(200).json({
           ok: true,
           tickets
@@ -260,6 +267,7 @@ class TicketController {
         }
         
         const { purchaser, ... params} = ticket.toObject();
+        params.ticketNumber = ticketNumber(params.ticketNumber);
 
         res.status(200).json({
           ok: true,
