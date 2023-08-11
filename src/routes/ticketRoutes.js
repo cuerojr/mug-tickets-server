@@ -46,7 +46,7 @@ router.post('/',
 // Middleware: validateJWT (Validates the JSON Web Token in the request header)
 // Controller: ticketController.get (Controller method to get a specific ticket by ID)
 router.get('/:id', [
-        validationsMiddlewares.validateJWT,
+        //validationsMiddlewares.validateJWT,
     ], 
     ticketController.get);
 
