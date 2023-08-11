@@ -70,6 +70,10 @@ const ticketSchema = new mongoose.Schema({
 ticketSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.ticketId = _id;
+  object.ticketNumber = (object.ticketNumber).toLocaleString('en-US', {
+    minimumIntegerDigits: 7, 
+    useGrouping:false
+  })
   return object;
 });
 
