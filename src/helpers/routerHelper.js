@@ -26,7 +26,7 @@ class Routes {
 
   setupRoutes() {
     //API key Authorization
-    this.app.use((req, res, next) => {
+    /*this.app.use((req, res, next) => {
         const apiKey = req.get('API-Key')
         if (!apiKey || apiKey !== process.env.API_KEY) {
             res.status(401).json({
@@ -36,7 +36,7 @@ class Routes {
         } else {
             next();
         }
-    });
+    });*/
 
     // User Routes
     this.app.use('/api/users', userRouter);
