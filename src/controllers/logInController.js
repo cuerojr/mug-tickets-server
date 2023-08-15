@@ -1,9 +1,9 @@
-const { response } = require('express');
-const bcryptjs = require('bcryptjs');
+import { response } from 'express';
+import bcryptjs from 'bcryptjs';
 
-const User = require('../models/userModel');
-const { generateJWT } = require('../config/authentication');
-const { googleVerify } = require('../helpers/google-verify');
+import { User } from '../models/userModel.js';
+import { generateJWT } from '../config/authentication.js';
+import { googleVerify } from '../helpers/google-verify.js';
 
 /**
  * Controller class for handling user login-related operations.
@@ -99,6 +99,6 @@ class LogInController {
     }
 }
 
-module.exports = {
+export {
     LogInController
 };

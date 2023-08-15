@@ -1,6 +1,6 @@
-const { response } = require('express');
-const mercadopago = require("mercadopago");
-const { createTransaction, callbackReturn } = require('../helpers/mercadopago');
+import { response } from 'express';
+import mercadopago from 'mercadopago';
+import { createTransaction } from '../helpers/mercadopago.js';
 
 /**
  * Controller class for handling Mercadopago-related operations.
@@ -86,6 +86,6 @@ class MercadopagoController {
     };
 }
 
-module.exports = {
+export {
     MercadopagoController
 };

@@ -1,11 +1,11 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
 
-const fileUpload = require('express-fileupload');
-const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
+import fileUpload from 'express-fileupload';
+import { ValidationsMiddlewares } from '../middlewares/validationMiddleware.js';
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-const UploadImagesController = require('../controllers/uploadImagesController');
+import {UploadImagesController} from '../controllers/uploadImagesController.js';
 const uploadImagesController = new UploadImagesController();
 
 // Middleware: fileUpload (File upload middleware to handle image uploads)
@@ -25,4 +25,6 @@ router.put('/:type/:id',
     ],
     uploadImagesController.upload);
 
-module.exports = router;
+export {
+    router
+};

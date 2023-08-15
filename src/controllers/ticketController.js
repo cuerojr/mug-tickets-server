@@ -1,8 +1,8 @@
-const { response } = require('express');
-const Ticket = require('../models/ticketModel');
-const User = require('../models/userModel');
-const Event = require('../models/eventModel');
-const { ticketNumber } = require('../helpers/dataFormatter')
+import { response } from 'express';
+import { Ticket } from '../models/ticketModel.js';
+import { User } from '../models/userModel.js';
+import { Event } from '../models/eventModel.js';
+import { ticketNumber } from '../helpers/dataFormatter.js';
 
 /**
  * Controller class for handling ticket-related operations.
@@ -384,6 +384,6 @@ class TicketController {
     }
 }
 
-module.exports = {
+export {
   TicketController
 };

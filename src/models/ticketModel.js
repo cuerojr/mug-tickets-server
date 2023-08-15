@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 /**
  * Mongoose schema for the 'ticket' collection.
  */
@@ -85,4 +84,6 @@ ticketSchema.method('toJSON', function() {
  * Mongoose model for the 'Ticket' collection based on the 'ticketSchema'.
  */
 const Ticket = mongoose.model('Ticket', ticketSchema);
-module.exports = Ticket;
+export {
+  Ticket
+};

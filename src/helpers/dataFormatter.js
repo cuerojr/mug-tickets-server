@@ -5,6 +5,6 @@ const ticketNumber = (ticketNumber = '') => {
       });
 };
 
-module.exports = {
+export {
     ticketNumber,
 }

@@ -1,7 +1,7 @@
-const fs = require('fs');
+import fs from 'fs';
 
-const User = require('../models/userModel');
-const Event = require('../models/eventModel');
+import { User } from '../models/userModel.js';
+import { Event } from '../models/eventModel.js';
 
 /**
  * Function to update the image path for a user or event based on the given options.
@@ -72,6 +72,6 @@ const _replacePrevPath = (imageData = {}) => {
     }
 };
 
-module.exports = {
+export {
     updateImages
 };

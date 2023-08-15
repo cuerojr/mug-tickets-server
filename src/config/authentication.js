@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const config = require('./server');
-const User = require('../models/userModel');
+import jwt from 'jsonwebtoken';
+import config from './config.js';
+import { User } from '../models/userModel.js';
 
 /**
  * Middleware function to authenticate incoming requests using JSON Web Tokens (JWT).
@@ -60,7 +60,7 @@ const generateJWT = ( uid ) => new Promise((resolve, reject) => {
 });
 
 
-module.exports = {
+export {
   auth,
   generateJWT
 };

@@ -1,6 +1,5 @@
-const mcache = require('memory-cache');
-
-module.exports = function (duration = 60) {
+import mcache from 'memory-cache';
+export default function (duration = 60) {
     return (req, res, next) => {
         const key = process.env.CACHE_KEY + req.originUrl || req.url;
         const cachedBody = mcache.get(key);

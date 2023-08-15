@@ -1,4 +1,4 @@
-const mercadopago = require("mercadopago");
+import mercadopago from 'mercadopago';
 
 /**
  * Creates a transaction using MercadoPago API.
@@ -55,6 +55,6 @@ const createTransaction = async (options = {}) => {
     }
 };
 
-module.exports = {
+export {
     createTransaction
 };

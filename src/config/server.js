@@ -1,9 +1,9 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const config = require('./config');
-const Routes = require('../helpers/routerHelper');
-const Database = require('./db');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import config from './config.js';
+import { Routes } from '../helpers/routerHelper.js';
+import { Database } from './db.js';
 
 /**
  * Server class responsible for setting up and running the web server.
@@ -76,4 +76,6 @@ class Server {
     }
 }
 
-module.exports = Server;
+export {
+    Server
+}

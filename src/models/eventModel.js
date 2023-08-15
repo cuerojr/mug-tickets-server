@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
-const Counter = require('./counterModel');
-
+import mongoose from 'mongoose';
+import { Counter } from './counterModel.js';
 /**
  * Mongoose schema for the 'event' collection.
  */
@@ -103,4 +102,6 @@ eventSchema.method('toJSON', function() {
  * Adds 'eventId' field using the '_id' field for the returned JSON object.
  */
 const Event = mongoose.model('Event', eventSchema);
-module.exports = Event;
+export {
+  Event 
+};

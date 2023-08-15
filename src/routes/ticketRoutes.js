@@ -1,12 +1,12 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
-const config = require('../config/config');
+import config from '../config/config.js';
 
 
-const { check } = require('express-validator');
-const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
-const { TicketController } = require('../controllers/ticketController');
-const CacheMiddleware = require('../middlewares/cacheMiddleware');
+import { check } from 'express-validator';
+import { ValidationsMiddlewares }  from '../middlewares/validationMiddleware.js';
+import { TicketController } from '../controllers/ticketController.js';
+import * as CacheMiddleware from '../middlewares/cacheMiddleware.js';
 
 const validationsMiddlewares = new ValidationsMiddlewares();
 const ticketController = new TicketController();
@@ -15,7 +15,7 @@ const ticketController = new TicketController();
 // Middleware: CacheMiddleware (Caches the response for faster subsequent requests)
 // Controller: ticketController.getAll (Controller method to get all tickets)
 router.get('/', [
-        CacheMiddleware()
+        //CacheMiddleware()
     ],
     ticketController.getAll);
 
@@ -87,4 +87,6 @@ router.put('/validate/:id',
     ], 
     ticketController.validate);
 
-module.exports = router;
+export {
+    router
+};

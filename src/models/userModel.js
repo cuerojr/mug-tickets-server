@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 /**
  * Mongoose schema for the 'user' collection.
  */
@@ -57,4 +56,6 @@ userSchema.method('toJSON', function() {
  * Mongoose model for the 'User' collection based on the 'userSchema'.
  */
 const User = mongoose.model('User', userSchema);
-module.exports = User;
+export {
+  User
+};

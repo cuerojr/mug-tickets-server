@@ -1,13 +1,13 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
 
-const { check } = require('express-validator');
-const ValidationsMiddlewares = require('../middlewares/validationMiddleware');
-const CacheMiddleware = require('../middlewares/cacheMiddleware');
+import { check } from 'express-validator';
+import {ValidationsMiddlewares} from '../middlewares/validationMiddleware.js';
+import * as CacheMiddleware from '../middlewares/cacheMiddleware.js';
 
 const validationsMiddlewares = new ValidationsMiddlewares();
 
-const { AdminController } = require('../controllers/adminController');
+import { AdminController } from '../controllers/adminController.js';
 const adminController = new AdminController();
 
 // Route: GET /api/admin
@@ -16,7 +16,7 @@ const adminController = new AdminController();
 router.get('/',
     [
         //validationsMiddlewares.validateJWT,
-        CacheMiddleware()
+        //CacheMiddleware()
     ], 
     adminController.getAll);
 
@@ -67,4 +67,6 @@ router.delete('/:id',
     ], 
     adminController.delete);
 
-module.exports = router;
+export {
+    router
+};
