@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import config from './config.js';
 import { Routes } from '../helpers/routerHelper.js';
 import { Database } from './db.js';
 
