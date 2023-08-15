@@ -23,12 +23,12 @@ class Routes {
    * Sets up the routes for the Express application by registering various route handlers.
    * Each route handler is associated with a specific route path.
    */
-  
+
   setupRoutes() {
     //API key Authorization
     this.app.use((req, res, next) => {
         const apiKey = req.get('API-Key')
-        if (!apiKey || apiKey !== config.API_KEY) {
+        if (!apiKey || apiKey !== process.env.API_KEY) {
             res.status(401).json({
                 ok: false,
                 error: 'Unauthorized'

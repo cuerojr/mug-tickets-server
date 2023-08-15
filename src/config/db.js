@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import config from './config.js';
 class Database {
   constructor(){}
 
   async connectDB() {
     try {
-      await mongoose.connect(config.HOST, {
+      await mongoose.connect(process.env.DB_CNN, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       });

@@ -1,10 +1,9 @@
-import config from '../config/config.js';
 import cloudinary from 'cloudinary';
 
 cloudinary.v2.config({ 
-  cloud_name: config.CLOUD_NAME, 
-  api_key: config.CLOUDINARY_KEY,
-  api_secret:  config.CLOUDINARY_SECRET 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret:  process.env.CLOUDINARY_SECRET 
 });
 
 const uploadCloudImage = async (filePath = '', folder = '') => {

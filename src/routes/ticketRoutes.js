@@ -1,7 +1,5 @@
 import { Router } from 'express';
 const router = Router();
-import config from '../config/config.js';
-
 
 import { check } from 'express-validator';
 import { ValidationsMiddlewares }  from '../middlewares/validationMiddleware.js';
