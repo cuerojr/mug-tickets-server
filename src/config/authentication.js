@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 import { User } from '../models/userModel.js';
-
 /**
  * Middleware function to authenticate incoming requests using JSON Web Tokens (JWT).
  *
