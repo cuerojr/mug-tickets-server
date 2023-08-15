@@ -37,7 +37,6 @@ class Routes {
             next();
         }
     });*/
-
     // User Routes
     this.app.use('/api/users', userRouter);
 
