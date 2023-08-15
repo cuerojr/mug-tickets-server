@@ -38,6 +38,7 @@ class Routes {
         }
     });*/
     
+
     // User Routes
     this.app.use('/api/users', userRouter);
 
