@@ -23,6 +23,19 @@ class Routes {
    * Each route handler is associated with a specific route path.
    */
   setupRoutes() {
+    //API key Authorization
+    this.app.use((req, res, next) => {
+        const apiKey = req.get('API-Key')
+        if (!apiKey || apiKey !== config.API_KEY) {
+            res.status(401).json({
+                ok: false,
+                error: 'Unauthorized'
+            });
+        } else {
+            next();
+        }
+    });
+
     // User Routes
     this.app.use('/api/users', userRouter);
 
