@@ -1,5 +1,6 @@
 import { response } from 'express';
 import mercadopago from 'mercadopago';
+import 'dotenv/config'
 import { createTransaction } from '../helpers/mercadopago.js';
 
 /**

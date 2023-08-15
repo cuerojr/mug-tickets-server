@@ -2,7 +2,7 @@ import { response } from 'express';
 import { validationResult } from 'express-validator';
 import { Admin } from'./../models/adminModel.js';
 import jwt from 'jsonwebtoken';
-
+import 'dotenv/config'
 /**
  * Middleware class containing validation methods for request fields, JWT tokens, and admin privileges.
  */

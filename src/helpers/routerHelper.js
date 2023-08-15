@@ -2,6 +2,7 @@
  * Class representing the setup of routes for the Express application.
  */
 import config from '../config/config.js'; 
+import 'dotenv/config'
 import { router as userRouter } from '../routes/userRoutes.js';
 import { router as adminRouter } from '../routes/adminRoutes.js';
 import { router as ticketRouter } from '../routes/ticketRoutes.js';

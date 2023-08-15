@@ -1,4 +1,5 @@
 import mercadopago from 'mercadopago';
+import 'dotenv/config'
 
 /**
  * Creates a transaction using MercadoPago API.

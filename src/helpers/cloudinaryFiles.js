@@ -1,5 +1,5 @@
 import cloudinary from 'cloudinary';
-
+import 'dotenv/config'
 cloudinary.v2.config({ 
   cloud_name: process.env.CLOUD_NAME, 
   api_key: process.env.CLOUDINARY_KEY,
