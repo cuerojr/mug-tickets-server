@@ -23,6 +23,7 @@ class Routes {
    * Sets up the routes for the Express application by registering various route handlers.
    * Each route handler is associated with a specific route path.
    */
+  
   setupRoutes() {
     //API key Authorization
     this.app.use((req, res, next) => {
