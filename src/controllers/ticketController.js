@@ -104,6 +104,19 @@ class TicketController {
           validationDate
         } = req.body;
 
+        // create Anonimous User 
+        if(!purchaserId) {
+          const newUser = new User({
+              firstName: purchaserFirstName,
+              lastName: purchaserLastName,
+              dni: purchaserDni,
+              email: purchaserEmail,
+              password: '@@@',
+          });
+          const savedNewUser = await newUser.save();  
+          purchaserId = savedNewUser._id;
+        }
+
         const [ purchaseEvent, user ] = await Promise.all([
           Event.findById(event), 
           User.findById(purchaserId)
@@ -115,54 +128,7 @@ class TicketController {
             message: 'Sold out!'
           });          
         }
-        
-        // create Anonimous User 
-        if(!user) {
-          const newUser = new User({
-                              firstName: purchaserFirstName,
-                              lastName: purchaserLastName,
-                              dni: purchaserDni,
-                              email: purchaserEmail,
-                              password: '@@@',
-                          })
-          const savedNewUser = await newUser.save();
-          // createAnonimousUser()
-          const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
-          const newTicket = new Ticket({
-            event,
-            purchaser: { 
-              purchaserFirstName, 
-              purchaserLastName, 
-              purchaserDni,
-              purchaserEmail,
-              purchaserId: savedNewUser._id
-            },
-            attendee: { 
-              attendeeFirstName, 
-              attendeeLastName, 
-              attendeeDni 
-            },
-            validated,
-            purchaseDate,
-            validationDate,
-            ticketNumber
-          });
-          
-          const savedNewTicket = await newTicket.save();
-          newUser.purchasedTickets = newUser.purchasedTickets.concat(savedNewTicket._id);
-          
-          purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
-          purchaseEvent.purchasedTicketsList = purchaseEvent.purchasedTicketsList.concat(savedNewTicket._id);
-
-          await purchaseEvent.save();
-          await newUser.save();
-          
-          return res.status(200).json({
-            ok: true,
-            savedNewTicket
-          });
-        }
-
+                
         const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
         const newTicket = new Ticket({
           event,
