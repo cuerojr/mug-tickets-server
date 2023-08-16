@@ -35,7 +35,7 @@ router.post('/',
     check('tickets.*.attendee.attendeeFirstName', 'Attendee first name is required for each ticket').not().isEmpty(),
     check('tickets.*.attendee.attendeeLastName', 'Attendee last name is required for each ticket').not().isEmpty(),
     check('tickets.*.attendee.attendeeDni', 'Attendee dni is required for each ticket').not().isEmpty(),
-    validationsMiddlewares.validateFields
+    //validationsMiddlewares.validateFields
   ],
   ticketController.create);
 
