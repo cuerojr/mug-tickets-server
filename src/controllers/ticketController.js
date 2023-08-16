@@ -125,7 +125,7 @@ class TicketController {
                               email: purchaserEmail,
                               password: '@@@',
                           })
-          await newUser.save();
+          const savedNewUser = await newUser.save();
           // createAnonimousUser()
           const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
           const newTicket = new Ticket({
@@ -135,7 +135,7 @@ class TicketController {
               purchaserLastName, 
               purchaserDni,
               purchaserEmail,
-              purchaserId: newUser._id
+              purchaserId: savedNewUser._id
             },
             attendee: { 
               attendeeFirstName, 
