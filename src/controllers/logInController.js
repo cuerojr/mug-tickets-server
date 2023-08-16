@@ -82,7 +82,6 @@ class LogInController {
             await newUser.save();
             const newToken = await generateJWT(newUser.id);
 
-
             res.status(200).json({
                 ok: true,
                 name,

@@ -18,7 +18,7 @@ const ticketSchema = new mongoose.Schema({
     },
     purchaserId: {
       type: String,
-      required: true
+      required: false
     },
     purchaserDni: {
       type: Number,
