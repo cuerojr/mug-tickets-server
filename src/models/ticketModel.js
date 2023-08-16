@@ -23,6 +23,10 @@ const ticketSchema = new mongoose.Schema({
     purchaserDni: {
       type: Number,
       required: true
+    },
+    purchaserEmail: {
+      type: String,
+      trim: true
     }
   },
   attendee: {

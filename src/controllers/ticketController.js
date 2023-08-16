@@ -18,7 +18,6 @@ class TicketController {
      * @returns {Object} JSON response containing an array of tickets or an error message.
      */
     async getAll(req, res = response) {
-      console.log('getAll')
       try {
         const { id } = req.params;
         const tickets = await Ticket.find({}).populate('event', {
@@ -78,103 +77,6 @@ class TicketController {
     }
   
     /**
-     * Create a new ticket with the provided data.
-     *
-     * @param {Object} req - Express request object containing the ticket data in the request body.
-     * @param {Object} res - Express response object.
-     * @returns {Object} JSON response containing the newly created ticket details or an error message.
-     */
-    async create(req, res = response) {
-      console.log('create')
-      return
-      try {
-        const {
-          event,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni,
-            purchaserEmail,
-            //purchaserId
-          },
-          attendee: { 
-            attendeeFirstName, 
-            attendeeLastName, 
-            attendeeDni 
-          },
-          validated,
-          purchaseDate,
-          validationDate
-        } = req.body;
-
-        // create Anonimous User 
-        if(!purchaserId) {
-          const newUser = new User({
-              firstName: purchaserFirstName,
-              lastName: purchaserLastName,
-              dni: purchaserDni,
-              email: purchaserEmail,
-              password: '@@@',
-          });
-          await newUser.save();
-          purchaserId = newUser.id;          
-        }
-
-        const [ purchaseEvent, user ] = await Promise.all([
-          Event.findById(event), 
-          User.findById(purchaserId)
-        ]);
-
-        if(purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
-          return res.status(404).json({
-            ok: false,
-            message: 'Sold out!'
-          });          
-        }
-                
-        const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
-        const newTicket = new Ticket({
-          event,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni,
-            purchaserId: user._id
-          },
-          attendee: { 
-            attendeeFirstName, 
-            attendeeLastName, 
-            attendeeDni 
-          },
-          validated,
-          purchaseDate,
-          validationDate,
-          ticketNumber
-        });
-        
-        const savedNewTicket = await newTicket.save();
-        user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
-        
-        purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
-        purchaseEvent.purchasedTicketsList = purchaseEvent.purchasedTicketsList.concat(savedNewTicket._id);
-
-        await purchaseEvent.save();
-        await user.save();
-
-        res.status(200).json({
-          ok: true,
-          savedNewTicket
-        });
-      } catch (err) {
-        console.log("🚀 ~ file: ticketController.js:168 ~ TicketController ~ create ~ err:", err)
-        res.status(500).json({ 
-          ok: false, 
-          error: err.message 
-        });
-      }
-    }
-    
-    /**
    * Create new tickets with the provided data.
    *
    * @param {Object} req - Express request object containing the ticket data in the request body.
@@ -207,18 +109,17 @@ class TicketController {
         } else {
           purchasersIds = [ userDB._id.toString() ];
         }
-        
       }
-      //return
+      
       const [purchaseEvents, users] = await Promise.all([
         Event.find({ _id: { $in: eventsIds } }),
         User.find({ _id: { $in: purchasersIds } })
       ]);
-      
+
       const insertData = ticketsData.map((ticket, index) => {
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
-        const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0]._id.toString();
-
+        const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0];
+        
         if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
           return {
             error: {
@@ -235,6 +136,7 @@ class TicketController {
             purchaserFirstName: ticket.purchaser.purchaserFirstName,
             purchaserLastName: ticket.purchaser.purchaserLastName,
             purchaserDni: ticket.purchaser.purchaserDni,
+            purchaserEmail: ticket.purchaser.purchaserEmail,
             purchaserId: user._id
           },
           attendee: {
@@ -246,15 +148,14 @@ class TicketController {
           purchaseDate: ticket.purchaseDate,
           validationDate: ticket.validationDate,
           ticketNumber
-        });
-
+        });        
         return newTicket;
       });
+
       const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
-      
       savedTickets.forEach((savedTicket, index) => {
         const ticket = ticketsData[index];
-        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId || users[0]._id.toString());
+        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
 
         user.purchasedTickets.push(savedTicket._id);
