@@ -1,7 +1,7 @@
-const { response } = require('express');
-const { v4: uuidv4 } = require('uuid');
-const { updateImages } = require('../helpers/updateImage');
-const { uploadCloudImage } = require('../helpers/cloudinaryFiles');
+import { response } from 'express';
+//import { uuidv4 } from 'uuid';
+import { updateImages } from '../helpers/updateImage.js';
+import { uploadCloudImage } from '../helpers/cloudinaryFiles.js';
 
 /**
  * Controller class for handling image upload operations.
@@ -67,4 +67,6 @@ class UploadImagesController {
 
 }
 
-module.exports = UploadImagesController;
+export {
+  UploadImagesController
+};

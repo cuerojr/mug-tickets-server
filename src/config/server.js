@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const config = require('./config');
-const Routes = require('../helpers/routerHelper');
-const Database = require('./db');
+import express from 'express';
+import 'dotenv/config'
+import cors from 'cors';
+import helmet from 'helmet';
+import { Routes } from '../helpers/routerHelper.js';
+import { Database } from './db.js';
 
 /**
  * Server class responsible for setting up and running the web server.
  */
 class Server {
-    constructor(dataBase = new Database(), port = config.PORT, app = express()){
+    constructor(dataBase = new Database(), port = process.env.PORT , app = express()){
         this.port = port;
         this.app = app;
         this.dataBase = dataBase;
@@ -30,13 +30,13 @@ class Server {
      * Configures CORS middleware to allow cross-origin requests.
      */
     corsMiddleware(){
-        //this.app.use( cors() );
+        this.app.use( cors() );
         // enable CORS for all routes and for our specific API-Key header
-        this.app.use(function (req, res, next) {
+        /*this.app.use(function (req, res, next) {
             res.header('Access-Control-Allow-Origin', '*')
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, API-Key')
-            next()
-        });
+            next();
+        });*/
     }
     
     /**
@@ -65,4 +65,6 @@ class Server {
     }
 }
 
-module.exports = Server;
+export {
+    Server
+}

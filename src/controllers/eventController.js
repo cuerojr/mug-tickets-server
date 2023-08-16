@@ -1,6 +1,6 @@
-const { response } = require('express');
-const Event = require('../models/eventModel');
-const Admin = require('../models/adminModel');
+import { response } from 'express';
+import {Event} from '../models/eventModel.js';
+import {Admin} from '../models/adminModel.js';
 
 /**
  * Controller class for handling event-related operations.
@@ -210,6 +210,6 @@ class EventController {
     }
 }
 
-module.exports = { 
+export { 
   EventController 
 };

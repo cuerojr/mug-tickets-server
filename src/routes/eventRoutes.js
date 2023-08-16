@@ -1,10 +1,10 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
 
-const { check } = require('express-validator');
-const ValidationsMiddlewares  = require('../middlewares/validationMiddleware');
-const { EventController } = require('../controllers/eventController');
-const CacheMiddleware = require('../middlewares/cacheMiddleware');
+import { check } from 'express-validator';
+import {ValidationsMiddlewares} from '../middlewares/validationMiddleware.js';
+import { EventController } from '../controllers/eventController.js';
+import * as CacheMiddleware from '../middlewares/cacheMiddleware.js';
 
 const validationsMiddlewares = new ValidationsMiddlewares();
 
@@ -16,7 +16,7 @@ const eventController = new EventController();
 router.get('/', 
     [
         //validationsMiddlewares.validateIfAdmin,
-        CacheMiddleware()
+        //CacheMiddleware()
     ], 
     eventController.getAll);
 
@@ -80,4 +80,6 @@ router.delete('/:id',
     ], 
     eventController.delete);
 
-module.exports = router;
+export {
+    router
+};

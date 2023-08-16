@@ -1,9 +1,9 @@
-const { response } = require('express');
-const bcryptjs = require('bcryptjs');
+import { response } from 'express';
+import bcryptjs from 'bcryptjs';
 
-const Admin = require('../models/adminModel');
-const { generateJWT } = require('../config/authentication');
-const { googleVerify } = require('../helpers/google-verify');
+import { Admin } from '../models/adminModel.js';
+import { generateJWT } from '../config/authentication.js';
+import { googleVerify } from '../helpers/google-verify.js';
 
 /**
  * Controller class for handling user login-related operations.
@@ -99,6 +99,6 @@ class AdminLogInController {
     }
 }
 
-module.exports = {
+export {
     AdminLogInController
 };

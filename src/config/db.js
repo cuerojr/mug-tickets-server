@@ -1,12 +1,11 @@
-const mongoose = require('mongoose');
-const config = require('./config');
-
+import mongoose from 'mongoose';
+import 'dotenv/config'
 class Database {
   constructor(){}
 
   async connectDB() {
     try {
-      await mongoose.connect(config.HOST, {
+      await mongoose.connect(process.env.DB_CNN, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       });
@@ -18,4 +17,6 @@ class Database {
   };
 }
 
-module.exports = Database;
+export {
+  Database
+};

@@ -1,7 +1,8 @@
-const { response } = require('express');
-const Ticket = require('../models/ticketModel');
-const User = require('../models/userModel');
-const Event = require('../models/eventModel');
+import { response } from 'express';
+import { Ticket } from '../models/ticketModel.js';
+import { User } from '../models/userModel.js';
+import { Event } from '../models/eventModel.js';
+import { ticketNumber } from '../helpers/dataFormatter.js';
 
 /**
  * Controller class for handling ticket-related operations.
@@ -51,12 +52,18 @@ class TicketController {
     async filter(req, res = response) {
       try {
         const tickets = await Ticket.find(req.query);
+        
         if (tickets.length < 1) {
             return res.status(404).json({
               ok: false,
-              error: 'No events matched your search'
+              error: 'No tickets matched your search'
             });
         } 
+
+        tickets.forEach((item) => {
+          item.ticketNumber = ticketNumber(item.ticketNumber);
+        });
+
         res.status(200).json({
           ok: true,
           tickets
@@ -70,85 +77,6 @@ class TicketController {
     }
   
     /**
-     * Create a new ticket with the provided data.
-     *
-     * @param {Object} req - Express request object containing the ticket data in the request body.
-     * @param {Object} res - Express response object.
-     * @returns {Object} JSON response containing the newly created ticket details or an error message.
-     */
-    async create(req, res = response) { 
-      try {
-        const {
-          event,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni,
-            purchaserId
-          },
-          attendee: { 
-            attendeeFirstName, 
-            attendeeLastName, 
-            attendeeDni 
-          },
-          validated,
-          purchaseDate,
-          validationDate
-        } = req.body;
-
-        const [ purchaseEvent, user ] = await Promise.all([
-          Event.findById(event), 
-          User.findById(purchaserId)
-        ]);
-
-        if(purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
-          return res.status(404).json({
-            ok: false,
-            message: 'Sold out!'
-          });          
-        }
-        const ticketNumber = +purchaseEvent?.purchasedTicketsList?.length + 1;
-        const newTicket = new Ticket({
-          event,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni,
-            purchaserId: user._id
-          },
-          attendee: { 
-            attendeeFirstName, 
-            attendeeLastName, 
-            attendeeDni 
-          },
-          validated,
-          purchaseDate,
-          validationDate,
-          ticketNumber
-        });
-        
-        const savedNewTicket = await newTicket.save();
-        user.purchasedTickets = user.purchasedTickets.concat(savedNewTicket._id);
-        
-        purchaseEvent.ticketsPurchased = purchaseEvent.ticketsPurchased + 1;
-        purchaseEvent.purchasedTicketsList = purchaseEvent.purchasedTicketsList.concat(savedNewTicket._id);
-
-        await purchaseEvent.save();
-        await user.save();
-
-        res.status(200).json({
-          ok: true,
-          savedNewTicket
-        });
-      } catch (err) {
-        res.status(500).json({ 
-          ok: false, 
-          error: err.message 
-        });
-      }
-    }
-    
-    /**
    * Create new tickets with the provided data.
    *
    * @param {Object} req - Express request object containing the ticket data in the request body.
@@ -158,10 +86,31 @@ class TicketController {
   async create(req, res = response) {
     try {
       const ticketsData = req.body.tickets;
-
+      
       const eventsIds = ticketsData.map(ticket => ticket.event);
-      const purchasersIds = ticketsData.map(ticket => ticket.purchaser.purchaserId);
-
+      let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
+      
+      // create Anonimous User 
+      if(!!purchasersIds) {
+        const { purchaserFirstName, purchaserLastName, purchaserDni, purchaserEmail } = ticketsData[0].purchaser;
+        const userDB = await User.findOne({ dni: purchaserDni });
+        
+        let newUser;
+        if(!userDB) {
+          newUser = new User({
+              firstName: purchaserFirstName,
+              lastName: purchaserLastName,
+              dni: purchaserDni,
+              email: purchaserEmail,
+              password: '@@@',
+          });
+          await newUser.save();
+          purchasersIds = [ newUser._id.toString() ];
+        } else {
+          purchasersIds = [ userDB._id.toString() ];
+        }
+      }
+      
       const [purchaseEvents, users] = await Promise.all([
         Event.find({ _id: { $in: eventsIds } }),
         User.find({ _id: { $in: purchasersIds } })
@@ -169,8 +118,8 @@ class TicketController {
 
       const insertData = ticketsData.map((ticket, index) => {
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
-        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId);
-
+        const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0];
+        
         if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
           return {
             error: {
@@ -187,6 +136,7 @@ class TicketController {
             purchaserFirstName: ticket.purchaser.purchaserFirstName,
             purchaserLastName: ticket.purchaser.purchaserLastName,
             purchaserDni: ticket.purchaser.purchaserDni,
+            purchaserEmail: ticket.purchaser.purchaserEmail,
             purchaserId: user._id
           },
           attendee: {
@@ -198,16 +148,14 @@ class TicketController {
           purchaseDate: ticket.purchaseDate,
           validationDate: ticket.validationDate,
           ticketNumber
-        });
-
+        });        
         return newTicket;
       });
 
       const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
-
       savedTickets.forEach((savedTicket, index) => {
         const ticket = ticketsData[index];
-        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId);
+        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
 
         user.purchasedTickets.push(savedTicket._id);
@@ -260,6 +208,7 @@ class TicketController {
         }
         
         const { purchaser, ... params} = ticket.toObject();
+        params.ticketNumber = ticketNumber(params.ticketNumber);
 
         res.status(200).json({
           ok: true,
@@ -330,6 +279,13 @@ class TicketController {
       }
     }
 
+    /**
+     * Validate a ticket by its ID.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
     async validate(req, res = response){
       try {
         const { id } = req.params;
@@ -369,6 +325,6 @@ class TicketController {
     }
 }
 
-module.exports = {
+export {
   TicketController
 };

@@ -1,8 +1,8 @@
-const { response } = require('express');
-const bcryptjs = require('bcryptjs');
+import { response } from 'express';
+import bcryptjs from 'bcryptjs';
 
-const Admin = require('../models/adminModel');
-const { generateJWT } = require('../config/authentication');
+import { Admin } from '../models/adminModel.js';
+import { generateJWT } from '../config/authentication.js';
 
 /**
  * Controller class for handling admin-related operations.
@@ -249,6 +249,6 @@ class AdminController {
     }
 }
 
-module.exports = {
+export {
   AdminController
 };
