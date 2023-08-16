@@ -113,9 +113,8 @@ class TicketController {
               email: purchaserEmail,
               password: '@@@',
           });
-          const savedNewUser = await newUser.save();
-          console.log('savedNewUser', savedNewUser)
-          purchaserId = savedNewUser._id;
+          await newUser.save();
+          purchaserId = newUser._id;
         }
 
         const [ purchaseEvent, user ] = await Promise.all([
