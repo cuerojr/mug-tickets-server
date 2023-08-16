@@ -113,7 +113,8 @@ class TicketController {
               email: purchaserEmail,
               password: '@@@',
           });
-          const savedNewUser = await newUser.save();  
+          const savedNewUser = await newUser.save();
+          console.log('savedNewUser', savedNewUser)
           purchaserId = savedNewUser._id;
         }
 
