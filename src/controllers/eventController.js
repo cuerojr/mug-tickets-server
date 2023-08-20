@@ -17,7 +17,11 @@ class EventController {
      */
     async getAll(req, res = response) {
       try {
-        const events = await Event.find({})/*.populate('purchasedTicketsList');*/
+        const events = await Event.find({
+          date: {
+              $gt: new Date()
+          }
+      })/*.populate('purchasedTicketsList');*/
 
         res.status(200).json({
           ok: true,
