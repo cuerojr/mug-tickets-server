@@ -6,7 +6,7 @@ import { Counter } from './counterModel.js';
 const eventSchema = new mongoose.Schema({  
   creatorId: {
     type: String,
-    required: true,
+    required: false,
   },
   eventType: {
     type: String,

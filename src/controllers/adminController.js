@@ -26,7 +26,8 @@ class AdminController {
             hasLimitedPlaces: 1, 
             title: 1,
             address: 1,
-            date: 1
+            date: 1,
+            description: 1
         });
 
         res.status(200).json({
