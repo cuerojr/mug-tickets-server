@@ -21,7 +21,7 @@ class EventController {
           date: {
               $gt: new Date()
           }
-      }).sort({ length: 1 })/*.populate('purchasedTicketsList');*/
+      }).sort({ date: 1 })/*.populate('purchasedTicketsList');*/
 
         res.status(200).json({
           ok: true,
