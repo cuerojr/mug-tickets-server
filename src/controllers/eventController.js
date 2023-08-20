@@ -96,6 +96,13 @@ class EventController {
           price      
         });
 
+        if (!creatorId) {
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Missing creator Id ${creatorId}.` 
+          });
+        }
+
         const admin = await Admin.findById(creatorId);
         const savedNewEvent = await newEvent.save();
         admin.eventsCreatedList = admin.eventsCreatedList.concat(savedNewEvent._id);

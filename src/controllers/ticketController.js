@@ -85,8 +85,7 @@ class TicketController {
    */
   async create(req, res = response) {
     try {
-      const ticketsData = req.body.tickets;
-      
+      const ticketsData = req.body.tickets;      
       const eventsIds = ticketsData.map(ticket => ticket.event);
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
       
