@@ -35,6 +35,7 @@ router.post('/',
     [
         validationsMiddlewares.validateJWT,
         validationsMiddlewares.validateIfAdmin,
+        check('creatorId', 'Creator id is required').not().isEmpty(),
         check('eventType', 'Event type is required').not().isEmpty(),
         check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(),
         check('title', 'Show title is required').not().isEmpty(),

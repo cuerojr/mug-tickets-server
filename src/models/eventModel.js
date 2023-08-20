@@ -3,7 +3,11 @@ import { Counter } from './counterModel.js';
 /**
  * Mongoose schema for the 'event' collection.
  */
-const eventSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema({  
+  creatorId: {
+    type: String,
+    required: true,
+  },
   eventType: {
     type: String,
     required: true,
