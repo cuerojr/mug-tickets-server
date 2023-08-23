@@ -42,10 +42,11 @@ class AdminLogInController {
             console.log(admin)
             res.status(200).json({
                 ok: true,
-                firstName,
+                name: firstName,
                 email,
                 image,
-                token
+                token,
+                role: 'admin'
             });
         } catch (err) {
             res.status(500).json({ 
