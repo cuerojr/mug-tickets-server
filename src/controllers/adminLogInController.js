@@ -38,7 +38,7 @@ class AdminLogInController {
             }
 
             const token = await generateJWT(admin._id);
-            const { name, image } = user;
+            const { name, image } = admin;
             res.status(200).json({
                 ok: true,
                 token,
