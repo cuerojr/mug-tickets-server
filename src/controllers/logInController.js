@@ -39,12 +39,13 @@ class LogInController {
             }
 
             const token = await generateJWT(user._id);
-            const { name, image } = user;
+            const { firstName, image } = user;
             res.status(200).json({
                 ok: true,
-                token,
-                name,
-                image
+                firstName,
+                email,
+                image,
+                token
             });
         } catch (err) {
             res.status(500).json({ 
