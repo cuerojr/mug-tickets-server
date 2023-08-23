@@ -22,6 +22,7 @@ class LogInController {
         const { email, password } = req.body;
         try {
             const user = await User.findOne({ email });
+
             if (!user) {
                 return res.status(404).json({
                     ok: false,
@@ -38,9 +39,12 @@ class LogInController {
             }
 
             const token = await generateJWT(user._id);
+            const { name, image } = user;
             res.status(200).json({
                 ok: true,
-                token
+                token,
+                name,
+                image
             });
         } catch (err) {
             res.status(500).json({ 
