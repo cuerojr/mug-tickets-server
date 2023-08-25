@@ -92,7 +92,7 @@ class TicketController {
       // create Anonimous User 
       if(!!purchasersIds) {
         const { purchaserFirstName, purchaserLastName, purchaserDni, purchaserEmail } = ticketsData[0].purchaser;
-        const userDB = await User.findOne({ dni: purchaserDni });
+        const userDB = await User.findOne({ email: purchaserEmail });
         
         let newUser;
         if(!userDB) {
