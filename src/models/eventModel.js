@@ -64,6 +64,10 @@ const eventSchema = new mongoose.Schema({
   purchasedTicketsList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ticket'
+  }],
+  ticketsTypeList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TicketType'
   }]
 });
 
