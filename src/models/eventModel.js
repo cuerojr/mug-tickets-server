@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Counter } from './counterModel.js';
+
 /**
  * Mongoose schema for the 'event' collection.
  */
@@ -25,7 +26,7 @@ const eventSchema = new mongoose.Schema({
   },
   ticketPurchaseDeadline: {
     type: Date,
-    required: true
+    required: false
   },
   hasLimitedPlaces: {
     type: Boolean,
@@ -44,10 +45,12 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
+  dates: [{
+    date: {
+      type: Date,
+      required: true
+    }
+  }],
   image: {
     type: String,
     required: false

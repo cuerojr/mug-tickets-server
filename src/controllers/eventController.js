@@ -17,12 +17,13 @@ class EventController {
      */
     async getAll(req, res = response) {
       try {
-        const events = await Event.find({
+        /*const events = await Event.find({
           date: {
               $gt: new Date()
           }
-      }).sort({ date: 1 })/*.populate('purchasedTicketsList');*/
-
+        }).sort({ date: 1 }).populate('purchasedTicketsList');*/
+        const events = await Event.find({});
+        
         res.status(200).json({
           ok: true,
           events
@@ -82,7 +83,7 @@ class EventController {
           title, 
           description,
           address, 
-          date,
+          dates,
           image,
           price
         } = req.body;
@@ -95,7 +96,7 @@ class EventController {
           title, 
           description,
           address, 
-          date,
+          dates,
           image,
           price      
         });
