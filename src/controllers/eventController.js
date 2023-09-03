@@ -22,7 +22,7 @@ class EventController {
               $gt: new Date()
           }
         }).sort({ date: 1 }).populate('purchasedTicketsList');*/
-        const events = await Event.find({});
+        const events = await Event.find({}).populate('ticketsTypeList');
         
         res.status(200).json({
           ok: true,
@@ -136,7 +136,7 @@ class EventController {
     async get(req, res = response) {      
       try {
         const { id } = req.params;
-        const event = await Event.findById(id)/*.populate('purchasedTicketsList')*/;
+        const event = await Event.findById(id).populate('ticketsTypeList');
         if (!event) {
           return res.status(404).json({ 
             ok: false, 
