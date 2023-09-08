@@ -168,6 +168,7 @@ class EventController {
       const {
         eventType,
         hasLimitedPlaces,
+        ticketsAvailableOnline,
         title, 
         description,
         address
@@ -180,6 +181,7 @@ class EventController {
           title, 
           description,
           address,
+          ticketsAvailableOnline,
         }, { new: true });
         if (!updatedEvent) {
           return res
