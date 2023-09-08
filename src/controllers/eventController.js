@@ -165,10 +165,22 @@ class EventController {
      */
     async update(req, res = response) {
       const { id } = req.params;
-      const { name, description } = req.body;
+      const {
+        eventType,
+        hasLimitedPlaces,
+        title, 
+        description,
+        address
+      } = req.body;
 
       try {
-        const updatedEvent = await Event.findByIdAndUpdate(id, { name, description }, { new: true });
+        const updatedEvent = await Event.findByIdAndUpdate(id, {
+          eventType,
+          hasLimitedPlaces,
+          title, 
+          description,
+          address,
+        }, { new: true });
         if (!updatedEvent) {
           return res
             .status(404)
