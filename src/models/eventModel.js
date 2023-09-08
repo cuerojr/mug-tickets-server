@@ -48,7 +48,7 @@ const eventSchema = new mongoose.Schema({
   dates: [{
     date: {
       type: Date,
-      required: true
+      required: false
     }
   }],
   image: {
