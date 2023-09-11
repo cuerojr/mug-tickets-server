@@ -155,17 +155,30 @@ class TicketTypeController {
      */
     async update(req, res = response) {
       const { id } = req.params;
-      const { name, description } = req.body;
+      const {
+        eventId,
+        price,
+        date,
+        type,
+        ticketsAvailableOnline,
+        ticketPurchaseDeadline         
+    } = req.body;
 
       try {
-        const updatedTicketType = await TicketType.findByIdAndUpdate(id, { name, description }, { new: true });
+        const updatedTicketType = await TicketType.findByIdAndUpdate(id, {
+          eventId,
+          price,
+          date,
+          type,
+          ticketsAvailableOnline,
+          ticketPurchaseDeadline         
+        }, { new: true });
+
         if (!updatedTicketType) {
-          return res
-            .status(404)
-            .json({ 
-              ok: false, 
-              error: `Ticket type with id ${id} not found.` 
-            });
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Ticket type with id ${id} not found.` 
+          });
         }
 
         res.status(200).json({

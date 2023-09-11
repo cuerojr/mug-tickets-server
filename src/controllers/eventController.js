@@ -183,10 +183,9 @@ class EventController {
           address,
           ticketsAvailableOnline,
         }, { new: true });
+        
         if (!updatedEvent) {
-          return res
-            .status(404)
-            .json({ 
+          return res.status(404).json({ 
               ok: false, 
               error: `Event with id ${id} not found.` 
             });

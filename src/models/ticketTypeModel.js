@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 /**
  * Mongoose schema for the 'ticketType' collection.
  */
-const eventSchema = new mongoose.Schema({  
+const ticketTypeSchema = new mongoose.Schema({  
     eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
@@ -69,13 +69,13 @@ const eventSchema = new mongoose.Schema({
 /**
  * Mongoose pre-save hook for the 'ticketType' schema.
  */
-eventSchema.method('toJSON', function() {
+ticketTypeSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.ticketId = _id;
   return object;
 });
 
-const TicketType = mongoose.model('TicketType', eventSchema);
+const TicketType = mongoose.model('TicketType', ticketTypeSchema);
 export {
   TicketType 
 };
