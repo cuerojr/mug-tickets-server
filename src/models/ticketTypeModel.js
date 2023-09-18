@@ -69,11 +69,11 @@ const ticketTypeSchema = new mongoose.Schema({
 /**
  * Mongoose pre-save hook for the 'ticketType' schema.
  */
-ticketTypeSchema.method('toJSON', function() {
+/*ticketTypeSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.ticketId = _id;
   return object;
-});
+});*/
 
 const TicketType = mongoose.model('TicketType', ticketTypeSchema);
 export {
