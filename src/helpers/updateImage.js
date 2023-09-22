@@ -9,6 +9,7 @@ import { Event } from '../models/eventModel.js';
  */
 const updateImages = (options = {}) => {
     const { type, id, url } = options;
+
     try{
         // Define actions based on the 'type' (user, events, tickets)
         const action = {

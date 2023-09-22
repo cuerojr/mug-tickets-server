@@ -18,8 +18,7 @@ class UploadImagesController {
      */
     async upload(req, res = response) {   
       try{
-        const { type, id, url } = req.body;       
-                
+        const { type, id, url } = req.body;
         updateImages({ type, id, url });
             
         res.status(200).json({
