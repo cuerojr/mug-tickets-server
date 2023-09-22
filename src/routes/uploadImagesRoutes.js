@@ -21,7 +21,10 @@ const uploadImagesController = new UploadImagesController();
 router.put('/', 
     [     
         validationsMiddlewares.validateJWT,         
-        validationsMiddlewares.validateFields
+        validationsMiddlewares.validateFields,
+        check('url', 'Url is required').not().isEmpty(), 
+        check('eventId', 'Event id is required').isEmail(), 
+        check('type', 'Type is required').isEmail(), 
     ],
     uploadImagesController.upload);
 
