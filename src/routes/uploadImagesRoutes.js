@@ -2,6 +2,8 @@ import { Router } from 'express';
 const router = Router();
 
 import fileUpload from 'express-fileupload';
+
+import { check } from 'express-validator';
 import { ValidationsMiddlewares } from '../middlewares/validationMiddleware.js';
 const validationsMiddlewares = new ValidationsMiddlewares();
 
