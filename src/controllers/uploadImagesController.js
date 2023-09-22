@@ -18,14 +18,15 @@ class UploadImagesController {
      */
     async upload(req, res = response) {   
       try{
-        const { type, id, url } = req.body;
-        await updateImages({ type, id, url });
+        const { type, eventId, url } = req.body;
+        
+        await updateImages({ type, eventId, url });
             
         res.status(200).json({
             ok: true,
             msg: "File uploaded.",
             type, 
-            id, 
+            eventId, 
             url 
         });        
       } catch(err) {

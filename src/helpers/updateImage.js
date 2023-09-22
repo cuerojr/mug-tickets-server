@@ -9,7 +9,6 @@ import { Event } from '../models/eventModel.js';
  */
 const updateImages = async (options = {}) => {
     const { type, eventId, url } = options;
-    console.log("🚀 ~ file: updateImage.js:12 ~ updateImages ~ options:", options)
 
     try{
         // Define actions based on the 'type' (user, events, tickets)
@@ -34,7 +33,7 @@ const updateImages = async (options = {}) => {
             },
             events: async () => {
                 // Find the event by ID
-                const event = await Event.findById(id);           
+                const event = await Event.findById(eventId);           
                 if(!event) {
                     return false;
                 }
