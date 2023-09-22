@@ -16,11 +16,10 @@ class UploadImagesController {
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the uploaded image filename or an error message.
      */
-    async upload(req, res = response) {      
+    async upload(req, res = response) {   
       try{
-        const { type, id, url } = req.body;      
-        console.log("🚀 ~ type, id, url :", type, id, url )
-        
+        const { type, id, url } = req.body;       
+                
         updateImages({ type, id, url });
             
         res.status(200).json({
