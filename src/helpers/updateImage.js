@@ -7,8 +7,9 @@ import { Event } from '../models/eventModel.js';
  * Function to update the image path for a user or event based on the given options.
  * @param {Object} options - Options object containing 'type', 'id', and 'fileName'.
  */
-const updateImages = (options = {}) => {
-    const { type, id, url } = options;
+const updateImages = async (options = {}) => {
+    const { type, eventId, url } = options;
+    console.log("🚀 ~ file: updateImage.js:12 ~ updateImages ~ options:", options)
 
     try{
         // Define actions based on the 'type' (user, events, tickets)
