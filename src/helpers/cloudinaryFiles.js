@@ -8,16 +8,14 @@ cloudinary.config({
 });
 
 const uploadCloudImage = async (file, folder = '') => {
-    /*return await cloudinary.v2.uploader.upload(filePath, {
-        folder,
-    }, (error, result) => {
-        error? console.log(error) : ''
-    });*/
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
+    const arrBuf = file.buffer();
+    const buffer = Buffer.from(arrBuf);
+    console.log("🚀 ~ newFile:", buffer)
+    
     return await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream({}, (err, result) => {
+        cloudinary.uploader.upload_stream({
+            folder
+        }, (err, result) => {
             if(err) {
                 reject(err);
             }  
