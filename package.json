@@ -34,6 +34,9 @@
     "mogodb": "^0.0.1-security",
     "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui": "^5.4.2",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

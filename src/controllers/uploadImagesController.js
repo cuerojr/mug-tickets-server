@@ -46,8 +46,8 @@ class UploadImagesController {
             msg: "The file doesn't have a valid extension."
           });
         }
-
-        const result =  await uploadCloudImage(file.tempFilePath , type);
+        
+        const result =  await uploadCloudImage(file , type);
         const { url } = result;
         
         updateImages({ type, id, url });
