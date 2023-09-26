@@ -7,6 +7,7 @@ import { router as adminRouter } from '../routes/adminRoutes.js';
 import { router as ticketRouter } from '../routes/ticketRoutes.js';
 import { router as ticketTypeRouter } from '../routes/ticketTypeRoutes.js';
 import { router as eventRoutes } from '../routes/eventRoutes.js';
+import { router as orderRoutes } from '../routes/orderRoutes.js';
 import { router as logInRoutes } from '../routes/logInRoutes.js';
 import { router as adminLogInRoutes } from '../routes/adminLogInRoutes.js';
 import { router as uploadImagesRoutes } from '../routes/uploadImagesRoutes.js';
@@ -52,6 +53,9 @@ class Routes {
 
     // Ticket type Routes
     this.app.use('/api/ticketTypes', ticketTypeRouter);
+
+    // Order type Routes
+    this.app.use('/api/orders', orderRoutes);
 
     // Event Routes
     this.app.use('/api/events', eventRoutes);
