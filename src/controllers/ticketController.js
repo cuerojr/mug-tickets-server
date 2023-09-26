@@ -231,12 +231,46 @@ class TicketController {
      */
     async update(req, res = response) {
       const { id } = req.body;
-      const { name, description } = req.body;
-
+      const {
+        event,
+        purchaser: {
+          purchaserFirstName,
+          purchaserLastName,
+          purchaserDni,
+          purchaserEmail,
+          purchaserId
+        },
+        attendee: {
+          attendeeFirstName,
+          attendeeLastName,
+          attendeeDni
+        },
+        validated,
+        purchaseDate,
+        validationDate,
+        ticketNumber
+      } = req.body;
+      
+      
       try {
-        const ticket = await Ticket.findByIdAndUpdate(id, { 
-          name, 
-          description 
+        const ticket = await Ticket.findByIdAndUpdate(id, {
+          event,
+          purchaser: {
+            purchaserFirstName,
+            purchaserLastName,
+            purchaserDni,
+            purchaserEmail,
+            purchaserId
+          },
+          attendee: {
+            attendeeFirstName,
+            attendeeLastName,
+            attendeeDni
+          },
+          validated,
+          purchaseDate,
+          validationDate,
+          ticketNumber
         }, 
         { 
           new: true 

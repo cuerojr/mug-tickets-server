@@ -58,10 +58,12 @@ router.put('/:id',
         check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
         check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
         check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('purchaser.purchaserEmail', 'Purchaser email is required').not().isEmpty(),
+        check('purchaser.purchaserDni', 'Purchaser dni is required').not().isEmpty(),
         check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
         check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
-        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
-        validationsMiddlewares.validateFields 
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),  
+        validationsMiddlewares.validateFields
     ], 
     ticketController.update);
 
