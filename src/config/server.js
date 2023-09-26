@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config'
 import cors from 'cors';
-//import helmet from 'helmet';
+import helmet from 'helmet';
 import { Routes } from '../helpers/routerHelper.js';
 import { Database } from './db.js';
 
@@ -16,7 +16,7 @@ class Server {
         this.dataBase.connectDB();
 
         //Middlewares
-        //this.app.use(helmet()); 
+        this.app.use(helmet()); 
 
         this.corsMiddleware();
         this.parserMiddleware();

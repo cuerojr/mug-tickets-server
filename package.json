@@ -45,6 +45,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "jsdom": "^22.0.0",
     "nodemon": "^2.0.22",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "typescript": "^5.2.2"
   }
 }
