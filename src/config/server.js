@@ -16,7 +16,7 @@ class Server {
         this.dataBase.connectDB();
 
         //Middlewares
-        this.app.use(helmet());
+        this.app.use(helmet()); 
 
         this.corsMiddleware();
         this.parserMiddleware();
