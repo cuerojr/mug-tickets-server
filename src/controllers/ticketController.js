@@ -302,7 +302,8 @@ class TicketController {
         await Ticket.findByIdAndRemove(id, { new: true });
 
         res.status(200).json({
-          ok: true
+          ok: true,
+          message: `Ticket with id ${ id } was deleted.`
         });
       } catch (err) {
         res.status(500).json({ 

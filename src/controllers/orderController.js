@@ -2,7 +2,6 @@ import { response } from 'express';
 import { Order } from '../models/orderModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
-import { ticketNumber } from '../helpers/dataFormatter.js';
 
 /**
  * Controller class for handling ticket-related operations.
@@ -11,17 +10,25 @@ class OrderController {
     constructor(){}
 
     /**
-     * Get all tickets from the database and populate their associated events.
+     * Get all order from the database and populate their associated events.
      *
      * @param {Object} req - Express request object.
      * @param {Object} res - Express response object.
-     * @returns {Object} JSON response containing an array of tickets or an error message.
+     * @returns {Object} JSON response containing an array of order or an error message.
      */
     async getAll(req, res = response) {
       try {
-        const { id } = req.params;
-        const orders = await Order.find({});
-console.log(orders)
+        const orders = await Order.find({})
+          .populate('eventId', {
+            eventId: 1,
+            eventType: 1, 
+            ticketPurchaseDeadline: 1, 
+            hasLimitedPlaces: 1, 
+            title: 1,
+            address: 1,
+            date: 1
+          });
+      
         res.status(200).json({
           ok: true,
           orders
@@ -35,30 +42,26 @@ console.log(orders)
     }
 
     /**
-     * Filter tickets based on the provided query parameters.
+     * Filter order based on the provided query parameters.
      *
      * @param {Object} req - Express request object containing query parameters.
      * @param {Object} res - Express response object.
-     * @returns {Object} JSON response containing an array of filtered tickets or an error message.
+     * @returns {Object} JSON response containing an array of filtered order or an error message.
      */
     async filter(req, res = response) {
       try {
-        const tickets = await Order.find(req.query);
+        const orders = await Order.find(req.query);
         
-        if (tickets.length < 1) {
+        if (orders.length < 1) {
             return res.status(404).json({
               ok: false,
-              error: 'No tickets matched your search'
+              error: 'No orders matched your search'
             });
-        } 
-
-        tickets.forEach((item) => {
-          item.ticketNumber = ticketNumber(item.ticketNumber);
-        });
+        }
 
         res.status(200).json({
           ok: true,
-          tickets
+          orders
         });
       } catch (err) {
         res.status(500).json({ 
@@ -69,7 +72,7 @@ console.log(orders)
     }
   
     /**
-   * Create new tickets with the provided data.
+   * Create new order with the provided data.
    *
    * @param {Object} req - Express request object containing the ticket data in the request body.
    * @param {Object} res - Express response object.
@@ -99,7 +102,7 @@ console.log(orders)
       },
       status,
       expirationDate
-  });
+    });
 
     const savedNewOrder = await newOrder.save();
       
@@ -122,11 +125,10 @@ console.log(orders)
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the ticket details or an error message if not found.
      */
-    async get(req, res = response) {
-      const { id } = req.params;
-
+    async get(req, res = response) {      
       try {
-        const ticket = await Order.findById(id).populate('event', {
+        const { id } = req.params;
+        const order = await Order.findById(id).populate('eventId', {
             eventId: 1,
             eventType: 1, 
             ticketPurchaseDeadline: 1, 
@@ -136,19 +138,16 @@ console.log(orders)
             date: 1
         });
 
-        if (!ticket) {
+        if (!order) {
           return res.status(404).json({ 
             ok: false, 
             error: `Order with id ${id} not found.` 
           });
         }
         
-        const { purchaser, ... params} = ticket.toObject();
-        params.ticketNumber = ticketNumber(params.ticketNumber);
-
         res.status(200).json({
           ok: true,
-          ticket: params
+          order
         });
 
       } catch (err) {
@@ -160,54 +159,37 @@ console.log(orders)
     }
   
     /**
-     * Update a ticket's information by its ID.
+     * Update a order's information by its ID.
      *
-     * @param {Object} req - Express request object containing the ticket ID in the request body and updated data in the request body.
+     * @param {Object} req - Express request object containing the order ID in the request body and updated data in the request body.
      * @param {Object} res - Express response object.
-     * @returns {Object} JSON response containing the updated ticket details or an error message if not found.
+     * @returns {Object} JSON response containing the updated order details or an error message if not found.
      */
     async update(req, res = response) {
       const { id } = req.body;
       const {
-        event,
-        purchaser: {
-          purchaserFirstName,
-          purchaserLastName,
-          purchaserDni,
-          purchaserEmail,
-          purchaserId
+        eventId,
+        quantity,
+        ticketType: {
+            price,
+            date,
+            type
         },
-        attendee: {
-          attendeeFirstName,
-          attendeeLastName,
-          attendeeDni
-        },
-        validated,
-        purchaseDate,
-        validationDate,
-        ticketNumber
+        status,
+        expirationDate
       } = req.body;
       
-      
       try {
-        const ticket = await Order.findByIdAndUpdate(id, {
-          event,
-          purchaser: {
-            purchaserFirstName,
-            purchaserLastName,
-            purchaserDni,
-            purchaserEmail,
-            purchaserId
+        const updatedOrder = await Order.findByIdAndUpdate(id, {
+          eventId,
+          quantity,
+          ticketType: {
+              price,
+              date,
+              type
           },
-          attendee: {
-            attendeeFirstName,
-            attendeeLastName,
-            attendeeDni
-          },
-          validated,
-          purchaseDate,
-          validationDate,
-          ticketNumber
+          status,
+          expirationDate
         }, 
         { 
           new: true 
@@ -215,7 +197,7 @@ console.log(orders)
 
         res.status(200).json({
           ok: true,
-          ticket
+          updatedOrder
         });
       } catch (err) {
         res.status(500).json({ 
@@ -239,7 +221,8 @@ console.log(orders)
         await Order.findByIdAndRemove(id, { new: true });
 
         res.status(200).json({
-          ok: true
+          ok: true,
+          message: `Order with id ${ id } was deleted.`
         });
       } catch (err) {
         res.status(500).json({ 
@@ -259,31 +242,31 @@ console.log(orders)
     async validate(req, res = response){
       try {
         const { id } = req.params;
-        const ticket = await Order.findById(id);
+        const order = await Order.findById(id);
 
-        if (!ticket) {
+        if (!order) {
           return res.status(404).json({ 
             ok: false, 
             error: `Order with id ${id} not found.` 
           });
         }
 
-        if (ticket.validated) {
+        if (order.validated) {
           return res.status(404).json({ 
             ok: false, 
             error: `Order with id ${id} is already validated.` 
           });
         }
         
-        ticket.validated = true;
-        ticket.validationDate = new Date();
-        await ticket.save();
+        order.validated = true;
+        order.validationDate = new Date();
+        await order.save();
         
-        const { purchaser, ... params} = ticket.toObject();
+        const { purchaser, ... params} = order.toObject();
 
         res.status(200).json({
           ok: true,
-          ticket: params
+          order: params
         });
 
       } catch (err) {

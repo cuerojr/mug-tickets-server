@@ -35,7 +35,7 @@ router.post('/',
     [
         //validationsMiddlewares.validateJWT,
         //validationsMiddlewares.validateIfAdmin,
-        check('eventId', 'eventId is required').not().isEmpty(),
+        check('eventId', 'event is required').not().isEmpty(),
         check('quantity', 'Quantity is required').not().isEmpty(),
         check('expirationDate', 'expirationDate purchase deadline is required').not().isEmpty(),
         validationsMiddlewares.validateFields,

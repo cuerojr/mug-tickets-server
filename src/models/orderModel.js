@@ -5,8 +5,8 @@ import mongoose from 'mongoose';
  */
 const orderSchema = new mongoose.Schema({  
     eventId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event'
     },
     quantity:{
         type: Number,
