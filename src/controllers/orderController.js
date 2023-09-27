@@ -88,6 +88,13 @@ class OrderController {
         expirationDate,
       } = req.body;
 
+      if(!eventId) {
+        return res.status(404).json({
+          ok: false,
+          message: 'Event id is required',
+        });
+      }
+
       const newOrder = new Order({
         event: eventId,
         quantity,
@@ -135,7 +142,7 @@ class OrderController {
   async get(req, res = response) {
     try {
       const { id } = req.params;
-      const order = await Order.findById(id).populate("event", {
+      const order = await Order.findById(id).populate('event', {
         eventId: 1,
         eventType: 1,
         ticketPurchaseDeadline: 1,
