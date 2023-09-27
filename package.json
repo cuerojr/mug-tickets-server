@@ -27,7 +27,6 @@
     "express-fileupload": "^1.4.0",
     "express-validator": "^7.0.1",
     "google-auth-library": "^8.9.0",
-    "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "memory-cache": "^0.2.0",
     "mercadopago": "^1.5.17",
