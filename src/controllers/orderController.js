@@ -149,6 +149,7 @@ class OrderController {
         hasLimitedPlaces: 1,
         description: 1,
         title: 1,
+        image: 1,
         address: 1,
         date: 1,
       });
