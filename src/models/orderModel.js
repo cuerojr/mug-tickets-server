@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
  * Mongoose schema for the 'Order' collection.
  */
 const orderSchema = new mongoose.Schema({  
-    eventId: {
+    event: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
     },
