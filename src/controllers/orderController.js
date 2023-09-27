@@ -23,6 +23,7 @@ class OrderController {
         eventType: 1,
         ticketPurchaseDeadline: 1,
         hasLimitedPlaces: 1,
+        description: 1,
         title: 1,
         address: 1,
         date: 1,
@@ -134,11 +135,12 @@ class OrderController {
   async get(req, res = response) {
     try {
       const { id } = req.params;
-      const order = await Order.findById(id).populate("eventId", {
+      const order = await Order.findById(id).populate("event", {
         eventId: 1,
         eventType: 1,
         ticketPurchaseDeadline: 1,
         hasLimitedPlaces: 1,
+        description: 1,
         title: 1,
         address: 1,
         date: 1,
