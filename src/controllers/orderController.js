@@ -183,21 +183,16 @@ class OrderController {
    */
   async update(req, res = response) {  
     try {   
-      const STATUS = {
-        "aproved": 1,
-        "pending": 2,
-        "cancelled": 3,
-      };
       
       const { id } = req.params;
       const {
         eventId,
         quantity,
-        ticketType: { 
+        /*ticketType: { 
           price, 
           date, 
           type 
-        },
+        },*/
         status,
         expirationDate,
         purchaser: { 
@@ -207,17 +202,17 @@ class OrderController {
           purchaserEmail
         }
       } = req.body;
-
+      
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
           eventId,
           quantity,
-          ticketType: {
+          /*ticketType: {
             price,
             date,
             type,
-          },
+          },*/
           status,
           expirationDate,
           purchaser: { 
@@ -231,7 +226,7 @@ class OrderController {
           new: true,
         }
       );
-      console.log(updatedOrder)
+      console.log('sacascs', updatedOrder)
       const action = {
         ['aproved']: async () => {
           const { eventId, purchaser,  } = updatedOrder;
