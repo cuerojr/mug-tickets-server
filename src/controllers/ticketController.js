@@ -1,14 +1,20 @@
-import { response } from 'express';
+import { response, request } from 'express';
 import { Ticket } from '../models/ticketModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
+import { sendMail } from '../services/nodemailer.js';
+
+import pkg from 'qrcode';
+const { QRCode } = pkg;
 
 /**
  * Controller class for handling ticket-related operations.
  */
 class TicketController {    
-    constructor(){}
+    constructor() {
+      
+    }
 
     /**
      * Get all tickets from the database and populate their associated events.
@@ -167,6 +173,9 @@ class TicketController {
         ...purchaseEvents.map(event => event.save())
       ]);
 
+      // Mailing
+      sendMail(savedTickets);
+      
       res.status(200).json({
         ok: true,
         savedTickets
@@ -357,6 +366,122 @@ class TicketController {
         });
       }
     }
+
+      /**
+   * Create new tickets with the provided data.
+   *
+   * @param {Object} req - Express request object containing the ticket data in the request body.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the newly created ticket details or an error message.
+   */
+  async createTickets(ticketsData = []) {
+    try {
+      //const ticketsData = req.body.tickets;      
+      const eventsIds = ticketsData.map(ticket => ticket.event);
+      let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
+      
+      // create Anonimous User 
+      if(!!purchasersIds) {
+        const { purchaserFirstName, purchaserLastName, purchaserDni, purchaserEmail } = ticketsData[0].purchaser;
+        const userDB = await User.findOne({ email: purchaserEmail });
+        
+        let newUser;
+        if(!userDB) {
+          newUser = new User({
+              firstName: purchaserFirstName,
+              lastName: purchaserLastName,
+              dni: purchaserDni,
+              email: purchaserEmail,
+              password: '@@@',
+          });
+          await newUser.save();
+          purchasersIds = [ newUser._id.toString() ];
+        } else {
+          purchasersIds = [ userDB._id.toString() ];
+        }
+      }
+      
+      const [purchaseEvents, users] = await Promise.all([
+        Event.find({ _id: { $in: eventsIds } }),
+        User.find({ _id: { $in: purchasersIds } })
+      ]);
+
+      const insertData = ticketsData.map((ticket, index) => {
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+        const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0];
+        
+        if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
+          return {
+            error: {
+              message: 'Sold out!',
+              ticketIndex: index
+            }
+          };
+        }
+
+        const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);
+        const newTicket = new Ticket({
+          event: ticket.event,
+          purchaser: {
+            purchaserFirstName: ticket.purchaser.purchaserFirstName,
+            purchaserLastName: ticket.purchaser.purchaserLastName,
+            purchaserDni: ticket.purchaser.purchaserDni,
+            purchaserEmail: ticket.purchaser.purchaserEmail,
+            purchaserId: user._id
+          },
+          attendee: {
+            attendeeFirstName: ticket.attendee.attendeeFirstName,
+            attendeeLastName: ticket.attendee.attendeeLastName,
+            attendeeDni: ticket.attendee.attendeeDni
+          },
+          validated: ticket.validated,
+          purchaseDate: ticket.purchaseDate,
+          validationDate: ticket.validationDate,
+          ticketNumber
+        });
+         
+        newTicket.qrCode = this.setQrCode(newTicket._id.toString()) 
+        return newTicket;
+      });
+
+      const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
+      savedTickets.forEach((savedTicket, index) => {
+        const ticket = ticketsData[index];
+        const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+
+        user.purchasedTickets.push(savedTicket._id);
+        purchaseEvent.ticketsPurchased += 1;
+        purchaseEvent.purchasedTicketsList.push(savedTicket._id);
+      });
+
+      await Promise.all([
+        ...users.map(user => user.save()),
+        ...purchaseEvents.map(event => event.save())
+      ]);
+
+      // Mailing
+      sendMail(savedTickets);      
+      return savedTickets;      
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
+  async setQrCode(ticketId = '') {
+    try {
+      const qrCodeUrl = `https://yourwebsite.com/tickets/${ticketId}`; // Replace with your ticket URL
+  
+      // Generate the QR code
+      const qrCode = await QRCode.toDataURL(qrCodeUrl);
+  
+      // Return the QR code as an image
+      return Buffer.from(qrCode.split(',')[1], 'base64');
+    } catch (err) {
+      console.error(err, 'Failed to generate QR code');
+    }
+  };
+
 }
 
 export {
