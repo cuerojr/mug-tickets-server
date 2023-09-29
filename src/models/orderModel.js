@@ -21,11 +21,11 @@ const orderSchema = new mongoose.Schema({
         },
         date: {
             type: Date,
-            required: true,
+            required: false,
         },
         type: {
             type: String,
-            required: true
+            required: false
         }
     },
     status: {

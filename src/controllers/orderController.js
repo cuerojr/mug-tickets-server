@@ -234,53 +234,25 @@ class OrderController {
       console.log(updatedOrder)
       const action = {
         ['aproved']: async () => {
-          
+          const { eventId, purchaser,  } = updatedOrder;
           const tickets = [];
           for (let i = 0; i < quantity; i++) {          
             tickets.push({
-              "event": "64fb1f43d2f80bc5d132a8b6",
+              eventId,
               "purchaser": { 
-                  "purchaserFirstName": "Renzi", 
-                  "purchaserLastName": "Lenny", 
-                  "purchaserDni": 27235222,
-                  "purchaserEmail": "tito22332s@gasfo.com"
+                  "purchaserFirstName": purchaser.purchaserFirstName, 
+                  "purchaserLastName": purchaser.purchaserLastName, 
+                  "purchaserDni": purchaser.purchaserDni,
+                  "purchaserEmail": purchaser.purchaserEmail
                   },
               "attendee": { 
-                  "attendeeFirstName": "Galita", 
-                  "attendeeLastName": "Moldasqui", 
-                  "attendeeDni": 32405970
+                  "attendeeFirstName": purchaser.purchaserFirstName,
+                  "attendeeLastName": purchaser.purchaserLastName, 
+                  "attendeeDni": purchaser.purchaserDni,
               }
-          });
+            });
           }
-          /**
-           * {
-        "event": "64fb1f43d2f80bc5d132a8b6",
-        "purchaser": { 
-            "purchaserFirstName": "Renzi", 
-            "purchaserLastName": "Lenny", 
-            "purchaserDni": 27235222,
-            "purchaserEmail": "tito22332s@gasfo.com"
-            },
-        "attendee": { 
-            "attendeeFirstName": "Galita", 
-            "attendeeLastName": "Moldasqui", 
-            "attendeeDni": 32405970
-        }
-    },{
-        "event": "64fb1f43d2f80bc5d132a8b6",
-        "purchaser": { 
-            "purchaserFirstName": "Renzi", 
-            "purchaserLastName": "Lenny", 
-            "purchaserDni": 27235222,
-            "purchaserEmail": "tito22332s@gasfo.com"
-            },
-        "attendee": { 
-            "attendeeFirstName": "Galita", 
-            "attendeeLastName": "Moldasqui", 
-            "attendeeDni": 32405970
-        }
-    }
-           */
+          
           await ticketController.createTickets( tickets );
         },
         ['pending']: () => {          
