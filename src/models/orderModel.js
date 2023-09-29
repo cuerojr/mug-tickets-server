@@ -35,6 +35,24 @@ const orderSchema = new mongoose.Schema({
     expirationDate: {
         type: Date,
         required: false,
+    },
+    purchaser: {
+        purchaserFirstName: {
+            type: String,
+            required: false
+        }, 
+        purchaserLastName: {
+            type: String,
+            required: false
+        }, 
+        purchaserDni: {
+            type: String,
+            required: false
+        },
+        purchaserEmail: {
+            type: String,
+            required: false
+        }
     }
 });
 

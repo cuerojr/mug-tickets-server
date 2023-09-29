@@ -2,12 +2,13 @@ import { response } from "express";
 import { Order } from "../models/orderModel.js";
 import { User } from "../models/userModel.js";
 import { Event } from "../models/eventModel.js";
-
+import { TicketController } from "./ticketController.js";
+const ticketController = new TicketController();
 /**
  * Controller class for handling ticket-related operations.
  */
 class OrderController {
-  constructor() {}
+  constructor() {  }
 
   /**
    * Get all order from the database and populate their associated events.
@@ -180,17 +181,33 @@ class OrderController {
    * @param {Object} res - Express response object.
    * @returns {Object} JSON response containing the updated order details or an error message if not found.
    */
-  async update(req, res = response) {
-    const { id } = req.body;
-    const {
-      eventId,
-      quantity,
-      ticketType: { price, date, type },
-      status,
-      expirationDate,
-    } = req.body;
+  async update(req, res = response) {  
+    try {   
+      const STATUS = {
+        "aproved": 1,
+        "pending": 2,
+        "cancelled": 3,
+      };
+      
+      const { id } = req.params;
+      const {
+        eventId,
+        quantity,
+        ticketType: { 
+          price, 
+          date, 
+          type 
+        },
+        status,
+        expirationDate,
+        purchaser: { 
+          purchaserFirstName, 
+          purchaserLastName, 
+          purchaserDni,
+          purchaserEmail
+        }
+      } = req.body;
 
-    try {
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
@@ -203,11 +220,92 @@ class OrderController {
           },
           status,
           expirationDate,
+          purchaser: { 
+            purchaserFirstName, 
+            purchaserLastName, 
+            purchaserDni,
+            purchaserEmail
+          }
         },
         {
           new: true,
         }
       );
+      console.log(updatedOrder)
+      const action = {
+        ['aproved']: async () => {
+          
+          const tickets = [];
+          for (let i = 0; i < quantity; i++) {          
+            tickets.push({
+              "event": "64fb1f43d2f80bc5d132a8b6",
+              "purchaser": { 
+                  "purchaserFirstName": "Renzi", 
+                  "purchaserLastName": "Lenny", 
+                  "purchaserDni": 27235222,
+                  "purchaserEmail": "tito22332s@gasfo.com"
+                  },
+              "attendee": { 
+                  "attendeeFirstName": "Galita", 
+                  "attendeeLastName": "Moldasqui", 
+                  "attendeeDni": 32405970
+              }
+          });
+          }
+          /**
+           * {
+        "event": "64fb1f43d2f80bc5d132a8b6",
+        "purchaser": { 
+            "purchaserFirstName": "Renzi", 
+            "purchaserLastName": "Lenny", 
+            "purchaserDni": 27235222,
+            "purchaserEmail": "tito22332s@gasfo.com"
+            },
+        "attendee": { 
+            "attendeeFirstName": "Galita", 
+            "attendeeLastName": "Moldasqui", 
+            "attendeeDni": 32405970
+        }
+    },{
+        "event": "64fb1f43d2f80bc5d132a8b6",
+        "purchaser": { 
+            "purchaserFirstName": "Renzi", 
+            "purchaserLastName": "Lenny", 
+            "purchaserDni": 27235222,
+            "purchaserEmail": "tito22332s@gasfo.com"
+            },
+        "attendee": { 
+            "attendeeFirstName": "Galita", 
+            "attendeeLastName": "Moldasqui", 
+            "attendeeDni": 32405970
+        }
+    }
+           */
+          await ticketController.createTickets( tickets );
+        },
+        ['pending']: () => {          
+          console.log("🚀 ~ pending:")
+        },
+        ['cancelled']: () => {          
+          console.log("🚀 ~ cancelled:")
+        },
+      };
+      
+      action[updatedOrder.status.toLowerCase()]?.();
+      
+      // editar el status 
+      /**
+        on success de status
+        datos usuario + updatedOrder
+        
+        crear ticket
+        ticketController.create()
+        
+
+        mailing
+
+        canceled status
+      */
 
       res.status(200).json({
         ok: true,
