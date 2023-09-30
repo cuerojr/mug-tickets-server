@@ -8,10 +8,13 @@
 <body>
     {{#each tickets}}
     <li>
-      {{#each this}}
+      {{#each this}}      
+        <div>
+          <img src="cid:tito"/>
           {{#each this}}
             <p class="row">{{attendeeFirstName}} {{attendeeLastName}}</p>
           {{/each}}
+        </div>
       {{/each}}
     </li>
     {{/each}}

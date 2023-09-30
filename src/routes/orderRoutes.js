@@ -64,6 +64,20 @@ router.put('/:id',
     ], 
     orderController.update);
 
+// Route: PATCH /api/ticketType/:id
+// Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
+// Controller: orderController.update
+router.patch('/:id', 
+[
+    //validationsMiddlewares.validateJWT,
+    //validationsMiddlewares.validateIfAdmin,
+    //check('status', 'Status is required').not().isEmpty(),
+    //check('type', 'Ticket type is required').not().isEmpty(),
+    //check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(), 
+    validationsMiddlewares.validateFields
+], 
+orderController.updateStatus);
+
 // Route: DELETE /api/ticketType/:id
 // Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
 // Controller: orderController.delete

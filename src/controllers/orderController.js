@@ -183,16 +183,10 @@ class OrderController {
    */
   async update(req, res = response) {  
     try {   
-      
       const { id } = req.params;
       const {
         eventId,
         quantity,
-        /*ticketType: { 
-          price, 
-          date, 
-          type 
-        },*/
         status,
         expirationDate,
         purchaser: { 
@@ -208,11 +202,6 @@ class OrderController {
         {
           eventId,
           quantity,
-          /*ticketType: {
-            price,
-            date,
-            type,
-          },*/
           status,
           expirationDate,
           purchaser: { 
@@ -221,29 +210,29 @@ class OrderController {
             purchaserDni,
             purchaserEmail
           }
-        },
-        {
-          new: true,
         }
       );
-      console.log('sacascs', updatedOrder)
+      
       const action = {
         ['aproved']: async () => {
-          const { eventId, purchaser,  } = updatedOrder;
+          const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
-          for (let i = 0; i < quantity; i++) {          
+          
+          for (let i = 0; i < quantity; i++) {   
+            
             tickets.push({
-              eventId,
-              "purchaser": { 
-                  "purchaserFirstName": purchaser.purchaserFirstName, 
-                  "purchaserLastName": purchaser.purchaserLastName, 
-                  "purchaserDni": purchaser.purchaserDni,
-                  "purchaserEmail": purchaser.purchaserEmail
+              orderId: id,
+              event,
+              purchaser: { 
+                  purchaserFirstName: purchaser?.purchaserFirstName, 
+                  purchaserLastName: purchaser?.purchaserLastName, 
+                  purchaserDni: purchaser?.purchaserDni,
+                  purchaserEmail: purchaser?.purchaserEmail
                   },
-              "attendee": { 
-                  "attendeeFirstName": purchaser.purchaserFirstName,
-                  "attendeeLastName": purchaser.purchaserLastName, 
-                  "attendeeDni": purchaser.purchaserDni,
+              attendee: { 
+                  attendeeFirstName: purchaser?.purchaserFirstName,
+                  attendeeLastName: purchaser?.purchaserLastName, 
+                  attendeeDni: purchaser?.purchaserDni,
               }
             });
           }
@@ -259,20 +248,73 @@ class OrderController {
       };
       
       action[updatedOrder.status.toLowerCase()]?.();
+
+      res.status(200).json({
+        ok: true,
+        updatedOrder,
+      });
+    } catch (err) {
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+      });
+    }
+  }
+
+  /**
+   * Update a order's information by its ID.
+   *
+   * @param {Object} req - Express request object containing the order ID in the request body and updated data in the request body.
+   * @param {Object} res - Express response object.
+   * @returns {Object} JSON response containing the updated order details or an error message if not found.
+   */
+  async updateStatus(req, res = response) {  
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
       
-      // editar el status 
-      /**
-        on success de status
-        datos usuario + updatedOrder
-        
-        crear ticket
-        ticketController.create()
-        
-
-        mailing
-
-        canceled status
-      */
+      const updatedOrder = await Order.findByIdAndUpdate(
+        id,
+        {
+          status,
+        }
+      );
+        console.log('updatedOrder', updatedOrder)
+      const actions = {
+        ['aproved']: async () => {
+          const { event, purchaser, quantity } = updatedOrder;
+          const tickets = [];
+          
+          for (let i = 0; i < quantity; i++) {   
+            
+            tickets.push({
+              orderId: id,
+              event,
+              purchaser: { 
+                  purchaserFirstName: purchaser?.purchaserFirstName, 
+                  purchaserLastName: purchaser?.purchaserLastName, 
+                  purchaserDni: purchaser?.purchaserDni,
+                  purchaserEmail: purchaser?.purchaserEmail
+                  },
+              attendee: { 
+                  attendeeFirstName: purchaser?.purchaserFirstName,
+                  attendeeLastName: purchaser?.purchaserLastName, 
+                  attendeeDni: purchaser?.purchaserDni,
+              }
+            });
+          }
+          console.log(tickets)
+          await ticketController.createTickets( tickets );
+        },
+        ['pending']: () => {          
+          console.log("🚀 ~ pending:")
+        },
+        ['cancelled']: () => {          
+          console.log("🚀 ~ cancelled:")
+        },
+      };
+      
+      actions[updatedOrder.status.toLowerCase()]?.();
 
       res.status(200).json({
         ok: true,
