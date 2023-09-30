@@ -5,8 +5,7 @@ import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
 import { sendMail } from '../services/nodemailer.js';
 
-import pkg from 'qrcode';
-const { QRCode } = pkg;
+import QRCode from 'qrcode'
 
 /**
  * Controller class for handling ticket-related operations.
@@ -376,8 +375,9 @@ class TicketController {
    */
   async createTickets(ticketsData = []) {
     try {
+      console.log('ticketsData',ticketsData)
       //const ticketsData = req.body.tickets;      
-      const eventsIds = ticketsData.map(ticket => ticket.event);
+      const eventsIds = ticketsData.map(ticket => ticket.event.toString());
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
       
       // create Anonimous User 
@@ -407,7 +407,7 @@ class TicketController {
       ]);
 
       const insertData = ticketsData.map((ticket, index) => {
-        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event.toString());
         const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0];
         
         if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
@@ -420,8 +420,9 @@ class TicketController {
         }
 
         const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);
+        //console.log('ddddddd', ticketNumber)
         const newTicket = new Ticket({
-          event: ticket.event,
+          eventId: ticket.eventId,
           purchaser: {
             purchaserFirstName: ticket.purchaser.purchaserFirstName,
             purchaserLastName: ticket.purchaser.purchaserLastName,
@@ -440,15 +441,28 @@ class TicketController {
           ticketNumber
         });
          
-        newTicket.qrCode = this.setQrCode(newTicket._id.toString()) 
+        //this.setQrCode(newTicket._id)
+        this.setQrCode(newTicket._id).then(data => {
+          //console.log('newTicket',data)
+          newTicket.qrCode = data;
+        })
+
         return newTicket;
       });
-
+      //console.log(insertData)
       const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
+      if (savedTickets.length === 0) {
+        return {
+          error: {
+            message: 'Sold out!'
+          }
+        };
+      }
       savedTickets.forEach((savedTicket, index) => {
+
         const ticket = ticketsData[index];
         const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
-        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event);
+        const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event.toString());
 
         user.purchasedTickets.push(savedTicket._id);
         purchaseEvent.ticketsPurchased += 1;
@@ -470,13 +484,11 @@ class TicketController {
 
   async setQrCode(ticketId = '') {
     try {
-      const qrCodeUrl = `https://yourwebsite.com/tickets/${ticketId}`; // Replace with your ticket URL
+      const qrCodeUrl = `https://www.mug.ar/admin/validar/${ticketId}`; // Replace with your ticket URL
   
       // Generate the QR code
-      const qrCode = await QRCode.toDataURL(qrCodeUrl);
+      return await QRCode.toDataURL(qrCodeUrl);
   
-      // Return the QR code as an image
-      return Buffer.from(qrCode.split(',')[1], 'base64');
     } catch (err) {
       console.error(err, 'Failed to generate QR code');
     }
