@@ -303,7 +303,7 @@ class OrderController {
               }
             });
           }
-          console.log(tickets)
+          
           await ticketController.createTickets( tickets );
         },
         ['pending']: () => {          
@@ -313,8 +313,7 @@ class OrderController {
           console.log("🚀 ~ cancelled:")
         },
       };
-      console.log('updatedOrder', updatedOrder)
-
+      
       actions[updatedOrder.status.toLowerCase()]?.();
 
       res.status(200).json({
