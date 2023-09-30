@@ -18,8 +18,8 @@ console.log(tickets)
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'mug.rosario@gmail.com',
-        pass: 'jkhn iusb wpat hsrq'
+        user: 'cannibal5033@gmail.com',
+        pass: 'mxwr kgau sxwq nchl '
     }
   });
 
