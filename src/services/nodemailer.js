@@ -40,7 +40,7 @@ export const sendMail = (tickets = []) => {
   });
 
   const mailOptions = {
-    from: 'mug.rosario@gmail.com',
+    from: 'cannibal5033@gmail.com',
     to: tickets[0].purchaser.purchaserEmail,
     subject: 'Entradas FestiMug',
     template: 'email',
