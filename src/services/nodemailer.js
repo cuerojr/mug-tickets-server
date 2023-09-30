@@ -12,6 +12,14 @@ const pass = process.env.EMAIL_PASS;
  * @param {Array} tickets - An array of tickets to be included in the email.
  */
 export const sendMail = (tickets = []) => {
+
+  const attachmentsFormated = [...tickets].map((ticket, index) => {
+    return {
+      filename: `ticket-${index}.png`,
+      path: ticket.qrCode,
+    }
+  });
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -35,24 +43,13 @@ export const sendMail = (tickets = []) => {
   const mailOptions = {
     from: 'mug.rosario@gmail.com',
     to: tickets[0].purchaser.purchaserEmail,
-    subject: 'Sending Email using Node.js',
+    subject: 'Entradas FestiMug',
     template: 'email',
     context: {
       tickets
     },
     attachDataUrls: true,
-    attachments: [
-      {
-        filename: `ticket-${1}.png`,
-        path: tickets[0].qrCode,
-        //cid: 'tito'
-      },
-      {
-        filename: `ticket-${2}.png`,
-        path: tickets[1].qrCode,
-        //cid: 'tito2'
-      }
-    ],
+    attachments: attachmentsFormated,
   };
   
   transporter.sendMail(mailOptions, function (error, info) {
