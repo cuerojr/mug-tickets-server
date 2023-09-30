@@ -213,7 +213,7 @@ class OrderController {
         }
       );
       
-      const action = {
+      /*const action = {
         ['aproved']: async () => {
           const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
@@ -247,7 +247,7 @@ class OrderController {
         },
       };
       
-      action[updatedOrder.status.toLowerCase()]?.();
+      action[updatedOrder.status.toLowerCase()]?.();*/
 
       res.status(200).json({
         ok: true,
@@ -279,7 +279,7 @@ class OrderController {
           status,
         }
       );
-        console.log('updatedOrder', updatedOrder)
+      
       const actions = {
         ['aproved']: async () => {
           const { event, purchaser, quantity } = updatedOrder;
@@ -313,7 +313,8 @@ class OrderController {
           console.log("🚀 ~ cancelled:")
         },
       };
-      
+      console.log('updatedOrder', updatedOrder)
+
       actions[updatedOrder.status.toLowerCase()]?.();
 
       res.status(200).json({
