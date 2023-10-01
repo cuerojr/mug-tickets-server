@@ -39,21 +39,6 @@ export const sendMail = async (tickets = []) => {
     }
   });
 
-  /*await new Promise((resolve, reject) => {
-
-      // verify connection configuration
-
-      transporter.verify(function (error, success) {
-          if (error) {
-              console.log(error);
-              reject(error);
-          } else {
-              console.log("OTP has been sent to your Email");
-              resolve(success);
-          }
-      });
-  });*/
-
   const mailOptions = {
     from: 'mug.rosario@gmail.com',
     to: tickets[0].purchaser.purchaserEmail,
@@ -68,7 +53,7 @@ export const sendMail = async (tickets = []) => {
 
   
 
-  /*await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error(err);
@@ -77,10 +62,5 @@ export const sendMail = async (tickets = []) => {
         resolve(info);
       }
     });
-  });*/
-
-  const response = await transporter.sendMail(mailOptions);
-
-  console.log('sendMail', response)
-  return response;
+  });
 }
