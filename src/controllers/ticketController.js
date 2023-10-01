@@ -374,9 +374,7 @@ class TicketController {
    * @returns {Object} JSON response containing the newly created ticket details or an error message.
    */
   async createTickets(ticketsData = []) {
-    try {
-      //console.log('ticketsData',ticketsData)
-      //const ticketsData = req.body.tickets;      
+    try {     
       const eventsIds = ticketsData.map(ticket => ticket.event.toString());
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
       
@@ -420,7 +418,7 @@ class TicketController {
         }
 
         const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);
-        //console.log('ddddddd', ticketNumber)
+        
         const newTicket = new Ticket({
           eventId: ticket.eventId,
           purchaser: {
@@ -447,7 +445,7 @@ class TicketController {
         
         return newTicket;
       });
-      //console.log(insertData)
+      
       const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
       if (savedTickets.length === 0) {
         return {
@@ -470,7 +468,7 @@ class TicketController {
         ...users.map(user => user.save()),
         ...purchaseEvents.map(event => event.save())
       ]);
-      console.log('savedTickets', savedTickets)
+      
       // Mailing
       sendMail(savedTickets);      
       return savedTickets;      

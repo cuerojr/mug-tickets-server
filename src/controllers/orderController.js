@@ -212,42 +212,6 @@ class OrderController {
           }
         }
       );
-      
-      /*const action = {
-        ['aproved']: async () => {
-          const { event, purchaser, quantity } = updatedOrder;
-          const tickets = [];
-          
-          for (let i = 0; i < quantity; i++) {   
-            
-            tickets.push({
-              orderId: id,
-              event,
-              purchaser: { 
-                  purchaserFirstName: purchaser?.purchaserFirstName, 
-                  purchaserLastName: purchaser?.purchaserLastName, 
-                  purchaserDni: purchaser?.purchaserDni,
-                  purchaserEmail: purchaser?.purchaserEmail
-                  },
-              attendee: { 
-                  attendeeFirstName: purchaser?.purchaserFirstName,
-                  attendeeLastName: purchaser?.purchaserLastName, 
-                  attendeeDni: purchaser?.purchaserDni,
-              }
-            });
-          }
-          
-          await ticketController.createTickets( tickets );
-        },
-        ['pending']: () => {          
-          console.log("🚀 ~ pending:")
-        },
-        ['cancelled']: () => {          
-          console.log("🚀 ~ cancelled:")
-        },
-      };
-      
-      action[updatedOrder.status.toLowerCase()]?.();*/
 
       res.status(200).json({
         ok: true,
@@ -272,17 +236,9 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      const updatedOrder = await Order.findByIdAndUpdate(
-        id,
-        {
-          status,
-        }
-        );
-      console.log('status', status)
-      console.log('updatedOrder', updatedOrder.status)
-      //if(status.toString() === 'aproved' && updatedOrder.status.toString() === 'pending') {
-      if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {
-        
+      const updatedOrder = await Order.findByIdAndUpdate(id, { status });
+      
+      if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {        
           const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
           
@@ -306,47 +262,17 @@ class OrderController {
           
           await ticketController.createTickets( tickets );
 
-          return res.status(200).json({
+          res.status(200).json({
             ok: true,
             updatedOrder,
           });
-
+      } else {
+        res.status(404).json({
+          ok: false,
+          message: 'Order not found',
+        });
       }
-      /*const actions = {
-        ['aproved']: async () => {
-          const { event, purchaser, quantity } = updatedOrder;
-          const tickets = [];
-          
-          for (let i = 0; i < quantity; i++) {
-            tickets.push({
-              orderId: id,
-              event,
-              purchaser: { 
-                  purchaserFirstName: purchaser?.purchaserFirstName, 
-                  purchaserLastName: purchaser?.purchaserLastName, 
-                  purchaserDni: purchaser?.purchaserDni,
-                  purchaserEmail: purchaser?.purchaserEmail
-                  },
-              attendee: { 
-                  attendeeFirstName: purchaser?.purchaserFirstName,
-                  attendeeLastName: purchaser?.purchaserLastName, 
-                  attendeeDni: purchaser?.purchaserDni,
-              }
-            });
-          }
-          
-          await ticketController.createTickets( tickets );
-
-          return res.status(200).json({
-            ok: true,
-            updatedOrder,
-          });
-        },
-        //['pending']: () => console.log('pending'),
-      };      
-
-      actions[updatedOrder.status.toLowerCase()]?.();
-      */
+      
     } catch (err) {
       res.status(500).json({
         ok: false,
@@ -380,49 +306,6 @@ class OrderController {
     }
   }
 
-  /**
-   * Validate a ticket by its ID.
-   *
-   * @param {Object} req - Express request object containing the ticket ID in the request parameters.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure of the delete operation.
-   */
-  async validate(req, res = response) {
-    try {
-      const { id } = req.params;
-      const order = await Order.findById(id);
-
-      if (!order) {
-        return res.status(404).json({
-          ok: false,
-          error: `Order with id ${id} not found.`,
-        });
-      }
-
-      if (order.validated) {
-        return res.status(404).json({
-          ok: false,
-          error: `Order with id ${id} is already validated.`,
-        });
-      }
-
-      order.validated = true;
-      order.validationDate = new Date();
-      await order.save();
-
-      const { purchaser, ...params } = order.toObject();
-
-      res.status(200).json({
-        ok: true,
-        order: params,
-      });
-    } catch (err) {
-      res.status(500).json({
-        ok: false,
-        error: err.message,
-      });
-    }
-  }
 }
 
 export { OrderController };
