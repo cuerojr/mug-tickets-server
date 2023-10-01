@@ -33,13 +33,13 @@ export const sendMail = async (tickets = []) => {
   }
   
   transporter.use('compile', hbs(handlebarOptions));
-
+  
   const attachmentsFormated = [...tickets].map((ticket, index) => ({
       filename: `ticket-${index}.png`,
       path: ticket.qrCode,
     }));  
 
-    await new Promise((resolve, reject) => {
+    /*await new Promise((resolve, reject) => {
       // verify connection configuration
   
         transporter.verify(function (error, success) {
@@ -51,7 +51,7 @@ export const sendMail = async (tickets = []) => {
                 resolve(success);
             }
         });
-    });
+    });*/
 
   const mailOptions = {
     from: 'mug.rosario@gmail.com',
@@ -66,14 +66,15 @@ export const sendMail = async (tickets = []) => {
   };
 
   // send mail with defined transport object
-  const message = await transporter.sendMail(mailOptions);
+  //const message = await transporter.sendMail(mailOptions);
 
   await new Promise((resolve, reject) => {
-    transporter.sendMail(message, (err, info) => {
+    transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error(err);
         reject(err);
       } else {
+        console.log(info, mailOptions)
         resolve(info);
       }
     });
