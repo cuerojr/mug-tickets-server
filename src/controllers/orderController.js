@@ -279,44 +279,45 @@ class OrderController {
           status,
         }
       );
-      console.log('updatedOrder', updatedOrder)
-      const actions = {
-        ['aproved']: async () => {
-          const { event, purchaser, quantity } = updatedOrder;
-          const tickets = [];
-          
-          for (let i = 0; i < quantity; i++) {
-            tickets.push({
-              orderId: id,
-              event,
-              purchaser: { 
-                  purchaserFirstName: purchaser?.purchaserFirstName, 
-                  purchaserLastName: purchaser?.purchaserLastName, 
-                  purchaserDni: purchaser?.purchaserDni,
-                  purchaserEmail: purchaser?.purchaserEmail
-                  },
-              attendee: { 
-                  attendeeFirstName: purchaser?.purchaserFirstName,
-                  attendeeLastName: purchaser?.purchaserLastName, 
-                  attendeeDni: purchaser?.purchaserDni,
-              }
-            });
-          }
-          
-          await ticketController.createTickets( tickets );
+      
+      if(updatedOrder) {
+        const actions = {
+          ['aproved']: async () => {
+            const { event, purchaser, quantity } = updatedOrder;
+            const tickets = [];
+            
+            for (let i = 0; i < quantity; i++) {
+              tickets.push({
+                orderId: id,
+                event,
+                purchaser: { 
+                    purchaserFirstName: purchaser?.purchaserFirstName, 
+                    purchaserLastName: purchaser?.purchaserLastName, 
+                    purchaserDni: purchaser?.purchaserDni,
+                    purchaserEmail: purchaser?.purchaserEmail
+                    },
+                attendee: { 
+                    attendeeFirstName: purchaser?.purchaserFirstName,
+                    attendeeLastName: purchaser?.purchaserLastName, 
+                    attendeeDni: purchaser?.purchaserDni,
+                }
+              });
+            }
+            
+            await ticketController.createTickets( tickets );
+            
+          },
+          //['pending']: () => console.log('pending'),
+        };      
 
-          
-        },
-        //['pending']: () => console.log('pending'),
-      };      
+        actions[status.toLowerCase()]?.();
+        
+        return res.status(200).json({
+          ok: true,
+          updatedOrder,
+        });
+      }
 
-      console.log('updated_Order', updatedOrder)
-      actions[status.toLowerCase()]?.();
-
-      return res.status(200).json({
-        ok: true,
-        updatedOrder,
-      });
     } catch (err) {
       res.status(500).json({
         ok: false,
