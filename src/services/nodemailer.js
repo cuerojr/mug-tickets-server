@@ -47,8 +47,8 @@ export const sendMail = async (tickets = []) => {
     context: {
       tickets
     },
-    //attachDataUrls: true,
-    //attachments: attachmentsFormated,
+    attachDataUrls: true,
+    attachments: attachmentsFormated,
   };
 
   
