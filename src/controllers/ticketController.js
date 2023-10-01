@@ -375,7 +375,7 @@ class TicketController {
    */
   async createTickets(ticketsData = []) {
     try {
-      //console.log('ticketsData',ticketsData)
+      console.log('tickets_Data',ticketsData)
       //const ticketsData = req.body.tickets;      
       const eventsIds = ticketsData.map(ticket => ticket.event.toString());
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
