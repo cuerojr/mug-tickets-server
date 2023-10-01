@@ -484,7 +484,7 @@ class TicketController {
       //const qrCodeUrl = `https://www.mug.ar/admin/validar/${ticketId}`; // Replace with your ticket URL
   
       // Generate the QR code
-      return await QRCode.toDataURL(ticketId);
+      return await QRCode.toDataURL(`${ticketId}`);
   
     } catch (err) {
       console.error(err, 'Failed to generate QR code');
