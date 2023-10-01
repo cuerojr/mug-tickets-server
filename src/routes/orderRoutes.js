@@ -71,7 +71,7 @@ router.patch('/:id',
 [
     //validationsMiddlewares.validateJWT,
     //validationsMiddlewares.validateIfAdmin,
-    //check('status', 'Status is required').not().isEmpty(),
+    check('status', 'Status is required').not().isEmpty(),
     //check('type', 'Ticket type is required').not().isEmpty(),
     //check('ticketPurchaseDeadline', 'Ticket purchase deadline is required').not().isEmpty(), 
     validationsMiddlewares.validateFields

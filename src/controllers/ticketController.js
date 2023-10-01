@@ -470,7 +470,7 @@ class TicketController {
         ...users.map(user => user.save()),
         ...purchaseEvents.map(event => event.save())
       ]);
-
+      console.log('savedTickets', savedTickets)
       // Mailing
       sendMail(savedTickets);      
       return savedTickets;      

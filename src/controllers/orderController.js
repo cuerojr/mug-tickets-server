@@ -304,15 +304,16 @@ class OrderController {
           }
           
           await ticketController.createTickets( tickets );
+
+          return res.status(200).json({
+            ok: true,
+            updatedOrder,
+          });
         }
-      };
+      };      
       
       actions[updatedOrder.status.toLowerCase()]?.();
-
-      res.status(200).json({
-        ok: true,
-        updatedOrder,
-      });
+      
     } catch (err) {
       res.status(500).json({
         ok: false,
