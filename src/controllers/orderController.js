@@ -311,7 +311,7 @@ class OrderController {
       };      
 
       console.log('updated_Order', updatedOrder)
-      actions[updatedOrder.status.toLowerCase()]?.();
+      actions[status.toLowerCase()]?.();
 
       return res.status(200).json({
         ok: true,
