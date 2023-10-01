@@ -15,8 +15,8 @@ export const sendMail = async (tickets = []) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'cannibal5033@gmail.com',
-        pass: 'mxwr kgau sxwq nchl '
+        user: 'mug.rosario@gmail.com',
+        pass: 'jkhn iusb wpat hsrq'
     }
   });
 
@@ -40,7 +40,7 @@ export const sendMail = async (tickets = []) => {
   });
 
   const mailOptions = {
-    from: 'cannibal5033@gmail.com',
+    from: 'mug.rosario@gmail.com',
     to: tickets[0].purchaser.purchaserEmail,
     subject: 'Entradas FestiMug',
     template: 'email',
