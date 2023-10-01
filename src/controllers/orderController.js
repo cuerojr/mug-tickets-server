@@ -280,7 +280,7 @@ class OrderController {
         }
       );
       //console.log('updatedOrder', updatedOrder)
-      if(status === 'aproved') {
+      if(updatedOrder.status.toString() === 'pending' && status.toString() === 'aproved') {
         
           const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
