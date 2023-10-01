@@ -213,42 +213,6 @@ class OrderController {
         }
       );
       
-      /*const action = {
-        ['aproved']: async () => {
-          const { event, purchaser, quantity } = updatedOrder;
-          const tickets = [];
-          
-          for (let i = 0; i < quantity; i++) {   
-            
-            tickets.push({
-              orderId: id,
-              event,
-              purchaser: { 
-                  purchaserFirstName: purchaser?.purchaserFirstName, 
-                  purchaserLastName: purchaser?.purchaserLastName, 
-                  purchaserDni: purchaser?.purchaserDni,
-                  purchaserEmail: purchaser?.purchaserEmail
-                  },
-              attendee: { 
-                  attendeeFirstName: purchaser?.purchaserFirstName,
-                  attendeeLastName: purchaser?.purchaserLastName, 
-                  attendeeDni: purchaser?.purchaserDni,
-              }
-            });
-          }
-          
-          await ticketController.createTickets( tickets );
-        },
-        ['pending']: () => {          
-          console.log("🚀 ~ pending:")
-        },
-        ['cancelled']: () => {          
-          console.log("🚀 ~ cancelled:")
-        },
-      };
-      
-      action[updatedOrder.status.toLowerCase()]?.();*/
-
       res.status(200).json({
         ok: true,
         updatedOrder,
@@ -273,12 +237,8 @@ class OrderController {
       const { id } = req.params;
       const { status } = req.body;
       console.log('status', status)
-      const updatedOrder = await Order.findByIdAndUpdate(
-        id,
-        {
-          status,
-        }
-      );
+      const updatedOrder = await Order.findByIdAndUpdate(id, { status });
+
       console.log('updatedOrder', updatedOrder)
       const actions = {
         ['aproved']: async () => {
@@ -313,7 +273,7 @@ class OrderController {
         //['pending']: () => console.log('pending'),
       };      
 
-      actions[updatedOrder.status.toLowerCase()]?.();
+      actions[status.toLowerCase()]?.();
       
     } catch (err) {
       res.status(500).json({
