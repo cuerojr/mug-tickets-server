@@ -236,10 +236,9 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      console.log('status', status)
+      
       const updatedOrder = await Order.findByIdAndUpdate(id, { status });
-
-      console.log('updatedOrder', updatedOrder)
+      
       const actions = {
         ['aproved']: async () => {
           const { event, purchaser, quantity } = updatedOrder;
@@ -273,7 +272,7 @@ class OrderController {
         //['pending']: () => console.log('pending'),
       };      
 
-      actions[status.toLowerCase()]?.();
+      await actions[updatedOrder.status.toLowerCase()]?.();
       
     } catch (err) {
       res.status(500).json({
