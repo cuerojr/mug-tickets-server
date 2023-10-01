@@ -310,7 +310,7 @@ class OrderController {
             updatedOrder,
           });
         },
-        ['pending']: () => console.log('pending'),
+        //['pending']: () => console.log('pending'),
       };      
 
       actions[updatedOrder.status.toLowerCase()]?.();
