@@ -441,12 +441,10 @@ class TicketController {
           ticketNumber
         });
          
-        //this.setQrCode(newTicket._id)
         this.setQrCode(newTicket._id).then(data => {
-          //console.log('newTicket',data)
           newTicket.qrCode = data;
-        })
-
+        }).catch((err) => console.error(err.message));
+        
         return newTicket;
       });
       //console.log(insertData)
@@ -459,7 +457,6 @@ class TicketController {
         };
       }
       savedTickets.forEach((savedTicket, index) => {
-
         const ticket = ticketsData[index];
         const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event.toString());
