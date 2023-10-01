@@ -272,16 +272,16 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      //console.log('status', status)
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
           status,
         }
-      );
-      console.log('updatedOrder', updatedOrder)
-      //if(updatedOrder.status.toString() === 'pending' ) {
-      if( status.toString() === 'aproved') {
+        );
+      console.log('status', status)
+      console.log('updatedOrder', updatedOrder.status)
+      //if(status.toString() === 'aproved' && updatedOrder.status.toString() === 'pending') {
+      if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {
         
           const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
