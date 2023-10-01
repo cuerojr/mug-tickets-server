@@ -375,7 +375,7 @@ class TicketController {
    */
   async createTickets(ticketsData = []) {
     try {
-      //console.log('tickets_Data',ticketsData)
+      //console.log('ticketsData',ticketsData)
       //const ticketsData = req.body.tickets;      
       const eventsIds = ticketsData.map(ticket => ticket.event.toString());
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
@@ -470,9 +470,9 @@ class TicketController {
         ...users.map(user => user.save()),
         ...purchaseEvents.map(event => event.save())
       ]);
-      
+      console.log('savedTickets', savedTickets)
       // Mailing
-      await sendMail(savedTickets);      
+      sendMail(savedTickets);      
       return savedTickets;      
     } catch (err) {
       console.error(err.message)

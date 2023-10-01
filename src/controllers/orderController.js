@@ -272,52 +272,80 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      
+      //console.log('status', status)
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
           status,
         }
       );
-      
-      if(updatedOrder) {
-        const actions = {
-          ['aproved']: async () => {
-            const { event, purchaser, quantity } = updatedOrder;
-            const tickets = [];
-            
-            for (let i = 0; i < quantity; i++) {
-              tickets.push({
-                orderId: id,
-                event,
-                purchaser: { 
-                    purchaserFirstName: purchaser?.purchaserFirstName, 
-                    purchaserLastName: purchaser?.purchaserLastName, 
-                    purchaserDni: purchaser?.purchaserDni,
-                    purchaserEmail: purchaser?.purchaserEmail
-                    },
-                attendee: { 
-                    attendeeFirstName: purchaser?.purchaserFirstName,
-                    attendeeLastName: purchaser?.purchaserLastName, 
-                    attendeeDni: purchaser?.purchaserDni,
-                }
-              });
-            }
-            
-            const ticketsMailed = await ticketController.createTickets( tickets );
-            console.log('ticketsMailed', ticketsMailed)            
-          },
-          //['pending']: () => console.log('pending'),
-        };      
-
-        actions[status.toLowerCase()]?.();
+      //console.log('updatedOrder', updatedOrder)
+      if(status === 'aproved') {
         
-        return res.status(200).json({
-          ok: true,
-          updatedOrder,
-        });
-      }
+          const { event, purchaser, quantity } = updatedOrder;
+          const tickets = [];
+          
+          for (let i = 0; i < quantity; i++) {
+            tickets.push({
+              orderId: id,
+              event,
+              purchaser: { 
+                  purchaserFirstName: purchaser?.purchaserFirstName, 
+                  purchaserLastName: purchaser?.purchaserLastName, 
+                  purchaserDni: purchaser?.purchaserDni,
+                  purchaserEmail: purchaser?.purchaserEmail
+                  },
+              attendee: { 
+                  attendeeFirstName: purchaser?.purchaserFirstName,
+                  attendeeLastName: purchaser?.purchaserLastName, 
+                  attendeeDni: purchaser?.purchaserDni,
+              }
+            });
+          }
+          
+          await ticketController.createTickets( tickets );
 
+          return res.status(200).json({
+            ok: true,
+            updatedOrder,
+          });
+
+      }
+      /*const actions = {
+        ['aproved']: async () => {
+          const { event, purchaser, quantity } = updatedOrder;
+          const tickets = [];
+          
+          for (let i = 0; i < quantity; i++) {
+            tickets.push({
+              orderId: id,
+              event,
+              purchaser: { 
+                  purchaserFirstName: purchaser?.purchaserFirstName, 
+                  purchaserLastName: purchaser?.purchaserLastName, 
+                  purchaserDni: purchaser?.purchaserDni,
+                  purchaserEmail: purchaser?.purchaserEmail
+                  },
+              attendee: { 
+                  attendeeFirstName: purchaser?.purchaserFirstName,
+                  attendeeLastName: purchaser?.purchaserLastName, 
+                  attendeeDni: purchaser?.purchaserDni,
+              }
+            });
+          }
+          
+          await ticketController.createTickets( tickets );
+
+          return res.status(200).json({
+            ok: true,
+            updatedOrder,
+          });
+        },
+        //['pending']: () => console.log('pending'),
+      };      
+
+      actions[updatedOrder.status.toLowerCase()]?.();
+      */
     } catch (err) {
       res.status(500).json({
         ok: false,
