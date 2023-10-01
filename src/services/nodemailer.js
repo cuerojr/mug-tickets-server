@@ -81,5 +81,6 @@ export const sendMail = async (tickets = []) => {
 
   const response = await transporter.sendMail(mailOptions);
 
-  console.log(response)
+  console.log('sendMail', response)
+  return response;
 }

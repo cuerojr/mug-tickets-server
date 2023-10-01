@@ -304,8 +304,8 @@ class OrderController {
               });
             }
             
-            await ticketController.createTickets( tickets );
-            
+            const ticketsMailed = await ticketController.createTickets( tickets );
+            console.log('ticketsMailed', ticketsMailed)            
           },
           //['pending']: () => console.log('pending'),
         };      
