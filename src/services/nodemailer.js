@@ -20,6 +20,20 @@ export const sendMail = async (tickets = []) => {
     }
   });
 
+  /*await new Promise((resolve, reject) => {
+    // verify connection configuration
+
+      transporter.verify(function (error, success) {
+          if (error) {
+              console.log(error);
+              reject(error);
+          } else {
+              console.log("OTP has been sent to your Email");
+              resolve(success);
+          }
+      });
+  });*/
+
   const handlebarOptions = {
     viewEngine: {
       extName: '.handlebars',
@@ -32,12 +46,10 @@ export const sendMail = async (tickets = []) => {
   
   transporter.use('compile', hbs(handlebarOptions));
 
-  const attachmentsFormated = [...tickets].map((ticket, index) => {
-    return {
+  const attachmentsFormated = [...tickets].map((ticket, index) => ({
       filename: `ticket-${index}.png`,
       path: ticket.qrCode,
-    }
-  });
+    }));  
 
   const mailOptions = {
     from: 'mug.rosario@gmail.com',
@@ -51,7 +63,8 @@ export const sendMail = async (tickets = []) => {
     attachments: attachmentsFormated,
   };
 
-  
+  // send mail with defined transport object
+  //const message = await transporter.sendMail(mailOptions);
 
   await new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (err, info) => {
