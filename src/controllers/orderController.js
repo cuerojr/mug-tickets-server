@@ -309,9 +309,10 @@ class OrderController {
             ok: true,
             updatedOrder,
           });
-        }
+        },
+        ['pending']: () => console.log('pending'),
       };      
-      
+
       actions[updatedOrder.status.toLowerCase()]?.();
       
     } catch (err) {
