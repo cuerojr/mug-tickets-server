@@ -272,21 +272,20 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      
+      console.log('status', status)
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
           status,
         }
       );
-      
+      console.log('updatedOrder', updatedOrder)
       const actions = {
         ['aproved']: async () => {
           const { event, purchaser, quantity } = updatedOrder;
           const tickets = [];
           
-          for (let i = 0; i < quantity; i++) {   
-            
+          for (let i = 0; i < quantity; i++) {
             tickets.push({
               orderId: id,
               event,
@@ -305,13 +304,7 @@ class OrderController {
           }
           
           await ticketController.createTickets( tickets );
-        },
-        ['pending']: () => {          
-          console.log("🚀 ~ pending:")
-        },
-        ['cancelled']: () => {          
-          console.log("🚀 ~ cancelled:")
-        },
+        }
       };
       
       actions[updatedOrder.status.toLowerCase()]?.();
