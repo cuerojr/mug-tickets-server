@@ -69,7 +69,7 @@ export const sendMail = async (tickets = []) => {
   const message = await transporter.sendMail(mailOptions);
 
   await new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (err, info) => {
+    transporter.sendMail(message, (err, info) => {
       if (err) {
         console.error(err);
         reject(err);
