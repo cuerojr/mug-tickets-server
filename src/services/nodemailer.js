@@ -1,7 +1,7 @@
 import path from 'path';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
-import { ticketNumber as ticketFormatter } from '../helpers/dataFormatter.js';
+import * as PDFDocument from 'pdfkit';
 
 const email = process.env.EMAIL;
 const pass = process.env.EMAIL_PASS;
@@ -12,7 +12,6 @@ const pass = process.env.EMAIL_PASS;
  * @param {Array} tickets - An array of tickets to be included in the email.
  */
 export const sendMail = async (tickets = []) => {
-  
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -33,23 +32,12 @@ export const sendMail = async (tickets = []) => {
   
   transporter.use('compile', hbs(handlebarOptions));
 
-  const attachmentsFormated = [...tickets].map((ticket, index) => ({
-    filename: `ticket-${index + 1}.png`,
-    path: ticket.qrCode,
-  }));
-  
-  const formatedTickets = [...tickets].map((ticket) => {
-    const { purchaser, ticketNumber } = ticket;
-    const formattedTicketNumber = ticketFormatter(ticketNumber);
-    return {      
-      Nombre: purchaser.purchaserFirstName,
-      Apellido: purchaser.purchaserLastName,
-      DNI: purchaser.purchaserDni,
-      Email: purchaser.purchaserEmail,
-      Numero: formattedTicketNumber
+  const attachmentsFormated = [...tickets].map((ticket, index) => {
+    return {
+      filename: `ticket-${index}.png`,
+      path: ticket.qrCode,
     }
   });
-
 
   const mailOptions = {
     from: 'mug.rosario@gmail.com',
@@ -57,11 +45,13 @@ export const sendMail = async (tickets = []) => {
     subject: 'Entradas FestiMug',
     template: 'email',
     context: {
-      formatedTickets
+      tickets
     },
     attachDataUrls: true,
     attachments: attachmentsFormated,
   };
+
+  
 
   await new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (err, info) => {
