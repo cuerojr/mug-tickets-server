@@ -5,11 +5,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const SendMail = async (tickets = []) => {
     try {
-        //console.log(process.env.SENDGRID_API_KEY)
-        const attachmentsFormated = [...tickets].map((ticket, index) => {
+        //console.log(tickets[0])
+        const attachmentsFormated = [...tickets].map((ticket, index) => {            
             return {
               filename: `ticket-${ index + 1 }.png`,
-              content: ticket.qrCode,
+              content: `${ticket.qrCode.split(',').at(-1)}`,
               type: 'plain/text',
               disposition: 'attachment',              
               content_id: `ticket-${ index + 1 }`
@@ -35,6 +35,6 @@ export const SendMail = async (tickets = []) => {
             });
 
     } catch (error) {
-        console.error(error.message)
+        console.error(error.message.body)
     }
 }
