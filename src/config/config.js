@@ -24,4 +24,5 @@ export default {
     CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
     EMAIL: process.env.EMAIL,
     EMAIL_PASS: process.env.EMAIL_PASS,
+    SENDGRID_API_KEY:process.env.SENDGRID_API_KEY
 }
