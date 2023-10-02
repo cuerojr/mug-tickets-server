@@ -18,8 +18,7 @@ export const sendMail = async (tickets = []) => {
       auth: {
           user: 'mug.rosario@gmail.com',
           pass: 'jkhn iusb wpat hsrq'
-      },
-      secure: true
+      }
     });
   
     const handlebarOptions = {
@@ -51,9 +50,7 @@ export const sendMail = async (tickets = []) => {
       },
       attachDataUrls: true,
       attachments: attachmentsFormated,
-    };
-  
-    
+    };    
   
     await new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (err, info) => {
