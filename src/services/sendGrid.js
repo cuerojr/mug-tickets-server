@@ -6,13 +6,21 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 export const SendMail = async (tickets = []) => {
     try {
         console.log('tickets', tickets)
+        const attachmentsFormated = [...tickets].map((ticket, index) => {
+            return {
+              filename: `ticket-${index}.png`,
+              path: ticket.qrCode,
+            }
+        }); 
+
         const msg = {
-            to: 'rojonicolasdev@gmail.com', // Change to your recipient
+            to: tickets[0].purchaser.purchaserEmail, // Change to your recipient
             from: 'mug.rosario@gmail.com', // Change to your verified sender
-            subject: 'Sending with SendGrid is Fun',
+            subject: 'Entradas FestiMug',
             text: 'and easy to do anywhere, even with Node.js',
-            html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+            html: `<strong>${tickets[0].purchaser.purchaserEmail}</strong>`,
         }
+
         
         sgMail
             .send(msg)
