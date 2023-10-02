@@ -11,15 +11,14 @@ const pass = process.env.EMAIL_PASS;
  *
  * @param {Array} tickets - An array of tickets to be included in the email.
  */
-export const sendMail = async (tickets = []) => {
+export const sendMails = async (tickets = []) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
           user: 'mug.rosario@gmail.com',
           pass: 'jkhn iusb wpat hsrq'
-      },
-      secure: true
+      }
     });
   
     const handlebarOptions = {
@@ -51,9 +50,7 @@ export const sendMail = async (tickets = []) => {
       },
       attachDataUrls: true,
       attachments: attachmentsFormated,
-    };
-  
-    
+    };    
   
     await new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (err, info) => {
