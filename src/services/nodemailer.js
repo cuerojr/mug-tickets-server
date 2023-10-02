@@ -13,12 +13,26 @@ const pass = process.env.EMAIL_PASS;
  */
 export const sendMails = async (tickets = []) => {
   try {
+    console.log('sendmail', tickets)
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
           user: 'mug.rosario@gmail.com',
           pass: 'jkhn iusb wpat hsrq'
       }
+    });
+
+    await new Promise((resolve, reject) => {
+      // verify connection configuration
+      transporter.verify((error, success) => {
+          if (error) {
+              console.log(error);
+              reject(error);
+          } else {
+              console.log("Server is ready to take our messages");
+              resolve(success);
+          }
+      });
     });
   
     const handlebarOptions = {
@@ -38,20 +52,7 @@ export const sendMails = async (tickets = []) => {
         filename: `ticket-${index}.png`,
         path: ticket.qrCode,
       }
-    });
-
-    await new Promise((resolve, reject) => {
-      // verify connection configuration
-      transporter.verify((error, success) => {
-          if (error) {
-              console.log(error);
-              reject(error);
-          } else {
-              console.log("Server is ready to take our messages");
-              resolve(success);
-          }
-      });
-    });
+    });    
   
     const mailOptions = {
       from: 'mug.rosario@gmail.com',
@@ -75,6 +76,8 @@ export const sendMails = async (tickets = []) => {
         }
       });
     });
+
+    transporter.close();
   } catch (error) {
     console.error(error)
   }

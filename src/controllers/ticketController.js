@@ -5,7 +5,7 @@ import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
 import { sendMails } from '../services/nodemailer.js';
 
-import QRCode from 'qrcode'
+import QRCode from 'qrcode';
 
 /**
  * Controller class for handling ticket-related operations.
@@ -452,7 +452,7 @@ class TicketController {
           }
         };
       }
-      
+
       savedTickets.forEach((savedTicket, index) => {
         const ticket = ticketsData[index];
         const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
