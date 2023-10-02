@@ -17,7 +17,6 @@ const transporter = nodemailer.createTransport({
       pass: 'jkhn iusb wpat hsrq'
   }
 });
-
 export const sendMails = async (tickets = []) => {
   try {
     console.log('sendmail', tickets)
@@ -45,7 +44,7 @@ export const sendMails = async (tickets = []) => {
       extName: '.handlebars'    
     }
     
-    //transporter.use('compile', hbs(handlebarOptions));
+    transporter.use('compile', hbs(handlebarOptions));
   
     const attachmentsFormated = [...tickets].map((ticket, index) => {
       return {
@@ -58,13 +57,17 @@ export const sendMails = async (tickets = []) => {
       from: 'mug.rosario@gmail.com',
       to: tickets[0].purchaser.purchaserEmail,
       subject: 'Entradas FestiMug',
-      html: '<h1>caca</h1>'
+      template: 'email',
+      context: {
+        tickets
+      },
+      attachDataUrls: true,
+      attachments: attachmentsFormated,
     };    
   
     const data = await transporter.sendMail(mailOptions);
-    console.log(data.accepted)
-    console.log(data.rejected)
-    
+    console.log(data.response)
+    //transporter.close();
   } catch (error) {
     console.error(error)
   }
