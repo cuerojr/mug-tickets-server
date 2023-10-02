@@ -14,7 +14,7 @@ export const SendMail = async (tickets = []) => {
         }); 
 
         const msg = {
-            to: tickets[0].purchaser.purchaserEmail, // Change to your recipient
+            to: 'rojonicolasdev@gmail.com', // Change to your recipient
             from: 'mug.rosario@gmail.com', // Change to your verified sender
             subject: 'Entradas FestiMug',
             text: 'and easy to do anywhere, even with Node.js',
