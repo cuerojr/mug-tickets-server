@@ -10,16 +10,17 @@ const pass = process.env.EMAIL_PASS;
  *
  * @param {Array} tickets - An array of tickets to be included in the email.
  */
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'mug.rosario@gmail.com',
+      pass: 'jkhn iusb wpat hsrq'
+  }
+});
+
 export const sendMails = async (tickets = []) => {
   try {
     console.log('sendmail', tickets)
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-          user: 'mug.rosario@gmail.com',
-          pass: 'jkhn iusb wpat hsrq'
-      }
-    });
 
     await new Promise((resolve, reject) => {
       // verify connection configuration
