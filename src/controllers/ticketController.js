@@ -3,7 +3,7 @@ import { Ticket } from '../models/ticketModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
-import { sendMail } from '../services/nodemailer.js';
+import { sendMails } from '../services/nodemailer.js';
 
 import QRCode from 'qrcode'
 
@@ -172,8 +172,6 @@ class TicketController {
         ...purchaseEvents.map(event => event.save())
       ]);
 
-      // Mailing
-      sendMail(savedTickets);
       
       res.status(200).json({
         ok: true,
@@ -454,6 +452,7 @@ class TicketController {
           }
         };
       }
+      
       savedTickets.forEach((savedTicket, index) => {
         const ticket = ticketsData[index];
         const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
@@ -470,7 +469,7 @@ class TicketController {
       ]);
       
       // Mailing
-      sendMail(savedTickets);      
+      sendMails(savedTickets);      
       return savedTickets;      
     } catch (err) {
       console.error(err.message)
