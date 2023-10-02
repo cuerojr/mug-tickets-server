@@ -1,7 +1,6 @@
 import path from 'path';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
-import * as PDFDocument from 'pdfkit';
 
 const email = process.env.EMAIL;
 const pass = process.env.EMAIL_PASS;

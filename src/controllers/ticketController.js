@@ -4,6 +4,7 @@ import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
 import { sendMails } from '../services/nodemailer.js';
+import { SendMail } from '../services/sendGrid.js';
 
 import QRCode from 'qrcode';
 
@@ -469,7 +470,8 @@ class TicketController {
       ]);
       
       // Mailing
-      sendMails(savedTickets);      
+      //sendMails(savedTickets);   
+      SendMail(savedTickets);   
       return savedTickets;      
     } catch (err) {
       console.error(err.message)
