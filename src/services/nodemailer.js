@@ -45,7 +45,7 @@ export const sendMails = async (tickets = []) => {
       extName: '.handlebars'    
     }
     
-    transporter.use('compile', hbs(handlebarOptions));
+    //transporter.use('compile', hbs(handlebarOptions));
   
     const attachmentsFormated = [...tickets].map((ticket, index) => {
       return {
