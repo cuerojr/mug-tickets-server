@@ -24,15 +24,8 @@ export const SendMail = async (tickets = []) => {
             attachments: attachmentsFormated,
         }
         
-        sgMail
-            .send(msg)
-            .then((response) => {
-                console.log(response[0].statusCode)
-                console.log(response[0].headers)
-            })
-            .catch((error) => {
-                console.error('asdasd', error)
-            });
+        const res = await sgMail.send(msg);
+        console.log(res)
 
     } catch (error) {
         console.error(error.message.body)
