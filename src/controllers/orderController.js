@@ -260,12 +260,14 @@ class OrderController {
             });
           }
           
-          await ticketController.createTickets( tickets );
+          const data = await ticketController.createTickets( tickets );
 
-          res.status(200).json({
-            ok: true,
-            updatedOrder,
-          });
+          if(data) {
+            res.status(200).json({
+              ok: true,
+              updatedOrder,
+            });
+          }
       } else {
         console.log('ya esta aprobada la orden')
         res.status(404).json({
