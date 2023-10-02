@@ -5,21 +5,24 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const SendMail = async (tickets = []) => {
     try {
-        /*const attachmentsFormated = [...tickets].map((ticket, index) => {
+        //console.log(process.env.SENDGRID_API_KEY)
+        const attachmentsFormated = [...tickets].map((ticket, index) => {
             return {
-              filename: `ticket-${index}.png`,
-              path: ticket.qrCode,
+              filename: `ticket-${ index + 1 }.png`,
+              content: ticket.qrCode,
+              type: 'plain/text',
+              disposition: 'attachment',              
+              content_id: `ticket-${ index + 1 }`
             }
-        }); */
-
+        });
+        const email = `${tickets[0].purchaser.purchaserEmail}`;
         const msg = {
-            to: `${tickets[0].purchaser.purchaserEmail}`, // Change to your recipient
+            to: email, // Change to your recipient
             from: 'mug.rosario@gmail.com', // Change to your verified sender
             subject: 'Entradas FestiMug',
-            text: 'and easy to do anywhere, even with Node.js',
-            html: `<strong>qweqwe</strong>`,
+            html: '<p>Here’s an attachment for you!</p>',
+            attachments: attachmentsFormated,
         }
-
         
         sgMail
             .send(msg)
