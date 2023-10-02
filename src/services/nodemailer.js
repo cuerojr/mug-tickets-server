@@ -66,18 +66,9 @@ export const sendMails = async (tickets = []) => {
       attachments: attachmentsFormated,
     };    
   
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(info);
-        }
-      });
-    });
-
-    transporter.close();
+    const data = await transporter.sendMail(mailOptions);
+    console.log(data.response)
+    //transporter.close();
   } catch (error) {
     console.error(error)
   }
