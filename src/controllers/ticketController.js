@@ -472,7 +472,7 @@ class TicketController {
       // Mailing
       //sendMails(savedTickets);   
       SendMail(savedTickets);   
-      return savedTickets;      
+      //return savedTickets;      
     } catch (err) {
       console.error(err.message)
     }
