@@ -267,6 +267,7 @@ class OrderController {
             updatedOrder,
           });
       } else {
+        console.log('ya esta aprobada la orden')
         res.status(404).json({
           ok: false,
           message: 'Order not found',
