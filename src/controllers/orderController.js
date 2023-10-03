@@ -239,8 +239,11 @@ class OrderController {
       const updatedOrder = await Order.findByIdAndUpdate(id, { status });
       
       if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {        
-          const { event, purchaser, quantity } = updatedOrder;
+          const { event, purchaser, quantity, ticketType } = updatedOrder;
+
           const tickets = [];
+
+          const { title, address } = await Event.findById(event);
           
           for (let i = 0; i < quantity; i++) {
             tickets.push({
@@ -256,7 +259,10 @@ class OrderController {
                   attendeeFirstName: purchaser?.purchaserFirstName,
                   attendeeLastName: purchaser?.purchaserLastName, 
                   attendeeDni: purchaser?.purchaserDni,
-              }
+              },
+              ticketType,
+              title,
+              address
             });
           }
           

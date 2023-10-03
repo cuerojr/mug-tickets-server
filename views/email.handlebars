@@ -6,16 +6,20 @@
   <title>Welcome Email</title>
 </head>
 <body>
-  <h1>Felicitaciones!! Acabamos de enviarte el/los Qrs para validar el acceso al evento</h1>
-    {{#each ticketsFormatted}}
-      <div style="border:2px solid #333333;padding:1rem;margin-bottom:1rem;border-radius:15px">
-        <h3 style="margin: 0;">Ticket {{@key}}</h3>
-        <ul style="list-style-type: none;">
-        {{#each this}}
-            <li><b>{{@key}}</b>: {{this}}</li>
-        {{/each}} 
-        </ul> 
-      </div>
-    {{/each}}
+  <div style="font-family: sans-serif; text-align: center!important"></div>
+    <h1 style="text-align:center;">Gracias por tu compra</h1>
+    <p style="text-align:center;">Te enviamos las entradas. <br/> Recordá llevarlas el día del evento junto con tu DNI</p>
+    <h2 style="text-align:center;">Resumen de la compra:</h2>
+      {{#each ticketsFormatted}}
+        <div  style="border: 2px solid lightgray; padding: 30px 20px; width: max-content; margin: 10px auto; border-radius: 5px">
+          <h4>Datos de la entrada:</h4>
+          <ul style="list-style: none; padding-left: 0!important; text-align: left">
+          {{#each this}}
+              <li style="margin-block: 4px;margin-left: 0;"><span style="font-weight: bold">{{@key}}</span>: {{this}}</li>
+          {{/each}} 
+          </ul> 
+        </div>
+      {{/each}}    
+  </div>
 </body>
 </html>
