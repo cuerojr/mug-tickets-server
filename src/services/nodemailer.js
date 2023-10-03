@@ -2,6 +2,7 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import { ticketNumber as formatedNumber } from '../helpers/dataFormatter.js';
+import { dateFormatter, formatTime } from '../helpers/dateFormatter.js'
 
 
 const email = process.env.EMAIL;
@@ -47,7 +48,6 @@ export const sendMails = async (tickets = [], ticketsData = []) => {
     
     transporter.use('compile', hbs(handlebarOptions));
 
-    console.log(ticketsData)
     const ticketsFormatted = [...tickets].map((ticket, index) => { 
       const { 
         purchaser, 
@@ -66,8 +66,7 @@ export const sendMails = async (tickets = [], ticketsData = []) => {
         "Entrada nro.": formatedNumber(ticketNumber),
         "Evento": ticketsData[0].title,
         "Tipo de entrada": ticketsData[0].ticketType.type,
-        "Fecha": ticketsData[0].ticketType.date,
-        "Hora": ticketsData[0].ticketType.date,
+        "Fecha y Hora": `${dateFormatter(ticketsData[0].ticketType.date)} - ${formatTime(ticketsData[0].ticketType.date)} `,
         "Dirección": ticketsData[0].address,
         "Nombre y Apellido": `${ purchaser.purchaserFirstName } ${ purchaser.purchaserLastName }`,
         "Dni": purchaser.purchaserDni,
