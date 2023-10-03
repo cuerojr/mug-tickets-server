@@ -25,7 +25,7 @@ export const SendMail = async (tickets = []) => {
         }
         
         const res = await sgMail.send(msg);
-        console.log(res)
+        if (res) return true;
 
     } catch (error) {
         console.error(error.message.body)
