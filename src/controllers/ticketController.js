@@ -3,7 +3,6 @@ import { Ticket } from '../models/ticketModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
-import { sendMails } from '../services/nodemailer.js';
 import { SendMail } from '../services/sendGrid.js';
 
 import QRCode from 'qrcode';
@@ -468,11 +467,8 @@ class TicketController {
         ...users.map(user => user.save()),
         ...purchaseEvents.map(event => event.save())
       ]);
-      
-      // Mailing
-      //sendMails(savedTickets);   
-      return await SendMail(savedTickets);   
-      //return savedTickets;      
+        
+      return await SendMail(savedTickets);
     } catch (err) {
       console.error(err.message)
     }
@@ -480,8 +476,6 @@ class TicketController {
 
   async setQrCode(ticketId = '') {
     try {
-      //const qrCodeUrl = `https://www.mug.ar/admin/validar/${ticketId}`; // Replace with your ticket URL
-  
       // Generate the QR code
       return await QRCode.toDataURL(`${ticketId}`);
   
