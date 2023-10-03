@@ -21,7 +21,6 @@ const transporter = nodemailer.createTransport({
 });
 export const sendMails = async (tickets = []) => {
   try {
-console.log(tickets)
     await new Promise((resolve, reject) => {
       // verify connection configuration
       transporter.verify((error, success) => {
