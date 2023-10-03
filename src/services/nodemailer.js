@@ -1,6 +1,8 @@
 import path from 'path';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
+import { ticketNumber as formatedNumber } from '../helpers/dataFormatter.js';
+
 
 const email = process.env.EMAIL;
 const pass = process.env.EMAIL_PASS;
@@ -19,8 +21,7 @@ const transporter = nodemailer.createTransport({
 });
 export const sendMails = async (tickets = []) => {
   try {
-    console.log('sendmail', tickets)
-
+console.log(tickets)
     await new Promise((resolve, reject) => {
       // verify connection configuration
       transporter.verify((error, success) => {
@@ -45,11 +46,34 @@ export const sendMails = async (tickets = []) => {
     }
     
     transporter.use('compile', hbs(handlebarOptions));
-  
+
+    const ticketsFormatted = [...tickets].map((ticket, index) => {      
+      const { 
+        purchaser, 
+        attendee, 
+        validated, 
+        purchased, 
+        purchaseDate, 
+        validationDate, 
+        ticketNumber, 
+        _id, 
+        __v,
+        qrCode
+      } = ticket;
+
+      return {
+        Nombre: `${ purchaser.purchaserFirstName } ${ purchaser.purchaserLastName }`,
+        Dni: purchaser.purchaserDni,
+        Email: purchaser.purchaserEmail,
+        Ticket: formatedNumber(ticketNumber),
+      }
+    });
+        
     const attachmentsFormated = [...tickets].map((ticket, index) => {
       return {
         filename: `ticket-${index}.png`,
         path: ticket.qrCode,
+        cid:  `ticket-${index}`
       }
     });    
   
@@ -59,15 +83,13 @@ export const sendMails = async (tickets = []) => {
       subject: 'Entradas FestiMug',
       template: 'email',
       context: {
-        tickets
+        ticketsFormatted
       },
       attachDataUrls: true,
       attachments: attachmentsFormated,
     };    
   
     const data = await transporter.sendMail(mailOptions);
-    console.log(data.response)
-    //transporter.close();
     if (data) return true;
   } catch (error) {
     console.error(error)
