@@ -468,9 +468,9 @@ class TicketController {
         ...users.map(user => user.save()),
         ...purchaseEvents.map(event => event.save())
       ]);
-        
-      //return await SendMail(savedTickets);
-      return await sendMails(savedTickets);
+      
+      //console.log(ticketsData)
+      return await sendMails(savedTickets, ticketsData);
     } catch (err) {
       console.error(err.message)
     }

@@ -19,8 +19,9 @@ const transporter = nodemailer.createTransport({
       pass: 'jkhn iusb wpat hsrq'
   }
 });
-export const sendMails = async (tickets = []) => {
+export const sendMails = async (tickets = [], ticketsData = []) => {
   try {
+    
     await new Promise((resolve, reject) => {
       // verify connection configuration
       transporter.verify((error, success) => {
@@ -46,7 +47,8 @@ export const sendMails = async (tickets = []) => {
     
     transporter.use('compile', hbs(handlebarOptions));
 
-    const ticketsFormatted = [...tickets].map((ticket, index) => {      
+    console.log(ticketsData)
+    const ticketsFormatted = [...tickets].map((ticket, index) => { 
       const { 
         purchaser, 
         attendee, 
@@ -54,17 +56,22 @@ export const sendMails = async (tickets = []) => {
         purchased, 
         purchaseDate, 
         validationDate, 
-        ticketNumber, 
+        ticketNumber,
         _id, 
         __v,
         qrCode
       } = ticket;
 
       return {
-        Nombre: `${ purchaser.purchaserFirstName } ${ purchaser.purchaserLastName }`,
-        Dni: purchaser.purchaserDni,
-        Email: purchaser.purchaserEmail,
-        Ticket: formatedNumber(ticketNumber),
+        "Entrada nro.": formatedNumber(ticketNumber),
+        "Evento": ticketsData[0].title,
+        "Tipo de entrada": ticketsData[0].ticketType.type,
+        "Fecha": ticketsData[0].ticketType.date,
+        "Hora": ticketsData[0].ticketType.date,
+        "Dirección": ticketsData[0].address,
+        "Nombre y Apellido": `${ purchaser.purchaserFirstName } ${ purchaser.purchaserLastName }`,
+        "Dni": purchaser.purchaserDni,
+        "Email": purchaser.purchaserEmail,
       }
     });
         
