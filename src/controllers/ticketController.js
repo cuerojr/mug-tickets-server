@@ -4,6 +4,7 @@ import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
 import { ticketNumber } from '../helpers/dataFormatter.js';
 import { SendMail } from '../services/sendGrid.js';
+import { sendMails } from '../services/nodemailer.js';
 
 import QRCode from 'qrcode';
 
@@ -468,7 +469,8 @@ class TicketController {
         ...purchaseEvents.map(event => event.save())
       ]);
         
-      return await SendMail(savedTickets);
+      //return await SendMail(savedTickets);
+      return await sendMails(savedTickets);
     } catch (err) {
       console.error(err.message)
     }

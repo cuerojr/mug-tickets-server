@@ -68,6 +68,7 @@ export const sendMails = async (tickets = []) => {
     const data = await transporter.sendMail(mailOptions);
     console.log(data.response)
     //transporter.close();
+    if (data) return true;
   } catch (error) {
     console.error(error)
   }
