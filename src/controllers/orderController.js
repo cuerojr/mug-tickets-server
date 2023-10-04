@@ -84,7 +84,12 @@ class OrderController {
       const {
         eventId,
         quantity,
-        ticketType: { price, date, type },
+        ticketType: { 
+          _id, 
+          price, 
+          date, 
+          type 
+        },
         status,
         expirationDate,
       } = req.body;
@@ -100,6 +105,7 @@ class OrderController {
         event: eventId,
         quantity,
         ticketType: {
+          _id,
           price,
           date,
           type,
@@ -107,6 +113,7 @@ class OrderController {
         status,
         expirationDate,
       });
+      //validacion y actualizacion de comprados para ese tipo de ticket
 
       const savedNewOrder = await newOrder.save();
       await newOrder.populate("event", {

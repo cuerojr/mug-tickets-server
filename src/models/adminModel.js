@@ -37,7 +37,12 @@ const adminSchema = new mongoose.Schema({
   eventsCreatedList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Event'
-  }]
+  }],
+  createdDate: {
+    type: Date,
+    required: false,
+    default: Date.now
+  },
 });
 
 /**

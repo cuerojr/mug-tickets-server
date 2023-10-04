@@ -37,7 +37,12 @@ const userSchema = new mongoose.Schema({
   purchasedTickets: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ticket'
-  }]
+  }],
+  createdDate: {
+    type: Date,
+    required: false,
+    default: Date.now
+  },
 });
 
 /**
