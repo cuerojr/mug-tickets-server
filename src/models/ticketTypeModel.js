@@ -45,6 +45,16 @@ const ticketTypeSchema = new mongoose.Schema({
     ticketPurchaseDeadline: {
         type: Date,
         required: true
+    },
+    isActive: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
+    isAbono: {
+        type: Boolean,
+        default: false,
+        required: false
     }
 });
 
