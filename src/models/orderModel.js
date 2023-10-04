@@ -36,6 +36,11 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: false,
     },
+    createdDate: {
+        type: Date,
+        required: false,
+        default: Date.now
+    },
     purchaser: {
         purchaserFirstName: {
             type: String,

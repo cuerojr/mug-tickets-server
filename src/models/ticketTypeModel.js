@@ -26,6 +26,11 @@ const ticketTypeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    createdDate: {
+        type: Date,
+        required: false,
+        default: Date.now
+    },
     ticketsAvailableOnline: {
         type: Number,
         required: true,

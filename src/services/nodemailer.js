@@ -84,7 +84,7 @@ export const sendMails = async (tickets = [], ticketsData = []) => {
   
     const mailOptions = {
       from: 'mug.rosario@gmail.com',
-      to: tickets[0].purchaser.purchaserEmail,
+      to: [tickets[0].purchaser.purchaserEmail, 'mug.rosario@gmail.com'],
       subject: 'Entradas FestiMug',
       template: 'email',
       context: {
