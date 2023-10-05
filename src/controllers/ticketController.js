@@ -236,30 +236,29 @@ class TicketController {
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the updated ticket details or an error message if not found.
      */
-    async update(req, res = response) {
-      const { id } = req.body;
-      const {
-        event,
-        purchaser: {
-          purchaserFirstName,
-          purchaserLastName,
-          purchaserDni,
-          purchaserEmail,
-          purchaserId
-        },
-        attendee: {
-          attendeeFirstName,
-          attendeeLastName,
-          attendeeDni
-        },
-        validated,
-        purchaseDate,
-        validationDate,
-        ticketNumber
-      } = req.body;
-      
-      
+    async update(req, res = response) {      
       try {
+        const { id } = req.body;
+        const {
+          event,
+          purchaser: {
+            purchaserFirstName,
+            purchaserLastName,
+            purchaserDni,
+            purchaserEmail,
+            purchaserId
+          },
+          attendee: {
+            attendeeFirstName,
+            attendeeLastName,
+            attendeeDni
+          },
+          validated,
+          purchaseDate,
+          validationDate,
+          ticketNumber
+        } = req.body;
+        
         const ticket = await Ticket.findByIdAndUpdate(id, {
           event,
           purchaser: {
@@ -381,10 +380,7 @@ class TicketController {
       //validar si hay ticket disponible
       const ticketType = await TicketType.findById(ticketTypeIds[0]);
       if(ticketType.ticketsAvailableOnline <= ticketType.ticketsPurchased) {
-        return res.status(404).json({
-          ok: false,
-          message: 'Sold out!',
-        });
+        return 
       }
 
       // create Anonimous User 
@@ -468,22 +464,17 @@ class TicketController {
         const ticket = ticketsData[index];
         const user = users.find(user => user._id.toString() === ticket.purchaser.purchaserId) || users[0];
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event.toString());
-        //console.log('ticket', ticket)
-        /**
-         * ticketType = 
-         */
 
         user.purchasedTickets.push(savedTicket._id);
         purchaseEvent.ticketsPurchased += 1;
         purchaseEvent.purchasedTicketsList.push(savedTicket._id);
-
-
-
+        ticketType.ticketsPurchased += 1;
       });
 
       await Promise.all([
         ...users.map(user => user.save()),
-        ...purchaseEvents.map(event => event.save())
+        ...purchaseEvents.map(event => event.save()),
+        ticketType.save()
       ]);
       
       //Mailing

@@ -241,7 +241,7 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      const updatedOrder = await Order.findById(id);
+      const updatedOrder = await Order.findByIdAndUpdate(id, { status });
       
       if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {        
           const { event, purchaser, quantity, ticketType } = updatedOrder;
@@ -254,15 +254,15 @@ class OrderController {
               orderId: id,
               event,
               purchaser: { 
-                  purchaserFirstName: purchaser?.purchaserFirstName, 
-                  purchaserLastName: purchaser?.purchaserLastName, 
-                  purchaserDni: purchaser?.purchaserDni,
-                  purchaserEmail: purchaser?.purchaserEmail
-                  },
+                purchaserFirstName: purchaser?.purchaserFirstName, 
+                purchaserLastName: purchaser?.purchaserLastName, 
+                purchaserDni: purchaser?.purchaserDni,
+                purchaserEmail: purchaser?.purchaserEmail
+              },
               attendee: { 
-                  attendeeFirstName: purchaser?.purchaserFirstName,
-                  attendeeLastName: purchaser?.purchaserLastName, 
-                  attendeeDni: purchaser?.purchaserDni,
+                attendeeFirstName: purchaser?.purchaserFirstName,
+                attendeeLastName: purchaser?.purchaserLastName, 
+                attendeeDni: purchaser?.purchaserDni,
               },
               ticketType: $ticketType,
               title,
@@ -272,17 +272,21 @@ class OrderController {
           
           const mailSended = await ticketController.createTickets( tickets );
 
-          if(mailSended) {
-            updatedOrder.status = status;
-            await updatedOrder.save();
-            res.status(200).json({
+          if(mailSended || mailSended.ok) {
+           // updatedOrder.ticketsPurchasedList = tickets;
+            // updatedOrder = await updatedOrder.save();
+            return res.status(200).json({
               ok: true,
               updatedOrder,
             });
           }
 
+          return res.status(404).json({
+            ok: false,
+            message: 'Sold out!',
+          });
       } else {
-        console.log('ya esta aprobada la orden')
+
         res.status(404).json({
           ok: false,
           message: 'Order not found',

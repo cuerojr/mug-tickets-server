@@ -62,7 +62,11 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: false
         }
-    }
+    },
+    ticketsPurchasedList: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket'
+    }]
 });
 
 const Order = mongoose.model('Order', orderSchema);
