@@ -31,7 +31,6 @@ router.post('/',
     check('tickets.*.event', 'Event is required for each ticket').not().isEmpty(),
     check('tickets.*.purchaser.purchaserFirstName', 'Purchaser first name is required for each ticket').not().isEmpty(),
     check('tickets.*.purchaser.purchaserLastName', 'Purchaser last name is required for each ticket').not().isEmpty(),
-    //check('tickets.*.purchaser.purchaserId', 'Purchaser id is required for each ticket').not().isEmpty(),
     check('tickets.*.attendee.attendeeFirstName', 'Attendee first name is required for each ticket').not().isEmpty(),
     check('tickets.*.attendee.attendeeLastName', 'Attendee last name is required for each ticket').not().isEmpty(),
     check('tickets.*.attendee.attendeeDni', 'Attendee dni is required for each ticket').not().isEmpty(),
@@ -59,10 +58,12 @@ router.put('/:id',
         check('purchaser.purchaserFirstName', 'Purchaser first name is required').not().isEmpty(),
         check('purchaser.purchaserLastName', 'Purchaser last name is required').not().isEmpty(),
         check('purchaser.purchaserId', 'Purchaser id is required').not().isEmpty(),
+        check('purchaser.purchaserEmail', 'Purchaser email is required').not().isEmpty(),
+        check('purchaser.purchaserDni', 'Purchaser dni is required').not().isEmpty(),
         check('attendee.attendeeFirstName', 'Attendee first name is required').not().isEmpty(),
         check('attendee.attendeeLastName', 'Attendee last name is required').not().isEmpty(),
-        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),        
-        validationsMiddlewares.validateFields 
+        check('attendee.attendeeDni', 'Attendee dni is required').not().isEmpty(),  
+        validationsMiddlewares.validateFields
     ], 
     ticketController.update);
 
