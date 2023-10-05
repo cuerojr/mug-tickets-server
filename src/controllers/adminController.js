@@ -79,18 +79,17 @@ class AdminController {
    * @param {Object} res - Express response object.
    * @returns {Object} JSON response containing the newly created admin details and a JWT token or an error message.
    */
-    async create(req, res = response) {
-      const { 
-        dni, 
-        firstName, 
-        lastName,
-        email,
-        password
-      } = req.body;
-      
+    async create(req, res = response) {      
       try {       
+        const { 
+          dni, 
+          firstName, 
+          lastName,
+          email,
+          password
+        } = req.body;
         const existEmail = await Admin.findOne({ email });
-
+        
         if(existEmail){
           return res.status(400).json({
             ok: false,

@@ -18,7 +18,7 @@ const ticketTypeSchema = new mongoose.Schema({
         min: 1,
         default: 1
     },
-    date: {
+    date: { //make a list for abono's dates
         type: Date,
         required: true,
     },
