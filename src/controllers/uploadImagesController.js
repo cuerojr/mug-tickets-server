@@ -1,7 +1,6 @@
 import { response } from 'express';
 //import { uuidv4 } from 'uuid';
 import { updateImages } from '../helpers/updateImage.js';
-import { uploadCloudImage } from '../helpers/cloudinaryFiles.js';
 
 /**
  * Controller class for handling image upload operations.

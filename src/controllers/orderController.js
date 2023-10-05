@@ -1,8 +1,8 @@
 import { response } from "express";
 import { Order } from "../models/orderModel.js";
-import { User } from "../models/userModel.js";
 import { Event } from "../models/eventModel.js";
 import { TicketController } from "./ticketController.js";
+import { TicketType } from "../models/ticketTypeModel.js";
 const ticketController = new TicketController();
 /**
  * Controller class for handling ticket-related operations.
@@ -101,6 +101,15 @@ class OrderController {
         });
       }
 
+      //validacion y actualizacion de comprados para ese tipo de ticket
+      const ticketType = await TicketType.findById(_id);
+      if(ticketType.ticketsAvailableOnline <= ticketType.ticketsPurchased) {
+        return res.status(404).json({
+          ok: false,
+          message: 'Sold out!',
+        });
+      }
+
       const newOrder = new Order({
         event: eventId,
         quantity,
@@ -113,7 +122,6 @@ class OrderController {
         status,
         expirationDate,
       });
-      //validacion y actualizacion de comprados para ese tipo de ticket
 
       const savedNewOrder = await newOrder.save();
       await newOrder.populate("event", {
@@ -196,14 +204,9 @@ class OrderController {
         quantity,
         status,
         expirationDate,
-        purchaser: { 
-          purchaserFirstName, 
-          purchaserLastName, 
-          purchaserDni,
-          purchaserEmail
-        }
+        purchaser
       } = req.body;
-      
+
       const updatedOrder = await Order.findByIdAndUpdate(
         id,
         {
@@ -211,15 +214,10 @@ class OrderController {
           quantity,
           status,
           expirationDate,
-          purchaser: { 
-            purchaserFirstName, 
-            purchaserLastName, 
-            purchaserDni,
-            purchaserEmail
-          }
-        }
+          purchaser
+        }, { new: true }
       );
-
+      
       res.status(200).json({
         ok: true,
         updatedOrder,
@@ -243,16 +241,15 @@ class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      const updatedOrder = await Order.findByIdAndUpdate(id, { status });
+      const updatedOrder = await Order.findById(id);
       
       if( status.toLowerCase() === 'aproved' && updatedOrder.status.toLowerCase() !== 'aproved') {        
           const { event, purchaser, quantity, ticketType } = updatedOrder;
-
-          const tickets = [];
-
           const { title, address } = await Event.findById(event);
+          const $ticketType = await TicketType.findById(ticketType._id.toString());
+          const tickets = [];
           
-          for (let i = 0; i < quantity; i++) {
+          for (let i = 0; i < (quantity * $ticketType.quantity); i++) {
             tickets.push({
               orderId: id,
               event,
@@ -267,20 +264,23 @@ class OrderController {
                   attendeeLastName: purchaser?.purchaserLastName, 
                   attendeeDni: purchaser?.purchaserDni,
               },
-              ticketType,
+              ticketType: $ticketType,
               title,
               address
             });
           }
           
-          const data = await ticketController.createTickets( tickets );
+          const mailSended = await ticketController.createTickets( tickets );
 
-          if(data) {
+          if(mailSended) {
+            updatedOrder.status = status;
+            await updatedOrder.save();
             res.status(200).json({
               ok: true,
               updatedOrder,
             });
           }
+
       } else {
         console.log('ya esta aprobada la orden')
         res.status(404).json({
