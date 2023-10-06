@@ -249,7 +249,28 @@ class OrderController {
           const $ticketType = await TicketType.findById(ticketType._id.toString());
           const tickets = [];
           
-          for (let i = 0; i < (quantity * $ticketType.quantity); i++) {
+          /*for (let i = 0; i < (quantity * $ticketType.quantity); i++) {
+            tickets.push({
+              orderId: id,
+              event,
+              purchaser: { 
+                purchaserFirstName: purchaser?.purchaserFirstName, 
+                purchaserLastName: purchaser?.purchaserLastName, 
+                purchaserDni: purchaser?.purchaserDni,
+                purchaserEmail: purchaser?.purchaserEmail
+              },
+              attendee: { 
+                attendeeFirstName: purchaser?.purchaserFirstName,
+                attendeeLastName: purchaser?.purchaserLastName, 
+                attendeeDni: purchaser?.purchaserDni,
+              },
+              ticketType: $ticketType,
+              title,
+              address
+            });
+          }*/
+
+          for (let i = 0; i < quantity; i++) {
             tickets.push({
               orderId: id,
               event,
@@ -270,6 +291,7 @@ class OrderController {
             });
           }
           
+          //Error handling rf
           const mailSended = await ticketController.createTickets( tickets );
 
           if(mailSended || mailSended.ok) {
@@ -283,7 +305,7 @@ class OrderController {
 
           return res.status(404).json({
             ok: false,
-            message: 'Sold out!',
+            message: 'error!',
           });
       } else {
 
