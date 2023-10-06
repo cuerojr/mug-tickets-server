@@ -79,7 +79,9 @@ class TicketTypeController {
             date,
             type,
             ticketsAvailableOnline,
-            ticketPurchaseDeadline         
+            ticketPurchaseDeadline,
+            isAbono,
+            isActive
         } = req.body;
 
         const newTicketType = new TicketType({
@@ -88,7 +90,9 @@ class TicketTypeController {
             date,
             type,
             ticketsAvailableOnline,
-            ticketPurchaseDeadline      
+            ticketPurchaseDeadline,
+            isAbono,
+            isActive
         });
 
         if (!eventId) {
@@ -161,7 +165,9 @@ class TicketTypeController {
         date,
         type,
         ticketsAvailableOnline,
-        ticketPurchaseDeadline         
+        ticketPurchaseDeadline,
+        isAbono,
+        isActive
     } = req.body;
 
       try {
@@ -171,7 +177,9 @@ class TicketTypeController {
           date,
           type,
           ticketsAvailableOnline,
-          ticketPurchaseDeadline         
+          ticketPurchaseDeadline,
+          isAbono,
+          isActive
         }, { new: true });
 
         if (!updatedTicketType) {

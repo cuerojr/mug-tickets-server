@@ -1,12 +1,12 @@
-import { response, request } from 'express';
+import { response } from 'express';
 import { Ticket } from '../models/ticketModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
-import { ticketNumber } from '../helpers/dataFormatter.js';
-import { SendMail } from '../services/sendGrid.js';
+import { ticketNumber, flattenArray } from '../helpers/dataFormatter.js';
 import { sendMails } from '../services/nodemailer.js';
 
 import QRCode from 'qrcode';
+import { TicketType } from '../models/ticketTypeModel.js';
 
 /**
  * Controller class for handling ticket-related operations.
@@ -236,30 +236,29 @@ class TicketController {
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing the updated ticket details or an error message if not found.
      */
-    async update(req, res = response) {
-      const { id } = req.body;
-      const {
-        event,
-        purchaser: {
-          purchaserFirstName,
-          purchaserLastName,
-          purchaserDni,
-          purchaserEmail,
-          purchaserId
-        },
-        attendee: {
-          attendeeFirstName,
-          attendeeLastName,
-          attendeeDni
-        },
-        validated,
-        purchaseDate,
-        validationDate,
-        ticketNumber
-      } = req.body;
-      
-      
+    async update(req, res = response) {      
       try {
+        const { id } = req.body;
+        const {
+          event,
+          purchaser: {
+            purchaserFirstName,
+            purchaserLastName,
+            purchaserDni,
+            purchaserEmail,
+            purchaserId
+          },
+          attendee: {
+            attendeeFirstName,
+            attendeeLastName,
+            attendeeDni
+          },
+          validated,
+          purchaseDate,
+          validationDate,
+          ticketNumber
+        } = req.body;
+        
         const ticket = await Ticket.findByIdAndUpdate(id, {
           event,
           purchaser: {
@@ -373,10 +372,17 @@ class TicketController {
    * @returns {Object} JSON response containing the newly created ticket details or an error message.
    */
   async createTickets(ticketsData = []) {
-    try {     
+    try {
       const eventsIds = ticketsData.map(ticket => ticket.event.toString());
       let purchasersIds = ticketsData.map(ticket => ticket.purchaser?.purchaserId);
-      
+      const ticketTypeIds = ticketsData.map(ticket => ticket.ticketType._id);
+
+      //validar si hay ticket disponible
+      const ticketType = await TicketType.findById(ticketTypeIds[0]);
+      if(ticketType.ticketsAvailableOnline <= ticketType.ticketsPurchased) {
+        return 
+      }
+
       // create Anonimous User 
       if(!!purchasersIds) {
         const { purchaserFirstName, purchaserLastName, purchaserDni, purchaserEmail } = ticketsData[0].purchaser;
@@ -407,17 +413,17 @@ class TicketController {
         const purchaseEvent = purchaseEvents.find(event => event._id.toString() === ticket.event.toString());
         const user = users.find(user => user._id.toString() === ticket.purchaser?.purchaserId) || users[0];
         
-        if (purchaseEvent?.hasLimitedPlaces && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
-          return {
-            error: {
-              message: 'Sold out!',
+        //Locations validation
+        if (purchaseEvent?.hasLimitedPlaces 
+          && purchaseEvent?.ticketsAvailableOnline <= purchaseEvent?.purchasedTicketsList?.length) {
+            return {
+              error: {
+                message: 'Sold out!',
               ticketIndex: index
             }
           };
         }
-
-        const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);
-        
+        const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);          
         const newTicket = new Ticket({
           eventId: ticket.eventId,
           purchaser: {
@@ -437,7 +443,7 @@ class TicketController {
           validationDate: ticket.validationDate,
           ticketNumber
         });
-         
+        
         this.setQrCode(newTicket._id).then(data => {
           newTicket.qrCode = data;
         }).catch((err) => console.error(err.message));
@@ -445,7 +451,7 @@ class TicketController {
         return newTicket;
       });
       
-      const savedTickets = await Ticket.insertMany(insertData.filter(ticket => !ticket.error));
+      const savedTickets = await Ticket.insertMany(flattenArray(insertData).filter(ticket => !ticket.error));
       if (savedTickets.length === 0) {
         return {
           error: {
@@ -462,14 +468,16 @@ class TicketController {
         user.purchasedTickets.push(savedTicket._id);
         purchaseEvent.ticketsPurchased += 1;
         purchaseEvent.purchasedTicketsList.push(savedTicket._id);
+        ticketType.ticketsPurchased += 1;
       });
 
       await Promise.all([
         ...users.map(user => user.save()),
-        ...purchaseEvents.map(event => event.save())
+        ...purchaseEvents.map(event => event.save()),
+        ticketType.save()
       ]);
       
-      //console.log(ticketsData)
+      //Mailing
       return await sendMails(savedTickets, ticketsData);
     } catch (err) {
       console.error(err.message)

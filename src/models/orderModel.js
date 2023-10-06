@@ -14,6 +14,10 @@ const orderSchema = new mongoose.Schema({
         default: 1
     },
     ticketType: {
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'TicketType'
+        },
         price:{
             type: Number,
             min: 0,
@@ -58,7 +62,11 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: false
         }
-    }
+    },
+    ticketsPurchasedList: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket'
+    }]
 });
 
 const Order = mongoose.model('Order', orderSchema);
