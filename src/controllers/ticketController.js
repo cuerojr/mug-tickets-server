@@ -379,9 +379,9 @@ class TicketController {
 
       //validar si hay ticket disponible
       const ticketType = await TicketType.findById(ticketTypeIds[0]);
-      if(ticketType.ticketsAvailableOnline <= ticketType.ticketsPurchased) {
+      /*if(ticketType.ticketsAvailableOnline <= (ticketType.ticketsPurchased + ticketsData.length) ) {
         return 
-      }
+      }*/
 
       // create Anonimous User 
       if(!!purchasersIds) {
@@ -470,6 +470,10 @@ class TicketController {
         purchaseEvent.purchasedTicketsList.push(savedTicket._id);
         ticketType.ticketsPurchased += 1;
       });
+
+      if(ticketType.ticketsAvailableOnline <= ticketType.ticketsPurchased) {
+        ticketType.isActive = false; 
+      }
 
       await Promise.all([
         ...users.map(user => user.save()),
