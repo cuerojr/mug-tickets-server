@@ -10,9 +10,95 @@ const validationsMiddlewares = new ValidationsMiddlewares();
 
 const eventController = new EventController();
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Event:
+ *          type: object
+ *          properties:
+ *              eventType:
+ *                  type: string
+ *              ticketsAvailableOnline:
+ *                  type: number
+ *              ticketPurchaseDeadline:
+ *                  type: string
+ *              hasLimitedPlaces:
+ *                  type: boolean
+ *              title:
+ *                  type: string
+ *              description:
+ *                  type: string
+ *              address:
+ *                  type: string
+ *              dates:
+ *                  type: array
+ *              price:
+ *                  type: number
+ *              purchasedTicketsList:
+ *                  type: array
+ *              ticketsTypeList:
+ *                  type: array
+ *                  items:
+ *                      $ref: '#/components/schemas/TicketsTypeList'
+ *              createdDate:
+ *                  type: string
+ *              ticketsPurchased:
+ *                  type: number
+ *              eventId:
+ *                  type: string
+ *      TicketsTypeList: 
+ *          type: object
+ *          properties:
+ *              _id:
+ *                  type: string
+ *              eventId:
+ *                  type: string
+ *              price:
+ *                  type: number
+ *              quantity:
+ *                  type: number
+ *              date:
+ *                  type: string
+ *              type:
+ *                  type: string
+ *              ticketsAvailableOnline:
+ *                  type: number
+ *              ticketsPurchased:
+ *                  type: number
+ *              ticketPurchaseDeadline:
+ *                  type: string
+ *              isActive:
+ *                  type: boolean
+ *              isAbono:
+ *                  type: boolean
+ *              createdDate:
+ *                  type: string
+ *              __v:
+ *                  type: number
+ *          
+ */
+
 // Route: GET /api/events
 // Middleware: CacheMiddleware (cache middleware)
 // Controller: eventController.getAll
+/**
+ * @swagger
+ * /api/events/:
+ *  get:
+ *      summary: get all events
+ *      tags: [Event]
+ *      responses:
+ *          200:
+ *              description: all events
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Event'
+ *      
+ */     
 router.get('/', 
     [
         //validationsMiddlewares.validateIfAdmin,
@@ -31,6 +117,21 @@ router.get('/query', [
 // Route: POST /api/events
 // Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
 // Controller: eventController.create
+/**
+ * @swagger
+ * /api/events:
+ *  post:
+ *      summary: post new event
+ *      tags: [Event]
+ *      responses:
+ *          200:
+ *              description: all events
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: object
+ *      
+ */  
 router.post('/', 
     [
         validationsMiddlewares.validateJWT,
@@ -49,6 +150,23 @@ router.post('/',
 // Route: GET /api/events/:id
 // Middleware: validateIfAdmin (Admin validation middleware)
 // Controller: eventController.get
+/**
+ * @swagger
+ * /api/events/{id}:
+ *  get:
+ *      summary: get event
+ *      tags: [Event]
+ *      responses:
+ *          200:
+ *              description: all events
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Event'
+ *      
+ */  
 router.get('/:id', [
         //validationsMiddlewares.validateIfAdmin,
     ], 
@@ -57,6 +175,23 @@ router.get('/:id', [
 // Route: PUT /api/events/:id
 // Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
 // Controller: eventController.update
+/**
+ * @swagger
+ * /api/events/{id}:
+ *  put:
+ *      summary: update event
+ *      tags: [Event]
+ *      responses:
+ *          200:
+ *              description: all events
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Event'
+ *      
+ */  
 router.put('/:id', 
     [
         validationsMiddlewares.validateJWT,
@@ -74,6 +209,23 @@ router.put('/:id',
 // Route: DELETE /api/events/:id
 // Middleware: validateIfAdmin (Admin validation middleware) and validateJWT (JWT validation middleware)
 // Controller: eventController.delete
+/**
+ * @swagger
+ * /api/events/{id}:
+ *  delete:
+ *      summary: delete event
+ *      tags: [Event]
+ *      responses:
+ *          200:
+ *              description: all events
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Event'
+ *      
+ */  
 router.delete('/:id',
     [
         validationsMiddlewares.validateJWT,

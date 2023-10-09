@@ -58,6 +58,28 @@ class Routes {
     this.app.use('/api/orders', orderRoutes);
 
     // Event Routes
+    /**
+     * @openapi
+     * /api/events:
+     * get:
+     *  tags:
+     *    - Events
+     *  response:
+     *    200:
+     *      description: OK
+     *      content:
+     *        application/json:
+     *          schema:
+     *            type: object
+     *            properties:
+     *              status:
+     *                type: boolean
+     *                example: ok
+     *              data:
+     *                type: array
+     *                items:
+     *                  type: object
+     */
     this.app.use('/api/events', eventRoutes);
 
     // User Login Routes
