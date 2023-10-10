@@ -25,7 +25,6 @@ class TicketController {
      */
     async getAll(req, res = response) {
       try {
-        const { id } = req.params;
         const tickets = await Ticket.find({}).populate('event', {
             eventId: 1,
             eventType: 1, 
@@ -57,7 +56,16 @@ class TicketController {
      */
     async filter(req, res = response) {
       try {
-        const tickets = await Ticket.find(req.query);
+        
+        const tickets = await Ticket.find(req.query).populate('event', {
+          eventId: 1,
+          eventType: 1, 
+          ticketPurchaseDeadline: 1, 
+          hasLimitedPlaces: 1, 
+          title: 1,
+          address: 1,
+          date: 1
+        });
         
         if (tickets.length < 1) {
             return res.status(404).json({
@@ -423,9 +431,11 @@ class TicketController {
             }
           };
         }
+        
         const ticketNumber = purchaseEvent?.purchasedTicketsList?.length + (index + 1);          
+        
         const newTicket = new Ticket({
-          eventId: ticket.eventId,
+          event: ticket.event,
           purchaser: {
             purchaserFirstName: ticket.purchaser.purchaserFirstName,
             purchaserLastName: ticket.purchaser.purchaserLastName,
@@ -447,7 +457,7 @@ class TicketController {
         this.setQrCode(newTicket._id).then(data => {
           newTicket.qrCode = data;
         }).catch((err) => console.error(err.message));
-        
+                
         return newTicket;
       });
       

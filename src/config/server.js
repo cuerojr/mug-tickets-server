@@ -3,6 +3,7 @@ import 'dotenv/config'
 import cors from 'cors';
 import { Routes } from '../helpers/routerHelper.js';
 import { Database } from './db.js';
+import { swaggerDocs as V1SwaggerDocs } from '../v1/swagger.js';
 
 const HEADERS = {
     "Content-Security-Policy":
@@ -80,6 +81,7 @@ class Server {
     listen(){
         this.app.listen(this.port, () => {
             console.log('server', this.port);
+            V1SwaggerDocs(this.app, this.port)
         });
     }
 }
