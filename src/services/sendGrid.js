@@ -28,7 +28,6 @@ export const SendMail = async (tickets = []) => {
             }
         }).join('');
         
-        console.log(htmlFormatted)
         const msg = {
             to: email,
             from: 'mug.rosario@gmail.com',

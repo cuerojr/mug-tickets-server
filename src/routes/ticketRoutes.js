@@ -9,9 +9,95 @@ import * as CacheMiddleware from '../middlewares/cacheMiddleware.js';
 const validationsMiddlewares = new ValidationsMiddlewares();
 const ticketController = new TicketController();
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Ticket:
+ *          type: object
+ *          properties:
+ *              eventType:
+ *                  type: string
+ *              ticketsAvailableOnline:
+ *                  type: number
+ *              ticketPurchaseDeadline:
+ *                  type: string
+ *              hasLimitedPlaces:
+ *                  type: boolean
+ *              title:
+ *                  type: string
+ *              description:
+ *                  type: string
+ *              address:
+ *                  type: string
+ *              dates:
+ *                  type: array
+ *              price:
+ *                  type: number
+ *              purchasedTicketsList:
+ *                  type: array
+ *              ticketsTypeList:
+ *                  type: array
+ *                  items:
+ *                      $ref: '#/components/schemas/TicketsTypeList'
+ *              createdDate:
+ *                  type: string
+ *              ticketsPurchased:
+ *                  type: number
+ *              eventId:
+ *                  type: string
+ *      TicketsTypeList: 
+ *          type: object
+ *          properties:
+ *              _id:
+ *                  type: string
+ *              eventId:
+ *                  type: string
+ *              price:
+ *                  type: number
+ *              quantity:
+ *                  type: number
+ *              date:
+ *                  type: string
+ *              type:
+ *                  type: string
+ *              ticketsAvailableOnline:
+ *                  type: number
+ *              ticketsPurchased:
+ *                  type: number
+ *              ticketPurchaseDeadline:
+ *                  type: string
+ *              isActive:
+ *                  type: boolean
+ *              isAbono:
+ *                  type: boolean
+ *              createdDate:
+ *                  type: string
+ *              __v:
+ *                  type: number
+ *          
+ */
+
 // Route: GET /api/tickets
 // Middleware: CacheMiddleware (Caches the response for faster subsequent requests)
 // Controller: ticketController.getAll (Controller method to get all tickets)
+/**
+ * @swagger
+ * /api/tickets/:
+ *  get:
+ *      summary: get all tickets
+ *      tags: [Ticket]
+ *      responses:
+ *          200:
+ *              description: all tickets
+ *              content:
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Ticket'
+ *      
+ */   
 router.get('/', [
         //CacheMiddleware()
     ],
