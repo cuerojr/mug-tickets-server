@@ -76,7 +76,11 @@ const eventSchema = new mongoose.Schema({
   ticketsTypeList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TicketType'
-  }]
+  }]/*,
+  tokensList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Token'
+  }]*/
 });
 
 eventSchema.pre('save', async function(next) {

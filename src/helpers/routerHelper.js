@@ -5,6 +5,8 @@ import 'dotenv/config'
 import { router as userRouter } from '../routes/userRoutes.js';
 import { router as adminRouter } from '../routes/adminRoutes.js';
 import { router as ticketRouter } from '../routes/ticketRoutes.js';
+//import { router as validateRouter } from '../routes/validateRoutes.js';
+import { router as tokenRouter } from '../routes/tokenRoutes.js';
 import { router as ticketTypeRouter } from '../routes/ticketTypeRoutes.js';
 import { router as eventRoutes } from '../routes/eventRoutes.js';
 import { router as orderRoutes } from '../routes/orderRoutes.js';
@@ -57,29 +59,7 @@ class Routes {
     // Order type Routes
     this.app.use('/api/orders', orderRoutes);
 
-    // Event Routes
-    /**
-     * @openapi
-     * /api/events:
-     * get:
-     *  tags:
-     *    - Events
-     *  response:
-     *    200:
-     *      description: OK
-     *      content:
-     *        application/json:
-     *          schema:
-     *            type: object
-     *            properties:
-     *              status:
-     *                type: boolean
-     *                example: ok
-     *              data:
-     *                type: array
-     *                items:
-     *                  type: object
-     */
+    // Event Routes    
     this.app.use('/api/events', eventRoutes);
 
     // User Login Routes
@@ -93,6 +73,12 @@ class Routes {
 
     // MercadoPago Checkout Routes
     this.app.use('/api/checkout', mercadopagoRoutes);
+
+    // Validation Routes
+    //this.app.use('/api/validate', validateRouter);
+
+    // Token Routes
+    this.app.use('/api/token', tokenRouter);
   }
 }
 
