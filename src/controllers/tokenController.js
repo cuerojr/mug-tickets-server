@@ -1,11 +1,6 @@
 import { response } from 'express';
 import { Token } from '../models/tokenModel.js';
 import { Event } from '../models/eventModel.js';
-import { ticketNumber, flattenArray } from '../helpers/dataFormatter.js';
-import { sendMails } from '../services/nodemailer.js';
-
-import QRCode from 'qrcode';
-import { TicketType } from '../models/ticketTypeModel.js';
 
 /**
  * Controller class for handling token-related operations.
@@ -23,7 +18,7 @@ class TokenController {
     async getAll(req, res = response) {
       try {
         const tokens = await Token.find({});
-        console.log('tokens', tokens)
+        
         res.status(200).json({
           ok: true,
           tokens
@@ -77,7 +72,7 @@ class TokenController {
     async create(req, res = response) {
       try {
         const { token, eventId } = req.body;      
-        
+        console.log(req.body)
         if (!eventId) {
           return res.status(404).json({ 
             ok: false, 
