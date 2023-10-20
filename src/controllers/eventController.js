@@ -48,7 +48,10 @@ class EventController {
       try {
         const event$ = await Event.findOne(req.query).populate('purchasedTicketsList', {
             purchaser: 1,
-            ticketNumber: 1
+            ticketNumber: 1,
+            validated: 1,
+            validationDate: 1,
+            qrCode: 1,
         });
 
         if (!event$) {
@@ -61,16 +64,18 @@ class EventController {
         const event = {
           title: event$.title,
           tickets: event$.purchasedTicketsList.map((item) => {            
-            const { purchaser, ticketNumber } = item;
+            const { purchaser, ticketNumber, validated, validationDate, qrCode } = item;
             return {
               name: `${purchaser.purchaserFirstName} ${purchaser.purchaserLastName}`,
               email: `${purchaser.purchaserEmail}`,
               dni: `${purchaser.purchaserDni}`,
-              ticketNumber: ticketNumbers(ticketNumber)
+              ticketNumber: ticketNumbers(ticketNumber),
+              validated,
+              validationDate,
             }
           })
         }
-        console.log(event)
+        
         res.status(200).json({
           ok: true,
           event
