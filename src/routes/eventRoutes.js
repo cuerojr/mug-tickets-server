@@ -110,7 +110,7 @@ router.get('/',
 // Middleware: validateIfAdmin (Admin validation middleware)
 // Controller: eventController.filter
 router.get('/query', [
-        validationsMiddlewares.validateIfAdmin,
+        //validationsMiddlewares.validateIfAdmin,
     ], 
     eventController.filter);
 

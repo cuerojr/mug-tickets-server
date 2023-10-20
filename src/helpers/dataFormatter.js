@@ -5,6 +5,13 @@ const ticketNumber = (ticketNumber = '') => {
       });
 };
 
+const ticketNumbers = (ticketNumber = '') => {
+    return (ticketNumber).toLocaleString('en-US', {
+        minimumIntegerDigits: 7, 
+        useGrouping:false
+      });
+};
+
 const flattenArray = (array = []) => {
     let len = array.length;
     let result = [];
@@ -22,5 +29,6 @@ const flattenArray = (array = []) => {
 
 export {
     ticketNumber,
+    ticketNumbers,
     flattenArray
 }
