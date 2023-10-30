@@ -57,7 +57,8 @@ class TokenController {
       } catch (err) {
         res.status(500).json({ 
           ok: false, 
-          error: err.message 
+          tokens: [],
+          message: err.message
         });
       }
     }
