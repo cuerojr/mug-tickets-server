@@ -1,6 +1,7 @@
 import { response } from 'express';
-import {Event} from '../models/eventModel.js';
-import {Admin} from '../models/adminModel.js';
+import { Event } from '../models/eventModel.js';
+import { Admin } from '../models/adminModel.js';
+import { ticketNumbers, flattenArray } from '../helpers/dataFormatter.js';
 
 /**
  * Controller class for handling event-related operations.
@@ -45,17 +46,39 @@ class EventController {
      */
     async filter(req, res = response) {
       try {
-        const events = await Event.find(req.query);
-        if (events.length < 1) {
+        const event$ = await Event.findOne(req.query).populate('purchasedTicketsList', {
+            purchaser: 1,
+            ticketNumber: 1,
+            validated: 1,
+            validationDate: 1,
+            qrCode: 1,
+        });
+
+        if (!event$) {
             return res.status(404).json({
               ok: false,
               error: 'No events matched your search'
             });
         }
         
+        const event = {
+          title: event$.title,
+          tickets: event$.purchasedTicketsList.map((item) => {            
+            const { purchaser, ticketNumber, validated, validationDate, qrCode } = item;
+            return {
+              name: `${purchaser.purchaserFirstName} ${purchaser.purchaserLastName}`,
+              email: `${purchaser.purchaserEmail}`,
+              dni: `${purchaser.purchaserDni}`,
+              ticketNumber: ticketNumbers(ticketNumber),
+              validated,
+              validationDate,
+            }
+          })
+        }
+        
         res.status(200).json({
           ok: true,
-          events
+          event
         });
       } catch (err) {
         res.status(500).json({ 
