@@ -1,5 +1,6 @@
 import { response } from 'express';
 import { Event } from '../models/eventModel.js';
+import { TicketType } from '../models/ticketTypeModel.js';
 import { Admin } from '../models/adminModel.js';
 import { ticketNumbers, flattenArray } from '../helpers/dataFormatter.js';
 
@@ -40,40 +41,51 @@ class EventController {
     /**
      * Filter events based on the provided query parameters.
      *
-     * @param {Object} req - Express request object containing query parameters.
+     * @param {Object} req - Express request object containing query parameters by id.
      * @param {Object} res - Express response object.
      * @returns {Object} JSON response containing an array of filtered events or an error message.
      */
     async filter(req, res = response) {
       try {
+        if (!req.query) {
+          return res.status(404).json({
+            ok: false,
+            error: 'No events matched your search'
+          });
+        }
+
         const event$ = await Event.findOne(req.query).populate('purchasedTicketsList', {
             purchaser: 1,
             ticketNumber: 1,
             validated: 1,
             validationDate: 1,
             qrCode: 1,
-        });
-
+        }).populate('ticketsTypeList', { ticketsPurchased: 1, ticketsAvailableOnline: 1 });
+        
         if (!event$) {
             return res.status(404).json({
               ok: false,
               error: 'No events matched your search'
             });
         }
+
+        const { title, ticketsTypeList, purchasedTicketsList } = event$;
         
         const event = {
-          title: event$.title,
-          tickets: event$.purchasedTicketsList.map((item) => {            
+          title,
+          ticketsTypeList,
+          tickets: purchasedTicketsList.map((item) => {            
             const { purchaser, ticketNumber, validated, validationDate, qrCode } = item;
+            const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
             return {
-              name: `${purchaser.purchaserFirstName} ${purchaser.purchaserLastName}`,
-              email: `${purchaser.purchaserEmail}`,
-              dni: `${purchaser.purchaserDni}`,
+              name: `${ purchaserFirstName } ${ purchaserLastName }`,
+              email: `${ purchaserEmail }`,
+              dni: `${ purchaserDni }`,
               ticketNumber: ticketNumbers(ticketNumber),
               validated,
               validationDate,
             }
-          })
+          })          
         }
         
         res.status(200).json({
