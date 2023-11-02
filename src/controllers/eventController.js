@@ -54,13 +54,18 @@ class EventController {
           });
         }
 
-        const event$ = await Event.findOne(req.query).populate('purchasedTicketsList', {
+        const event$ = await Event.findOne(req.query)
+        .populate('purchasedTicketsList', {
             purchaser: 1,
             ticketNumber: 1,
             validated: 1,
             validationDate: 1,
-            qrCode: 1,
-        }).populate('ticketsTypeList', { ticketsPurchased: 1, ticketsAvailableOnline: 1 });
+            qrCode: 1
+        })
+        .populate('ticketsTypeList', { 
+          ticketsPurchased: 1, 
+          ticketsAvailableOnline: 1 
+        });
         
         if (!event$) {
             return res.status(404).json({
@@ -75,7 +80,7 @@ class EventController {
           title,
           ticketsTypeList,
           tickets: purchasedTicketsList.map((item) => {            
-            const { purchaser, ticketNumber, validated, validationDate, qrCode } = item;
+            const { purchaser, ticketNumber, validated, validationDate, qrCode, _id } = item;
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
             return {
               name: `${ purchaserFirstName } ${ purchaserLastName }`,
@@ -84,6 +89,7 @@ class EventController {
               ticketNumber: ticketNumbers(ticketNumber),
               validated,
               validationDate,
+              _id              
             }
           })          
         }
