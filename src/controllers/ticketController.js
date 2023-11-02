@@ -436,6 +436,7 @@ class TicketController {
         
         const newTicket = new Ticket({
           event: ticket.event,
+          ticketType,
           purchaser: {
             purchaserFirstName: ticket.purchaser.purchaserFirstName,
             purchaserLastName: ticket.purchaser.purchaserLastName,
