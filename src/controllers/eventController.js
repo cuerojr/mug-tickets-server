@@ -64,7 +64,8 @@ class EventController {
         })
         .populate('ticketsTypeList', { 
           ticketsPurchased: 1, 
-          ticketsAvailableOnline: 1 
+          ticketsAvailableOnline: 1,
+          type: 1
         });
         
         if (!event$) {
@@ -79,8 +80,8 @@ class EventController {
         const event = {
           title,
           ticketsTypeList,
-          tickets: purchasedTicketsList.map((item) => {            
-            const { purchaser, ticketNumber, validated, validationDate, qrCode, _id } = item;
+          tickets: purchasedTicketsList.map((item) => {        
+            const { purchaser, ticketNumber, validated, validationDate, qrCode, _id, type } = item;
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
             return {
               name: `${ purchaserFirstName } ${ purchaserLastName }`,
@@ -89,7 +90,8 @@ class EventController {
               ticketNumber: ticketNumbers(ticketNumber),
               validated,
               validationDate,
-              _id              
+              _id,
+              type
             }
           })          
         }
