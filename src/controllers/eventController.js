@@ -89,7 +89,7 @@ class EventController {
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
 
             const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);
-            const isAbono$ = ticketsTypeList.filter(data => data._id.toString() === order$.at(-1).ticketType._id.toString())
+            // const isAbono$ = ticketsTypeList.filter(data => data._id.toString() === order$.at(-1).ticketType._id.toString())
 
             //console.log('ticketType', isAbono$)
             
