@@ -1,5 +1,6 @@
 import { response } from 'express';
 import { Event } from '../models/eventModel.js';
+import { Order } from '../models/orderModel.js';
 import { TicketType } from '../models/ticketTypeModel.js';
 import { Admin } from '../models/adminModel.js';
 import { ticketNumbers, flattenArray } from '../helpers/dataFormatter.js';
@@ -55,18 +56,20 @@ class EventController {
         }
 
         const event$ = await Event.findOne(req.query)
-        .populate('purchasedTicketsList', {
-            purchaser: 1,
-            ticketNumber: 1,
-            validated: 1,
-            validationDate: 1,
-            qrCode: 1
-        })
-        .populate('ticketsTypeList', { 
-          ticketsPurchased: 1, 
-          ticketsAvailableOnline: 1,
-          type: 1
-        });
+          .populate('purchasedTicketsList', {
+              purchaser: 1,
+              ticketNumber: 1,
+              validated: 1,
+              validationDate: 1,
+              ticketType: 1,
+              qrCode: 1
+          })
+          .populate('ticketsTypeList', { 
+            ticketsPurchased: 1, 
+            ticketsAvailableOnline: 1,
+            type: 1,
+            isAbono: 1
+          });
         
         if (!event$) {
             return res.status(404).json({
@@ -75,14 +78,16 @@ class EventController {
             });
         }
 
+        const orders = await Order.find({ "status": "aproved" });
         const { title, ticketsTypeList, purchasedTicketsList } = event$;
-        
+
         const event = {
           title,
           ticketsTypeList,
           tickets: purchasedTicketsList.map((item) => {        
-            const { purchaser, ticketNumber, validated, validationDate, qrCode, _id, type } = item;
+            const { purchaser, ticketNumber, validated, validationDate, _id, ticketType } = item;
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
+            const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);            
             return {
               name: `${ purchaserFirstName } ${ purchaserLastName }`,
               email: `${ purchaserEmail }`,
@@ -91,7 +96,8 @@ class EventController {
               validated,
               validationDate,
               _id,
-              type
+              ticketType: ticketType ?? order$[0].ticketType,
+              orderData: order$[0].ticketType
             }
           })          
         }
