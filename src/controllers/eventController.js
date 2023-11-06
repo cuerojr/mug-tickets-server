@@ -85,7 +85,7 @@ class EventController {
           title,
           ticketsTypeList,
           tickets: purchasedTicketsList.map((item) => {        
-            const { purchaser, ticketNumber, validated, validationDate, _id, ticketType = null } = item;
+            const { purchaser, ticketNumber, validated, validationDate, _id, ticketType } = item;
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
 
             const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);
@@ -103,6 +103,7 @@ class EventController {
               validationDate,
               _id,
               ticketType: ticketType ?? order$[0].ticketType,
+              orderTicketType: order$[0].ticketType,
               // isAbono: isAbono$[0]?.isAbono ?? null
             }
           })          
