@@ -91,7 +91,7 @@ class EventController {
             const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);
             // const isAbono$ = ticketsTypeList.filter(data => data._id.toString() === order$.at(-1).ticketType._id.toString())
 
-            console.log('ticketType', order$)
+            console.log('ticketType', order$[0].ticketType)
             
             
             return {
@@ -102,7 +102,7 @@ class EventController {
               validated,
               validationDate,
               _id,
-              ticketType: ticketType ?? order$.at(-1).ticketType,
+              ticketType: ticketType ?? order$[0].ticketType,
               // isAbono: isAbono$[0]?.isAbono ?? null
             }
           })          
