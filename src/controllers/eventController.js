@@ -87,13 +87,7 @@ class EventController {
           tickets: purchasedTicketsList.map((item) => {        
             const { purchaser, ticketNumber, validated, validationDate, _id, ticketType } = item;
             const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
-
-            const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);
-            // const isAbono$ = ticketsTypeList.filter(data => data._id.toString() === order$.at(-1).ticketType._id.toString())
-
-            console.log('ticketType', order$[0].ticketType)
-            
-            
+            const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);            
             return {
               name: `${ purchaserFirstName } ${ purchaserLastName }`,
               email: `${ purchaserEmail }`,
@@ -103,8 +97,7 @@ class EventController {
               validationDate,
               _id,
               ticketType: ticketType ?? order$[0].ticketType,
-              orderTicketType: order$[0].ticketType,
-              // isAbono: isAbono$[0]?.isAbono ?? null
+              orderData: order$[0].ticketType
             }
           })          
         }
