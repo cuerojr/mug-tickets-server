@@ -66,6 +66,7 @@ export const sendMails = async (tickets = [], ticketsData = []) => {
         "Entrada nro.": formatedNumber(ticketNumber),
         "Evento": ticketsData[0].title,
         "Tipo de entrada": ticketsData[0].ticketType.type,
+        "Precio": `$${ ticketsData[0].ticketType.price }`,
         "Fecha y Hora": `${dateFormatter(ticketsData[0].ticketType.date)} - ${formatTime(ticketsData[0].ticketType.date)} `,
         "Dirección": ticketsData[0].address,
         "Nombre y Apellido": `${ purchaser.purchaserFirstName } ${ purchaser.purchaserLastName }`,
