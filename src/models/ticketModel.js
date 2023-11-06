@@ -66,6 +66,21 @@ const ticketSchema = new mongoose.Schema({
   ticketNumber: {
     type: Number,
     required: true
+  },
+  ticketType: {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'TicketType'
+    },
+    price: {
+      type: String
+    },
+    date: {
+      type: Date,
+    },
+    type: {
+      type: String
+    },
   }
 });
 
