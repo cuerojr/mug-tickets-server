@@ -172,6 +172,16 @@ router.put('/validate/:id',
     ], 
     ticketController.validate);
 
+// Route: UPDATE /api/tickets/:id
+// Middleware: validateJWT (Validates the JSON Web Token in the request header)
+// Controller: ticketController.unvalidate (Controller method to unvalidate a specific ticket by ID)
+router.put('/unvalidate/:id', 
+    [
+        //validationsMiddlewares.validateJWT,
+        //validationsMiddlewares.validateIfAdmin,
+    ], 
+    ticketController.validate);
+
 export {
     router
 };

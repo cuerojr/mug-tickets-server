@@ -372,6 +372,52 @@ class TicketController {
       }
     }
 
+    
+    /**
+     * Unvalidate a ticket by its ID.
+     *
+     * @param {Object} req - Express request object containing the ticket ID in the request parameters.
+     * @param {Object} res - Express response object.
+     * @returns {Object} JSON response indicating success or failure of the delete operation.
+     */
+    async unvalidate(req, res = response){
+      try {
+        const { id } = req.params;
+        const ticket = await Ticket.findById(id);
+
+        if (!ticket) {
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Ticket with id ${id} not found.` 
+          });
+        }
+
+        if (!ticket.validated) {
+          return res.status(404).json({ 
+            ok: false, 
+            error: `Ticket with id ${id} is already unvalidated.` 
+          });
+        }
+        
+        ticket.validated = false;
+        ticket.validationDate = '';
+        await ticket.save();
+        
+        const { purchaser, ... params } = ticket.toObject();
+
+        res.status(200).json({
+          ok: true,
+          ticket: params
+        });
+
+      } catch (err) {
+        res.status(500).json({ 
+          ok: false, 
+          error: err.message 
+        });
+      }
+    }
+
       /**
    * Create new tickets with the provided data.
    *
