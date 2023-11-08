@@ -122,7 +122,7 @@ class AdminController {
         console.error(`Error occurred while creating user - ${err}`);
         res.status(500).json({
           ok: false,
-          error: 'Unable to create admin',
+          error: `Error occurred while creating admin - ${err}`,
         });      
       }
     }
