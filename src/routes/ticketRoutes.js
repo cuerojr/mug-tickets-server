@@ -180,7 +180,7 @@ router.put('/unvalidate/:id',
         //validationsMiddlewares.validateJWT,
         //validationsMiddlewares.validateIfAdmin,
     ], 
-    ticketController.validate);
+    ticketController.unvalidate);
 
 export {
     router

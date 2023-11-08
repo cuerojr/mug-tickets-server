@@ -400,7 +400,7 @@ class TicketController {
         }
         
         ticket.validated = false;
-        ticket.validationDate = '';
+        ticket.validationDate = new Date();
         await ticket.save();
         
         const { purchaser, ... params } = ticket.toObject();
