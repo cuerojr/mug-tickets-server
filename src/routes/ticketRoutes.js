@@ -167,8 +167,8 @@ router.delete('/:id',
 // Controller: ticketController.validate (Controller method to validate a specific ticket by ID)
 router.put('/validate/:id', 
     [
-        validationsMiddlewares.validateJWT,
-        validationsMiddlewares.validateIfAdmin,
+        //validationsMiddlewares.validateJWT,
+        //validationsMiddlewares.validateIfAdmin,
     ], 
     ticketController.validate);
 
