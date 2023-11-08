@@ -33,15 +33,16 @@ class AdminLogInController {
             if(!validPassword){
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Pass no válido'
+                    msg: 'Something went wrong.'
                 });
             }
 
             const token = await generateJWT(admin._id);
-            const { firstName, image } = admin;
+            const { firstName, image, _id } = admin;
             
             res.status(200).json({
                 ok: true,
+                _id,
                 name: firstName,
                 email,
                 image,
@@ -51,7 +52,7 @@ class AdminLogInController {
         } catch (err) {
             res.status(500).json({ 
                 ok: false, 
-                error: err.message 
+                error: 'Something went wrong.' 
             });
         }
     }
