@@ -1,4 +1,5 @@
 import { response } from 'express';
+import mongoose from 'mongoose';
 import { Ticket } from '../models/ticketModel.js';
 import { User } from '../models/userModel.js';
 import { Event } from '../models/eventModel.js';
@@ -342,14 +343,14 @@ class TicketController {
         if (!ticket) {
           return res.status(404).json({ 
             ok: false, 
-            error: `Ticket with id ${id} not found.` 
+            error: `Ticket no encontrado.` 
           });
         }
 
         if (ticket.validated) {
           return res.status(404).json({ 
             ok: false, 
-            error: `Ticket with id ${id} is already validated.` 
+            error: `Este ticket ya fue validado.` 
           });
         }
         
@@ -365,9 +366,10 @@ class TicketController {
         });
 
       } catch (err) {
+        const { id } = req.params;
         res.status(500).json({ 
           ok: false, 
-          error: err.message 
+          error: (!mongoose.isValidObjectId(id)? 'Ticket inválido' : err.message) 
         });
       }
     }
@@ -388,14 +390,14 @@ class TicketController {
         if (!ticket) {
           return res.status(404).json({ 
             ok: false, 
-            error: `Ticket with id ${id} not found.` 
+            error: `Ticket no encontrado.` 
           });
         }
 
         if (!ticket.validated) {
           return res.status(404).json({ 
             ok: false, 
-            error: `Ticket with id ${id} is already unvalidated.` 
+            error: `Este ticket ya fue desvalidado.` 
           });
         }
         
@@ -411,9 +413,10 @@ class TicketController {
         });
 
       } catch (err) {
+        const { id } = req.params;
         res.status(500).json({ 
           ok: false, 
-          error: err.message 
+          error: (!mongoose.isValidObjectId(id)? 'Ticket inválido' : err.message) 
         });
       }
     }
