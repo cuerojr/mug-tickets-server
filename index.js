@@ -1,4 +1,18 @@
 import { Server } from './src/config/server.js';
-const server = new Server();
 
-server.listen();
+// Singleton implementation
+class SingletonServer {
+    constructor() {
+      if (!SingletonServer.instance) {
+        SingletonServer.instance = new Server();
+      }
+    }
+  
+    getInstance() {
+      return SingletonServer.instance;
+    }
+  }
+  
+  const singletonServer = new SingletonServer();
+  const server = singletonServer.getInstance();
+  server.listen();
