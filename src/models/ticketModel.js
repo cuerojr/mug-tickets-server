@@ -81,6 +81,10 @@ const ticketSchema = new mongoose.Schema({
     type: {
       type: String
     },
+  },
+  deleted: {
+    type: Boolean,
+    required: false
   }
 });
 
@@ -90,8 +94,8 @@ const ticketSchema = new mongoose.Schema({
  * Adds 'ticketId' field using the '_id' field for the returned JSON object.
  */
 ticketSchema.method('toJSON', function() {
-  const { __v, _id, ... object } = this.toObject();
-  object.ticketId = _id;
+  const { __v, ... object } = this.toObject();
+  //object.ticketId = _id;
   object.ticketNumber = (object.ticketNumber).toLocaleString('en-US', {
     minimumIntegerDigits: 7, 
     useGrouping:false

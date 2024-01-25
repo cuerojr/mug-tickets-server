@@ -76,7 +76,12 @@ const eventSchema = new mongoose.Schema({
   ticketsTypeList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TicketType'
-  }]/*,
+  }],
+  deleted: {
+    type: Boolean,
+    required: false
+  }
+  /*,
   tokensList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Token'
@@ -110,11 +115,11 @@ eventSchema.pre('save', async function(next) {
  * Mongoose pre-save hook for the 'event' schema.
  * It updates the 'ticketsPurchased' field based on the 'ticketsAvailableOnline' value.
  */
-eventSchema.method('toJSON', function() {
+/*eventSchema.method('toJSON', function() {
   const { __v, _id, ... object } = this.toObject();
   object.eventId = _id;
   return object;
-});
+});*/
 
 /**
  * Method to convert the Mongoose document to a JSON object.

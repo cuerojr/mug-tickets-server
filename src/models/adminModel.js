@@ -43,6 +43,10 @@ const adminSchema = new mongoose.Schema({
     required: false,
     default: Date.now
   },
+  deleted: {
+    type: Boolean,
+    required: false
+  }
 });
 
 /**
@@ -50,11 +54,11 @@ const adminSchema = new mongoose.Schema({
  * Removes '__v' and 'password' fields from the returned JSON object.
  * Adds 'uid' field using the '_id' field for the returned JSON object.
  */
-adminSchema.method('toJSON', function() {
+/*adminSchema.method('toJSON', function() {
   const { __v, _id, password, ... object } = this.toObject();
   object.uid = _id;
   return object;
-});
+});*/
 
 /**
  * Mongoose model for the 'Admin' collection based on the 'adminSchema'.
