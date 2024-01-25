@@ -558,6 +558,73 @@ class TicketController {
     }
   };
 
+  async updateAbonos(req, res = response) {
+    try {
+      if (!req.query) {
+        return res.status(404).json({
+          ok: false,
+          error: 'No events matched your search'
+        });
+      }
+
+      const event$ = await Event.findOne(req.query)
+        .populate('purchasedTicketsList', {
+            purchaser: 1,
+            ticketNumber: 1,
+            validated: 1,
+            validationDate: 1,
+            ticketType: 1,
+            qrCode: 1
+        })
+        .populate('ticketsTypeList', { 
+          ticketsPurchased: 1, 
+          ticketsAvailableOnline: 1,
+          type: 1,
+          isAbono: 1
+        });
+      
+      if (!event$) {
+          return res.status(404).json({
+            ok: false,
+            error: 'No events matched your search'
+          });
+      }
+
+      const orders = await Order.find({ "status": "aproved" });
+      const { title, ticketsTypeList, purchasedTicketsList } = event$;
+
+      const event = {
+        title,
+        ticketsTypeList,
+        tickets: purchasedTicketsList.map((item) => {        
+          const { purchaser, ticketNumber, validated, validationDate, _id, ticketType } = item;
+          const { purchaserFirstName, purchaserLastName, purchaserEmail, purchaserDni } = purchaser;
+          const order$ = orders.filter(order => order.purchaser.purchaserEmail === purchaserEmail);            
+          return {
+            name: `${ purchaserFirstName } ${ purchaserLastName }`,
+            email: `${ purchaserEmail }`,
+            dni: `${ purchaserDni }`,
+            ticketNumber: ticketNumbers(ticketNumber),
+            validated,
+            validationDate,
+            _id,
+            ticketType: ticketType ?? order$[0].ticketType,
+            orderData: order$[0].ticketType
+          }
+        })          
+      }
+      
+      res.status(200).json({
+        ok: true,
+        event
+      });
+    } catch (err) {
+      res.status(500).json({ 
+        ok: false, 
+        error: err.message 
+      });
+    }
+  }
 }
 
 export {

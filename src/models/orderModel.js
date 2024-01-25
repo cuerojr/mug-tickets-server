@@ -66,7 +66,11 @@ const orderSchema = new mongoose.Schema({
     ticketsPurchasedList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
-    }]
+    }],
+    deleted: {
+        type: Boolean,
+        required: false
+    }
 });
 
 const Order = mongoose.model('Order', orderSchema);

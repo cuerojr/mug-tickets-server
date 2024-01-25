@@ -19,7 +19,7 @@ const HEADERS = {
     "X-Frame-Options": "SAMEORIGIN",
     "X-Permitted-Cross-Domain-Policies": "none",
     "X-XSS-Protection": "0",
-  };
+};
   
 /**
  * Server class responsible for setting up and running the web server.

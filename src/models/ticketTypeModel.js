@@ -55,6 +55,10 @@ const ticketTypeSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         required: false
+    },
+    deleted: {
+      type: Boolean,
+      required: false
     }
 });
 

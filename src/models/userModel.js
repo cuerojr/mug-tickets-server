@@ -43,6 +43,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: Date.now
   },
+  deleted: {
+    type: Boolean,
+    required: false
+  }
 });
 
 /**
@@ -50,11 +54,11 @@ const userSchema = new mongoose.Schema({
  * Removes '__v', '_id', and 'password' fields from the returned JSON object.
  * Adds 'uid' field using the '_id' field for the returned JSON object.
  */
-userSchema.method('toJSON', function() {
+/*userSchema.method('toJSON', function() {
   const { __v, _id, password, ...object } = this.toObject();
   object.uid = _id;
   return object;
-});
+});*/
 
 /**
  * Mongoose model for the 'User' collection based on the 'userSchema'.
